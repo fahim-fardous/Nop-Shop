@@ -67,7 +67,6 @@
             android:numStars="5"
             android:rating="3"
             android:progressTint="@color/ratingBarActivate"
-            android:theme="@style/Widget.AppCompat.RatingBar"
             app:layout_constraintEnd_toEndOf="@id/product_name_tv"
             app:layout_constraintStart_toStartOf="@id/product_name_tv"
             app:layout_constraintTop_toBottomOf="@id/product_name_tv" />
