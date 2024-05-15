@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/khand</item>
+        <item>@font/khand_bold</item>
+        <item>@font/khand_medium</item>
+        <item>@font/khand_semibold</item>
+        <item>@font/lato</item>
+        <item>@font/lato_bold</item>
+    </array>
+</resources>

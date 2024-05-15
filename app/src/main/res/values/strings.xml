@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Nop Shop</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="item_image">Item image</string>
+    <string name="california_orange_8_pcs">California Orange 8 Pcs</string>
+    <string name="_15_00">$15.00</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="best_selling">BEST SELLING</string>
+    <string name="our_categories">OUR CATEGORIES</string>
+</resources>
