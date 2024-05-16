@@ -9,20 +9,18 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:background="@color/white"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent=".35">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/username_email_et_layout"
@@ -34,17 +32,21 @@
                 android:hint="@string/username_or_email"
                 android:textColorHint="#83868C"
                 app:boxStrokeColor="#D4D3DA"
+                app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_acccount"
-                app:hintTextAppearance="@font/lato"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/username_email_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white" />
+                    android:backgroundTint="@color/white"
+                    android:fontFamily="@font/lato"
+                    android:textColor="@color/black"
+                    android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -57,8 +59,8 @@
                 android:hint="@string/password"
                 android:textColorHint="#83868C"
                 app:boxStrokeColor="#D4D3DA"
-                app:endIconDrawable="@drawable/password_hide"
-                app:hintTextAppearance="@font/lato"
+                app:endIconMode="password_toggle"
+                app:endIconDrawable="@drawable/password_toggle"
                 app:layout_constraintEnd_toEndOf="@id/username_email_et_layout"
                 app:layout_constraintStart_toStartOf="@id/username_email_et_layout"
                 app:layout_constraintTop_toBottomOf="@id/username_email_et_layout">
@@ -67,13 +69,16 @@
                     android:id="@+id/password_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white" />
+                    android:backgroundTint="@color/white"
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/lato"
+                    android:textColor="@color/black"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/login_btn"
                 android:layout_width="0dp"
-                android:layout_height="37dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/password_et_layout"
                 app:layout_constraintStart_toStartOf="@id/password_et_layout"
                 app:layout_constraintEnd_toEndOf="@id/password_et_layout"
@@ -82,7 +87,9 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:layout_marginTop="16dp"
-                android:fontFamily="@font/lato"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="32dp"
+                android:padding="10dp"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

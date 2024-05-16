@@ -3,5 +3,6 @@ package com.example.nopshop.model
 data class CategoryItem(
     val id: Int,
     val categoryImage: Int,
-    val categoryName: String
+    val categoryName: String,
+    val productList: MutableList<ProductItem> = mutableListOf()
 )

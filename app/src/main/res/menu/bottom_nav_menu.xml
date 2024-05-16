@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home"
+        android:id="@+id/homeFragment"
         android:enabled="true"
         android:icon="@drawable/ic_home"
         android:title="@string/home" />
     <item
-        android:id="@+id/categories"
+        android:id="@+id/categoryFragment"
         android:enabled="true"
         android:icon="@drawable/ic_categories"
         android:title="@string/categories" />
@@ -16,7 +16,7 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search" />
     <item
-        android:id="@+id/account"
+        android:id="@+id/logInFragment"
         android:enabled="true"
         android:icon="@drawable/ic_acccount"
         android:title="@string/account" />
