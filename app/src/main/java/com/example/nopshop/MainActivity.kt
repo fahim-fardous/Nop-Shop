@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.nopshop.databinding.ActivityMainBinding
+import com.example.nopshop.screen.authentication.LogInFragment
+import com.example.nopshop.screen.category.CategoryFragment
+import com.example.nopshop.screen.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,10 +26,12 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
+                    HomeFragment()
                     true
                 }
 
                 R.id.categories -> {
+                    CategoryFragment()
                     true
                 }
 
@@ -35,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.account -> {
+                    LogInFragment()
                     true
                 }
 
