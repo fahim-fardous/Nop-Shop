@@ -152,7 +152,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             CategoryItem(
                 id = 0,
                 categoryName = "Foods",
-                categoryImage = R.drawable.strawbery
+                categoryImage = R.drawable.strawberry
             )
         )
 

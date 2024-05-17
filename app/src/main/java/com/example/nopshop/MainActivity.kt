@@ -41,9 +41,5 @@ class MainActivity : AppCompatActivity() {
                 else -> binding.bottomNavBar.visibility = View.VISIBLE
             }
         }
-
-
     }
-
-
 }

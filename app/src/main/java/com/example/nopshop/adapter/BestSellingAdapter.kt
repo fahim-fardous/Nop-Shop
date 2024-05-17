@@ -29,7 +29,6 @@ class BestSellingAdapter(private val onClick: (ProductItem) -> Unit) :
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemProductBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding, onClick)
-
     }
 
     override fun onBindViewHolder(

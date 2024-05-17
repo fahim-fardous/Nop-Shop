@@ -3,6 +3,7 @@ package com.example.nopshop.screen.category
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nopshop.R
 import com.example.nopshop.adapter.CategoryListAdapter
@@ -16,10 +17,13 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = CategoryListAdapter {}
+        adapter = CategoryListAdapter { category ->
+            onClick(category)
+        }
         //initObserver()
 
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +42,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             CategoryItem(
                 id = 0,
                 categoryName = "Foods",
-                categoryImage = R.drawable.strawbery
+                categoryImage = R.drawable.strawberry
             )
         )
 
@@ -70,7 +74,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             CategoryItem(
                 id = 0,
                 categoryName = "Foods",
-                categoryImage = R.drawable.strawbery
+                categoryImage = R.drawable.strawberry
             )
         )
 
@@ -102,7 +106,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             CategoryItem(
                 id = 0,
                 categoryName = "Foods",
-                categoryImage = R.drawable.strawbery
+                categoryImage = R.drawable.strawberry
             )
         )
 
@@ -137,6 +141,13 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     }
 
     private fun initListeners() {}
+
+    private fun onClick(category: CategoryItem) {
+        println("Clicked")
+        val action = CategoryFragmentDirections.actionCategoryFragmentToProductListFragment(0)
+        findNavController().navigate(action)
+    }
+
 
 
 }

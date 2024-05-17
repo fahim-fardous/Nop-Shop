@@ -20,6 +20,9 @@ class CategoryListAdapter(
         fun bind(category: CategoryItem) {
             binding.categoryImg.setImageResource(category.categoryImage)
             binding.categoryName.text = category.categoryName
+            binding.root.setOnClickListener {
+                onCategoryClick(category)
+            }
         }
 
     }
