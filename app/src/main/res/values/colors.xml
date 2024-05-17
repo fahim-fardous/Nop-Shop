@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="appTheme">#10CB3C</color>
+    <color name="appTheme">#10CA3C</color>
     <color name="ratingBarActivate">#FFBA49</color>
     <color name="ratingBarDeactivate">#C5C5C5</color>
     <color name="textColor">#2B2E43</color>
