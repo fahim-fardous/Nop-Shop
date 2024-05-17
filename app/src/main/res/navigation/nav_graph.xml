@@ -14,12 +14,11 @@
         android:id="@+id/categoryFragment"
         android:name="com.example.nopshop.screen.category.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
-    <fragment
-        android:id="@+id/productFragment"
-        android:name="com.example.nopshop.screen.product.ProductFragment"
-        android:label="fragment_product"
-        tools:layout="@layout/fragment_product" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_productListFragment"
+            app:destination="@id/productListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.nopshop.screen.cart.CartFragment"
@@ -35,4 +34,18 @@
         android:name="com.example.nopshop.screen.authentication.LogInFragment"
         android:label="fragment_log_in"
         tools:layout="@layout/fragment_log_in" />
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.example.nopshop.screen.product.list.ProductListFragment"
+        android:label="fragment_product_list"
+        tools:layout="@layout/fragment_product_list" >
+        <argument
+            android:name="category_id"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.example.nopshop.screen.product.details.ProductDetailsFragment"
+        android:label="fragment_product_details"
+        tools:layout="@layout/fragment_product_details" />
 </navigation>

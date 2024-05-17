@@ -2,59 +2,152 @@ package com.example.nopshop.screen.category
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nopshop.R
+import com.example.nopshop.adapter.CategoryListAdapter
+import com.example.nopshop.databinding.FragmentCategoryBinding
+import com.example.nopshop.model.CategoryItem
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class CategoryFragment : Fragment(R.layout.fragment_category) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CategoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CategoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private lateinit var binding: FragmentCategoryBinding
+    private lateinit var adapter: CategoryListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+        adapter = CategoryListAdapter { category ->
+            onClick(category)
         }
+        //initObserver()
+
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentCategoryBinding.bind(view)
+        initViews()
+        //initListeners()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CategoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CategoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun initObserver() {}
+
+    private fun initViews() {
+        val categoryList = mutableListOf<CategoryItem>()
+
+        categoryList.add(
+            CategoryItem(
+                id = 0,
+                categoryName = "Foods",
+                categoryImage = R.drawable.strawberry
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 1,
+                categoryName = "Watch",
+                categoryImage = R.drawable.watch
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 2,
+                categoryName = "Phones",
+                categoryImage = R.drawable.mobile
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 3,
+                categoryName = "Furniture",
+                categoryImage = R.drawable.furniture_category
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 0,
+                categoryName = "Foods",
+                categoryImage = R.drawable.strawberry
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 1,
+                categoryName = "Watch",
+                categoryImage = R.drawable.watch
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 2,
+                categoryName = "Phones",
+                categoryImage = R.drawable.mobile
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 3,
+                categoryName = "Furniture",
+                categoryImage = R.drawable.furniture_category
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 0,
+                categoryName = "Foods",
+                categoryImage = R.drawable.strawberry
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 1,
+                categoryName = "Watch",
+                categoryImage = R.drawable.watch
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 2,
+                categoryName = "Phones",
+                categoryImage = R.drawable.mobile
+            )
+        )
+
+        categoryList.add(
+            CategoryItem(
+                id = 3,
+                categoryName = "Furniture",
+                categoryImage = R.drawable.furniture_category
+            )
+        )
+        binding.categoryRv.layoutManager =
+            GridLayoutManager(requireContext(), 3)
+        binding.categoryRv.adapter = adapter
+        adapter.submitList(categoryList)
+
     }
+
+    private fun initListeners() {}
+
+    private fun onClick(category: CategoryItem) {
+        println("Clicked")
+        val action = CategoryFragmentDirections.actionCategoryFragmentToProductListFragment(0)
+        findNavController().navigate(action)
+    }
+
+
+
 }

@@ -8,4 +8,18 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="best_selling">BEST SELLING</string>
     <string name="our_categories">OUR CATEGORIES</string>
+    <string name="feature_products">FEATURE PRODUCTS</string>
+    <string name="women_heel">WOMEN HEEL</string>
+    <string name="salmon_fish">SALMON FISH</string>
+    <string name="furniture_collection">FURNITURE COLLECTION</string>
+    <string name="home">Home</string>
+    <string name="categories">Categories</string>
+    <string name="search">Search</string>
+    <string name="account">Account</string>
+    <string name="more">More</string>
+    <string name="username_or_email">Username or Email</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="category">Category</string>
+    <string name="product_name">Product name</string>
 </resources>
