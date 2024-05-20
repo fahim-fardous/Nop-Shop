@@ -29,4 +29,12 @@
     <string name="buy_now">BUY NOW!</string>
     <string name="cart">+ ADD TO CART</string>
     <string name="buy_now_">BUY NOW!</string>
+    <string name="shopping_cart">Shopping cart</string>
+    <string name="products">PRODUCTS</string>
+    <string name="proceed_to_checkout">PROCEED TO CHECKOUT</string>
+    <string name="total">Total:</string>
+    <string name="total_price">$555.00</string>
+    <string name="shipping">Shipping</string>
+    <string name="sub_total_title">Sub-Total</string>
+    <string name="subtotal_price">$550.00</string>
 </resources>

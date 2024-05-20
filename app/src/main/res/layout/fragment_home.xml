@@ -116,12 +116,11 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/category_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/our_categories_title_tv" />
@@ -153,10 +152,9 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/best_selling_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/best_selling_title_tv" />
@@ -188,10 +186,9 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/feature_product_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/feature_product_title_tv" />
@@ -223,10 +220,9 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/women_heel_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/women_heel_title_tv" />
@@ -235,7 +231,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/salmon_fish_layout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -258,10 +254,9 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/salmon_fish_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/salmon_fish_title_tv" />
@@ -293,10 +288,10 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/furniture_collection_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/furniture_collection_title_tv" />

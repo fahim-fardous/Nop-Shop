@@ -3,6 +3,7 @@ package com.example.nopshop.screen.home
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nopshop.R
 import com.example.nopshop.adapter.BestSellingAdapter
@@ -37,7 +38,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         salmonFishAdapter = SalmonFishAdapter {}
 
-        furnitureCollectionAdapter = FurnitureCollectionAdapter {  }
+        furnitureCollectionAdapter = FurnitureCollectionAdapter { }
 
         categoryAdapter = CategoryAdapter {}
 
@@ -379,6 +380,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.furnitureCollectionRv.adapter = furnitureCollectionAdapter
         furnitureCollectionAdapter.submitList(furnitureList)
+
+        binding.cartBtn.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToCartFragment()
+            findNavController().navigate(action)
+        }
 
 
     }
