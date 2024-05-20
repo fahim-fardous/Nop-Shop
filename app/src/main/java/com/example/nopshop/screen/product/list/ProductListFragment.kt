@@ -36,7 +36,7 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
 
         binding = FragmentProductListBinding.bind(view)
 
-        //initListeners()
+        initListeners()
         initViews()
         //loadData()
 
@@ -100,6 +100,8 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     }
 
     private fun initListeners() {
-        TODO("Not yet implemented")
+        binding.topBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }
