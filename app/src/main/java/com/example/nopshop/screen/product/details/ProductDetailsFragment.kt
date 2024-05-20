@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.nopshop.R
 import com.example.nopshop.databinding.FragmentProductDetailsBinding
 
@@ -23,7 +24,7 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
 
         binding = FragmentProductDetailsBinding.bind(view)
         initViews()
-        //initListeners()
+        initListeners()
         //loadData()
     }
 
@@ -32,7 +33,9 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     }
 
     private fun initListeners() {
-        TODO("Not yet implemented")
+        binding.topBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun initViews() {

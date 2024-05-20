@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nopshop.R
 import com.example.nopshop.adapter.CartAdapter
@@ -33,7 +34,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         binding = FragmentCartBinding.bind(view)
 
         initViews()
-        //initListeners()
+        initListeners()
         //loadData()
     }
 
@@ -42,7 +43,9 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     }
 
     private fun initListeners() {
-        TODO("Not yet implemented")
+        binding.topBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun initViews() {
