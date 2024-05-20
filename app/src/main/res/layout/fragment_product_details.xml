@@ -266,6 +266,7 @@
                 android:textColor="#A9AABF"
                 app:layout_constraintBottom_toBottomOf="@id/quantity_title"
                 app:layout_constraintEnd_toStartOf="@id/remove_btn"
+                app:layout_constraintHorizontal_bias="0.48"
                 app:layout_constraintStart_toEndOf="@id/quantity_title"
                 app:layout_constraintTop_toTopOf="@id/quantity_title" />
 

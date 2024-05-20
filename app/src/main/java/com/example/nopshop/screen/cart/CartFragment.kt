@@ -5,56 +5,136 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nopshop.R
+import com.example.nopshop.adapter.CartAdapter
+import com.example.nopshop.databinding.FragmentCartBinding
+import com.example.nopshop.model.CartItem
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CartFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CartFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+class CartFragment : Fragment(R.layout.fragment_cart) {
+    private lateinit var binding: FragmentCartBinding
+    private lateinit var adapter: CartAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        adapter = CartAdapter {
+
         }
+        //initObserver()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false)
+    private fun initObserver() {
+        TODO("Not yet implemented")
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CartFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CartFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentCartBinding.bind(view)
+
+        initViews()
+        //initListeners()
+        //loadData()
+    }
+
+    private fun loadData() {
+        TODO("Not yet implemented")
+    }
+
+    private fun initListeners() {
+        TODO("Not yet implemented")
+    }
+
+    private fun initViews() {
+        val list = mutableListOf<CartItem>()
+
+        list.add(
+            CartItem(
+                id = 0,
+                productImage = R.drawable.mobile,
+                productName = "Iphone 12",
+                productQuantity = 1,
+                originalPrice = 599.0,
+                discountPrice = 699.0
+            )
+        )
+
+        list.add(
+            CartItem(
+                id = 0,
+                productImage = R.drawable.steak,
+                productName = "Beef Rib Steak",
+                productQuantity = 1,
+                originalPrice = 599.0,
+                discountPrice = 699.0
+            )
+        )
+        list.add(
+            CartItem(
+                id = 0,
+                productImage = R.drawable.mobile,
+                productName = "Iphone 12",
+                productQuantity = 1,
+                originalPrice = 599.0,
+                discountPrice = 699.0
+            )
+        )
+
+        list.add(
+            CartItem(
+                id = 0,
+                productImage = R.drawable.steak,
+                productName = "Beef Rib Steak",
+                productQuantity = 1,
+                originalPrice = 599.0,
+                discountPrice = 699.0
+            )
+        )
+        list.add(
+            CartItem(
+                id = 0,
+                productImage = R.drawable.mobile,
+                productName = "Iphone 12",
+                productQuantity = 1,
+                originalPrice = 599.0,
+                discountPrice = 699.0
+            )
+        )
+
+        list.add(
+            CartItem(
+                id = 0,
+                productImage = R.drawable.steak,
+                productName = "Beef Rib Steak",
+                productQuantity = 1,
+                originalPrice = 599.0,
+                discountPrice = 699.0
+            )
+        )
+        list.add(
+            CartItem(
+                id = 0,
+                productImage = R.drawable.mobile,
+                productName = "Iphone 12",
+                productQuantity = 1,
+                originalPrice = 599.0,
+                discountPrice = 699.0
+            )
+        )
+
+        list.add(
+            CartItem(
+                id = 0,
+                productImage = R.drawable.steak,
+                productName = "Beef Rib Steak",
+                productQuantity = 1,
+                originalPrice = 599.0,
+                discountPrice = 699.0
+            )
+        )
+        binding.itemCountTv.text = "${list.size} ITEM (S)"
+        binding.cartRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.cartRv.adapter = adapter
+        adapter.submitList(list)
     }
 }
