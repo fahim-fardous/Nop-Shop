@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nopshop.R
 import com.example.nopshop.adapter.ProductAdapter
@@ -18,8 +19,16 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private lateinit var adapter: ProductAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = ProductAdapter {}
+        adapter = ProductAdapter { product ->
+            onClick(product)
+        }
         //initObserver()
+    }
+
+    private fun onClick(it: ProductItem) {
+        val action =
+            ProductListFragmentDirections.actionProductListFragmentToProductDetailsFragment()
+        findNavController().navigate(action)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,7 +42,7 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
 
     }
 
-    private fun initObserver(){}
+    private fun initObserver() {}
 
     private fun loadData() {
         TODO("Not yet implemented")
