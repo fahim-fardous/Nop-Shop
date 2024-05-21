@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_cart_btn"
             android:contentDescription="@string/quantity_plus"
-            android:paddingStart="8dp"
+            android:paddingStart="7dp"
             android:elevation="8dp"
             app:drawableStartCompat="@drawable/ic_remove_btn"
             app:layout_constraintBottom_toBottomOf="@id/quantity_tv"
