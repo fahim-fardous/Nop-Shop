@@ -22,8 +22,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -51,6 +50,14 @@ dependencies {
     implementation("me.relex:circleindicator:2.1.6")
     // Carousel
     implementation("org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.1.0")
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    // Gson
+    implementation("com.google.code.gson:gson:2.11.0")
+    // Moshi
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
+    //OkHttp
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
