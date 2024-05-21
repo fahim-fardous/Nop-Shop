@@ -74,55 +74,40 @@
             android:layout_height="wrap_content"
             android:background="@drawable/round_corner_with_stroke"
             android:gravity="center"
-            android:padding="2dp"
+            android:padding="5dp"
             android:text="5"
+            android:textSize="14sp"
             android:textColor="#A9AABF"
             app:layout_constraintTop_toBottomOf="@id/original_price"
             app:layout_constraintStart_toStartOf="@id/original_price"
             app:layout_constraintEnd_toEndOf="@id/discount_price"
             android:layout_marginTop="8dp"/>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/remove_btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:elevation="16dp"
-            android:padding="8dp"
-            app:cardCornerRadius="32dp"
+        <TextView
+            android:id="@+id/quantity_remove_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_cart_btn"
+            android:contentDescription="@string/quantity_plus"
+            android:paddingStart="8dp"
+            android:elevation="8dp"
+            app:drawableStartCompat="@drawable/ic_remove_btn"
             app:layout_constraintBottom_toBottomOf="@id/quantity_tv"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="@id/quantity_tv"
-            app:layout_constraintHeight_percent=".07"
             app:layout_constraintTop_toTopOf="@id/quantity_tv"
-            app:layout_constraintWidth_percent=".07">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_remove_btn" />
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/add_btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:elevation="16dp"
-            android:padding="8dp"
-            app:cardCornerRadius="32dp"
+            tools:ignore="RtlSymmetry"/>
+        <TextView
+            android:id="@+id/quantity_add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_cart_btn"
+            android:contentDescription="@string/quantity_plus"
+            android:paddingStart="8dp"
+            android:elevation="8dp"
+            app:drawableStartCompat="@drawable/ic_add_btn"
             app:layout_constraintBottom_toBottomOf="@id/quantity_tv"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="@id/quantity_tv"
-            app:layout_constraintHeight_percent=".07"
             app:layout_constraintTop_toTopOf="@id/quantity_tv"
-            app:layout_constraintWidth_percent=".07"
-            >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_add_btn" />
-        </androidx.cardview.widget.CardView>
+            tools:ignore="RtlSymmetry"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
