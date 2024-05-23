@@ -3,6 +3,7 @@ package com.example.nopshop.screen.home
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nopshop.R
@@ -26,9 +27,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var salmonFishAdapter: SalmonFishAdapter
     private lateinit var furnitureCollectionAdapter: FurnitureCollectionAdapter
     private lateinit var categoryAdapter: CategoryAdapter
+    private val viewModel: HomeViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //initObserver()
+        initObserver()
 
         bestSellingAdapter = BestSellingAdapter {}
 
@@ -46,9 +48,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initObserver() {
-
+        viewModel.sliderImageResponse.observe(this) {
+            for (image in it.Sliders) {
+                binding.adCarousel.addData(
+                    CarouselItem(
+                        imageUrl = image.ImageUrl
+                    )
+                )
+            }
+        }
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -58,11 +67,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         initViews()
         //initListeners()
-        //loadData()
+        loadData()
     }
 
     private fun loadData() {
-
+        viewModel.getImageSlider()
     }
 
     private fun initListeners() {
@@ -70,25 +79,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initViews() {
-        val list = mutableListOf<CarouselItem>()
-
-        list.add(
-            CarouselItem(
-                imageDrawable = R.drawable.furniture
-            )
-        )
-
-        list.add(
-            CarouselItem(
-                imageDrawable = R.drawable.furniture_2
-            )
-        )
-
-        list.add(
-            CarouselItem(
-                imageDrawable = R.drawable.furniture_3
-            )
-        )
 
         val bestSellingList = mutableListOf<ProductItem>()
 
@@ -346,9 +336,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         )
 
 
-
-
-        binding.adCarousel.setData(list)
+        //binding.adCarousel.setData(list)
 
         binding.bestSellingRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
