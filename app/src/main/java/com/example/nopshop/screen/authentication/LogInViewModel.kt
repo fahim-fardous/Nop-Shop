@@ -53,8 +53,7 @@ class LogInViewModel : ViewModel() {
             println(response.code())
             println(response.body()?.Data?.Token)
             _response.value = response.body()
-        }
-        else {
+        } else {
             println(response.code())
         }
     }
