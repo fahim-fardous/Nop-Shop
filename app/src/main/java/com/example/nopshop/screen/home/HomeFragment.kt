@@ -57,7 +57,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 )
             }
         }
+        viewModel.featureProductsResponse.observe(this) {
+            featureProductsAdapter.submitList(it.Data)
+        }
+
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -72,6 +77,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun loadData() {
         viewModel.getImageSlider()
+        viewModel.getFeatureProducts()
     }
 
     private fun initListeners() {
@@ -352,7 +358,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.featureProductRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.featureProductRv.adapter = featureProductsAdapter
-        featureProductsAdapter.submitList(featureProductList)
 
         binding.womenHeelRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
