@@ -19,10 +19,27 @@ class LogInViewModel : ViewModel() {
     val response: LiveData<DataX>
         get() = _response
 
+    private val _showMessage: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+
+    }
+
+    val showMessage: LiveData<String>
+        get() = _showMessage
+
     private val apiClient = ApiClient.getRetrofit().create(AuthenticationApi::class.java)
     private val repository = LoginRepository(apiClient)
 
+    private fun isValid(userEmail: String, userPassword: String): Boolean {
+        if (userEmail.isEmpty() || userPassword.isEmpty()) {
+            _showMessage.value = "Please fill all fields"
+            return false
+        }
+        return true
+    }
+
     fun postLogin(userEmail: String, userPassword: String) = viewModelScope.launch {
+        if (!isValid(userEmail, userPassword)) return@launch
         val response = repository.userLogin(
             Login(
                 Data = Data(
