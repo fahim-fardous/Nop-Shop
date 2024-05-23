@@ -7,16 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.nopshop.model.authentication.Data
 import com.example.nopshop.model.authentication.DataX
 import com.example.nopshop.model.authentication.Login
+import com.example.nopshop.model.authentication.LoginResponse
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.AuthenticationApi
 import com.example.nopshop.repository.LoginRepository
 import kotlinx.coroutines.launch
 
 class LogInViewModel : ViewModel() {
-    private val _response: MutableLiveData<DataX> by lazy {
-        MutableLiveData<DataX>()
+    private val _response: MutableLiveData<LoginResponse> by lazy {
+        MutableLiveData<LoginResponse>()
     }
-    val response: LiveData<DataX>
+    val response: LiveData<LoginResponse>
         get() = _response
 
     private val _showMessage: MutableLiveData<String> by lazy {
@@ -49,7 +50,12 @@ class LogInViewModel : ViewModel() {
             )
         )
         if (response.isSuccessful) {
+            println(response.code())
+            println(response.body()?.Data?.Token)
             _response.value = response.body()
+        }
+        else {
+            println(response.code())
         }
     }
 

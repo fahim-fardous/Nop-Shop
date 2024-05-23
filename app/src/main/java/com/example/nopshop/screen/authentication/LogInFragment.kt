@@ -52,9 +52,10 @@ class LogInFragment : Fragment(R.layout.fragment_log_in) {
     private fun initObserver() {
         viewModel.response.observe(this) { data ->
             val editor = sharedPreferences.edit()
-            editor.putString("token", data.Token)
+            editor.putString("token", data.Data.Token)
             editor.apply()
-            Toast.makeText(requireContext(), data.Token, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_SHORT).show()
+            println(data.Data.Token)
         }
         viewModel.showMessage.observe(this) { message ->
             if (message.isNotEmpty()) {

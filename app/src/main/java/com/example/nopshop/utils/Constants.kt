@@ -1,7 +1,7 @@
 package com.example.nopshop.utils
 
 object Constants {
-    const val BASE_URL = "http://demo460.nop-station.com/api"
+    const val BASE_URL = "http://demo460.nop-station.com/api/"
     const val CONTENT_TYPE = "application/json"
     const val DEVICE_ID = "44b4d8cd-7a2d-4a5f-a0e2-798021f1e294"
     const val NST =
