@@ -6,6 +6,7 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nopshop.R
+import com.example.nopshop.adapter.CategoryAdapter
 import com.example.nopshop.adapter.CategoryListAdapter
 import com.example.nopshop.databinding.FragmentCategoryBinding
 import com.example.nopshop.model.CategoryItem
@@ -13,11 +14,11 @@ import com.example.nopshop.model.CategoryItem
 class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private lateinit var binding: FragmentCategoryBinding
-    private lateinit var adapter: CategoryListAdapter
+    private lateinit var adapter: CategoryAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = CategoryListAdapter { category ->
+        adapter = CategoryAdapter { category ->
             onClick(category)
         }
         //initObserver()
@@ -136,7 +137,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         binding.categoryRv.layoutManager =
             GridLayoutManager(requireContext(), 3)
         binding.categoryRv.adapter = adapter
-        adapter.submitList(categoryList)
+
 
     }
 

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nopshop.R
 import com.example.nopshop.adapter.BestSellingAdapter
 import com.example.nopshop.adapter.CategoryAdapter
+import com.example.nopshop.adapter.CategoryListAdapter
 import com.example.nopshop.adapter.FeatureProductsAdapter
 import com.example.nopshop.adapter.FurnitureCollectionAdapter
 import com.example.nopshop.adapter.SalmonFishAdapter
@@ -27,6 +28,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var salmonFishAdapter: SalmonFishAdapter
     private lateinit var furnitureCollectionAdapter: FurnitureCollectionAdapter
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var categoryListAdapter: CategoryListAdapter
     private val viewModel: HomeViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         categoryAdapter = CategoryAdapter {}
 
+        categoryListAdapter = CategoryListAdapter{}
+
 
     }
 
@@ -59,6 +63,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
         viewModel.featureProductsResponse.observe(this) {
             featureProductsAdapter.submitList(it.Data)
+        }
+        viewModel.categoryWiseProductsResponse.observe(this) {
+            categoryListAdapter.submitList(it.Data)
         }
 
     }
@@ -78,6 +85,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun loadData() {
         viewModel.getImageSlider()
         viewModel.getFeatureProducts()
+        viewModel.getCategoryWiseProducts()
     }
 
     private fun initListeners() {
@@ -174,47 +182,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 id = 3,
                 categoryName = "Furniture",
                 categoryImage = R.drawable.furniture_category
-            )
-        )
-
-        val featureProductList = mutableListOf<ProductItem>()
-
-        featureProductList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.fashion_model,
-                productName = "Women outfit for show",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-        featureProductList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.essentials_hoodie,
-                productName = "Fear of God",
-                rating = 4.5f,
-                price = 15.00
-            )
-        )
-
-        featureProductList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.max_tshirt,
-                productName = "Max 90 t-shirt for men",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-        featureProductList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.nike_sportwear,
-                productName = "Nike Sportswear",
-                rating = 4.0f,
-                price = 15.00
             )
         )
 
@@ -352,8 +319,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.categoryRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.categoryRv.adapter = categoryAdapter
-        categoryAdapter.submitList(categoryList)
+        binding.categoryRv.adapter = categoryListAdapter
+
 
         binding.featureProductRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
