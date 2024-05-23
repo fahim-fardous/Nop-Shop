@@ -1,6 +1,6 @@
 package com.example.nopshop.model.category
 
-data class DefaultPictureModel(
+data class PictureModel(
     val AlternateText: String,
     val CustomProperties: CustomProperties,
     val FullSizeImageUrl: String,
