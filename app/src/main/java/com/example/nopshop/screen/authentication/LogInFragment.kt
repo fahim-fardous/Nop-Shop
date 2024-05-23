@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.nopshop.MainActivity
 import com.example.nopshop.R
 import com.example.nopshop.databinding.ActivityMainBinding
@@ -52,10 +53,13 @@ class LogInFragment : Fragment(R.layout.fragment_log_in) {
     private fun initObserver() {
         viewModel.response.observe(this) { data ->
             val editor = sharedPreferences.edit()
-            editor.putString("token", data.Data.Token)
+            editor.putString("auth_token", data.Data.Token)
+            editor.putBoolean("isLoggedIn", true)
             editor.apply()
+            println(sharedPreferences.getBoolean("isLoggedIn", false))
             Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_SHORT).show()
             println(data.Data.Token)
+            findNavController().popBackStack()
         }
         viewModel.showMessage.observe(this) { message ->
             if (message.isNotEmpty()) {
