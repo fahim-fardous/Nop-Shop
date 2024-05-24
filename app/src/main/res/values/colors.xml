@@ -8,4 +8,5 @@
     <color name="textColor">#2B2E43</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="iconTextInactive">#D2D3DC</color>
+    <color name="red">#F44336</color>
 </resources>

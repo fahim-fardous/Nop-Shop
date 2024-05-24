@@ -12,32 +12,34 @@ import com.example.nopshop.adapter.ProductAdapter
 import com.example.nopshop.databinding.FragmentProductListBinding
 import com.example.nopshop.databinding.ItemCategoryListBinding
 import com.example.nopshop.model.ProductItem
+import com.example.nopshop.model.products.ProductsItem
 
 
 class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private lateinit var binding: FragmentProductListBinding
-    private lateinit var adapter: ProductAdapter
+//    private lateinit var adapter: ProductAdapter
+//    private lateinit var args: ProductListFragmentArgs
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = ProductAdapter { product ->
-            onClick(product)
-        }
+//        adapter = ProductAdapter { product ->
+//            onClick(product)
+//        }
         //initObserver()
     }
 
-    private fun onClick(it: ProductItem) {
-        val action =
-            ProductListFragmentDirections.actionProductListFragmentToProductDetailsFragment()
-        findNavController().navigate(action)
-    }
+//    private fun onClick(it: ProductsItem) {
+//        val action =
+//            ProductListFragmentDirections.actionProductListFragmentToProductDetailsFragment(it.id)
+//        findNavController().navigate(action)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentProductListBinding.bind(view)
 
-        initListeners()
-        initViews()
+        //initListeners()
+        //initViews()
         //loadData()
 
     }
@@ -48,56 +50,14 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
         TODO("Not yet implemented")
     }
 
-    private fun initViews() {
-        val productList = mutableListOf<ProductItem>()
-
-        productList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.fashion_model,
-                productName = "Women outfit for show",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-        productList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.essentials_hoodie,
-                productName = "Fear of God",
-                rating = 4.5f,
-                price = 15.00
-            )
-        )
-
-        productList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.max_tshirt,
-                productName = "Max 90 t-shirt for men",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-        productList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.nike_sportwear,
-                productName = "Nike Sportswear",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-        binding.productRv.layoutManager =
-            GridLayoutManager(requireContext(), 2)
-        binding.productRv.adapter = adapter
-        adapter.submitList(productList)
-
-        binding.categoryTitleTv.text = "Random"
-
-    }
+//    private fun initViews() {
+//
+//        binding.productRv.layoutManager =
+//            GridLayoutManager(requireContext(), 2)
+//        binding.productRv.adapter = adapter
+//
+//
+//    }
 
     private fun initListeners() {
         binding.topBar.setNavigationOnClickListener {

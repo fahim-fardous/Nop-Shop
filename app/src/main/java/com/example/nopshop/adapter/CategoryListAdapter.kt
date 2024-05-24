@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.nopshop.databinding.ItemCategoryBinding
-import com.example.nopshop.databinding.ItemCategoryListBinding
 import com.example.nopshop.model.category.Data
 
 class CategoryListAdapter(

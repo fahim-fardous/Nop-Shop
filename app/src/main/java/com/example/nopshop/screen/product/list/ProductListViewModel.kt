@@ -1,4 +1,7 @@
 package com.example.nopshop.screen.product.list
 
-class ProductListViewModel {
+import androidx.lifecycle.ViewModel
+
+class ProductListViewModel : ViewModel() {
+
 }

@@ -38,6 +38,7 @@ class HomeViewModel : ViewModel() {
 
     fun getImageSlider() = viewModelScope.launch {
         val response = repository.getImageSlider()
+        println(response.code())
         _sliderImageResponse.value = response.body()?.Data
     }
 

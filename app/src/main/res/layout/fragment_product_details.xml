@@ -84,10 +84,10 @@
 
             <ImageView
                 android:id="@+id/product_img"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/furniture"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:scaleType="fitXY"
+                tools:src="@drawable/furniture"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent=".45"
@@ -116,9 +116,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:ellipsize="end"
                 android:fontFamily="@font/lato"
-                android:maxLines="2"
                 android:textColor="@color/textColor"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -253,6 +251,7 @@
                 app:layout_constraintHorizontal_bias=".22"
                 app:layout_constraintStart_toEndOf="@id/availability_title"
                 app:layout_constraintTop_toTopOf="@id/availability_title"
+                app:layout_constraintBottom_toBottomOf="@id/availability_title"
                 tools:text="In stock" />
 
             <TextView
@@ -263,7 +262,7 @@
                 android:background="@drawable/round_corner_with_stroke"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="5"
+                android:text="1"
                 android:textColor="#A9AABF"
                 app:layout_constraintBottom_toBottomOf="@id/quantity_title"
                 app:layout_constraintEnd_toStartOf="@id/remove_btn"

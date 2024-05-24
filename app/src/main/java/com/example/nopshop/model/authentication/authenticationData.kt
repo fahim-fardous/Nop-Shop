@@ -1,6 +1,6 @@
 package com.example.nopshop.model.authentication
 
-data class Data(
+data class authenticationData(
     val CheckoutAsGuest: Boolean = false,
     val DisplayCaptcha: Boolean=false,
     val Email: String,
