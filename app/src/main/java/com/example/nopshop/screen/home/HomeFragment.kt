@@ -16,7 +16,7 @@ import com.example.nopshop.adapter.SalmonFishAdapter
 import com.example.nopshop.adapter.WomenHeelAdapter
 import com.example.nopshop.databinding.FragmentHomeBinding
 import com.example.nopshop.model.ProductItem
-import com.example.nopshop.model.CategoryItem
+import com.example.nopshop.model.featureProducts.Data
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
 
 
@@ -36,7 +36,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         bestSellingAdapter = BestSellingAdapter {}
 
-        featureProductsAdapter = FeatureProductsAdapter {}
+        featureProductsAdapter = FeatureProductsAdapter {
+            onProductClick(it)
+        }
 
         womenHeelAdapter = WomenHeelAdapter {}
 
@@ -46,13 +48,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         categoryAdapter = CategoryAdapter {}
 
-        categoryListAdapter = CategoryListAdapter{}
+        categoryListAdapter = CategoryListAdapter {
 
-
+        }
     }
+
+    private fun onProductClick(product: Data) {
+        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(product.Id)
+        findNavController().navigate(action)
+    }
+
 
     private fun initObserver() {
         viewModel.sliderImageResponse.observe(this) {
+            println(it.Sliders.size)
             for (image in it.Sliders) {
                 binding.adCarousel.addData(
                     CarouselItem(
@@ -148,40 +157,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 3f,
                 15.00
 
-            )
-        )
-
-        val categoryList = mutableListOf<CategoryItem>()
-
-        categoryList.add(
-            CategoryItem(
-                id = 0,
-                categoryName = "Foods",
-                categoryImage = R.drawable.strawberry
-            )
-        )
-
-        categoryList.add(
-            CategoryItem(
-                id = 1,
-                categoryName = "Watch",
-                categoryImage = R.drawable.watch
-            )
-        )
-
-        categoryList.add(
-            CategoryItem(
-                id = 2,
-                categoryName = "Phones",
-                categoryImage = R.drawable.mobile
-            )
-        )
-
-        categoryList.add(
-            CategoryItem(
-                id = 3,
-                categoryName = "Furniture",
-                categoryImage = R.drawable.furniture_category
             )
         )
 

@@ -19,7 +19,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         super.onCreate(savedInstanceState)
 
         adapter = CategoryAdapter { category ->
-            onClick(category)
+            //onClick(category)
         }
         //initObserver()
 
@@ -143,11 +143,11 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun initListeners() {}
 
-    private fun onClick(category: CategoryItem) {
-        println("Clicked")
-        val action = CategoryFragmentDirections.actionCategoryFragmentToProductListFragment(0)
-        findNavController().navigate(action)
-    }
+//    private fun onClick(category: CategoryItem) {
+//        println("Clicked")
+//        val action = CategoryFragmentDirections.actionCategoryFragmentToProductListFragment(0)
+//        findNavController().navigate(action)
+//    }
 
 
 

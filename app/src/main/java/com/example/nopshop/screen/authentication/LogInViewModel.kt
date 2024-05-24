@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nopshop.model.authentication.Data
-import com.example.nopshop.model.authentication.DataX
+import com.example.nopshop.model.authentication.authenticationData
 import com.example.nopshop.model.authentication.Login
 import com.example.nopshop.model.authentication.LoginResponse
 import com.example.nopshop.network.ApiClient
@@ -43,7 +42,7 @@ class LogInViewModel : ViewModel() {
         if (!isValid(userEmail, userPassword)) return@launch
         val response = repository.userLogin(
             Login(
-                Data = Data(
+                authenticationData = authenticationData(
                     Email = userEmail,
                     Password = userPassword,
                 )

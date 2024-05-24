@@ -13,16 +13,18 @@
         <action
             android:id="@+id/action_homeFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_productListFragment"
+            app:destination="@id/productListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.nopshop.screen.category.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" >
-        <action
-            android:id="@+id/action_categoryFragment_to_productListFragment"
-            app:destination="@id/productListFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_category" />
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.nopshop.screen.cart.CartFragment"
@@ -45,7 +47,7 @@
         tools:layout="@layout/fragment_product_list" >
         <argument
             android:name="category_id"
-            app:argType="long" />
+            app:argType="integer" />
         <action
             android:id="@+id/action_productListFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
@@ -54,7 +56,11 @@
         android:id="@+id/productDetailsFragment"
         android:name="com.example.nopshop.screen.product.details.ProductDetailsFragment"
         android:label="fragment_product_details"
-        tools:layout="@layout/fragment_product_details" />
+        tools:layout="@layout/fragment_product_details" >
+        <argument
+            android:name="productId"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.example.nopshop.screen.authentication.account.AccountFragment"
