@@ -127,7 +127,7 @@
                 tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
 
             <TextView
-                android:id="@+id/original_price"
+                android:id="@+id/discount_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -139,16 +139,16 @@
                 tools:text="$349.0" />
 
             <TextView
-                android:id="@+id/discount_price"
+                android:id="@+id/original_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:fontFamily="@font/lato_bold"
                 android:textColor="#AEAEAE"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@id/original_price"
-                app:layout_constraintStart_toEndOf="@id/original_price"
-                app:layout_constraintTop_toTopOf="@id/original_price"
+                app:layout_constraintBottom_toBottomOf="@id/discount_price"
+                app:layout_constraintStart_toEndOf="@id/discount_price"
+                app:layout_constraintTop_toTopOf="@id/discount_price"
                 app:layout_constraintVertical_bias="0"
                 tools:text="$699.0" />
 
@@ -161,7 +161,7 @@
                 android:text="@string/quantity"
                 android:textColor="@color/textColor"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@id/original_price"
+                app:layout_constraintStart_toStartOf="@id/discount_price"
                 app:layout_constraintTop_toBottomOf="@id/divider_1" />
 
             <androidx.cardview.widget.CardView
@@ -228,8 +228,8 @@
                 android:text="Availability"
                 android:textColor="@color/textColor"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@id/original_price"
-                app:layout_constraintTop_toBottomOf="@id/original_price" />
+                app:layout_constraintStart_toStartOf="@id/discount_price"
+                app:layout_constraintTop_toBottomOf="@id/discount_price" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/divider_1"

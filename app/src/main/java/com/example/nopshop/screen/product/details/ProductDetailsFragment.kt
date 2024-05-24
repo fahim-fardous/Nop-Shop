@@ -21,7 +21,6 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private val viewModel: ProductDetailsViewModel by viewModels()
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initObserver()
@@ -48,26 +47,23 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     }
 
     private fun initViews() {
-        binding.discountPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        //binding.discountPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
     }
 
 
     private fun initObserver() {
         viewModel.productResponse.observe(this) {
-            binding.stockTv.text = it.Data.StockAvailability
+
             binding.productImg.load(it.Data.PictureModels[0].ImageUrl)
             binding.productTitleTv.text = it.Data.Name
+            binding.stockTv.text = it.Data.StockAvailability
             binding.productSubtitleTv.text =
                 Html.fromHtml(it.Data.ShortDescription, Html.FROM_HTML_MODE_COMPACT).toString()
-            if (it.Data.ProductPrice.PriceWithDiscount != "") {
-                binding.discountPrice.text = it.Data.ProductPrice.PriceWithDiscount.toString()
-                binding.discountPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            } else {
-                binding.discountPrice.visibility = View.INVISIBLE
-            }
-            binding.originalPrice.text = it.Data.ProductPrice.Price
             binding.descriptionTv.text =
                 Html.fromHtml(it.Data.FullDescription, Html.FROM_HTML_MODE_COMPACT).toString()
+            binding.discountPrice.text = it.Data.ProductPrice.BasePricePAngVValue.toString()
+            binding.originalPrice.text = it.Data.ProductPrice.Price
+            binding.originalPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }
     }
 
