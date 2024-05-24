@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.nopshop.databinding.ItemCategoryBinding
 import com.example.nopshop.databinding.ItemCategoryListBinding
 import com.example.nopshop.model.category.Data
 
@@ -13,7 +14,7 @@ class CategoryListAdapter(
     private val onCategoryClick: (Data) -> Unit
 ) : ListAdapter<Data, CategoryListAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
-        private val binding: ItemCategoryListBinding,
+        private val binding: ItemCategoryBinding,
         private val onCategoryClick: (Data) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -29,7 +30,7 @@ class CategoryListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemCategoryListBinding.inflate(layoutInflater, parent, false)
+        val binding = ItemCategoryBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding, onCategoryClick)
     }
 
