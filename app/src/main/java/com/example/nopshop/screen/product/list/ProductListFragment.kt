@@ -17,21 +17,22 @@ import com.example.nopshop.model.products.ProductsItem
 
 class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private lateinit var binding: FragmentProductListBinding
-//    private lateinit var adapter: ProductAdapter
-//    private lateinit var args: ProductListFragmentArgs
+
+    private lateinit var adapter: ProductAdapter
+    private lateinit var args: ProductListFragmentArgs
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        adapter = ProductAdapter { product ->
-//            onClick(product)
-//        }
-        //initObserver()
+        adapter = ProductAdapter { product ->
+            onClick(product)
+        }
+        initObserver()
     }
 
-//    private fun onClick(it: ProductsItem) {
+    private fun onClick(it: ProductsItem) {
 //        val action =
-//            ProductListFragmentDirections.actionProductListFragmentToProductDetailsFragment(it.id)
+//            ProductListFragmentDirections.actionProductListFragmentToProductDetailsFragment()
 //        findNavController().navigate(action)
-//    }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,25 +40,27 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
         binding = FragmentProductListBinding.bind(view)
 
         //initListeners()
-        //initViews()
+        initViews()
         //loadData()
 
     }
 
-    private fun initObserver() {}
+    private fun initObserver() {
+        view
+    }
 
     private fun loadData() {
         TODO("Not yet implemented")
     }
 
-//    private fun initViews() {
-//
-//        binding.productRv.layoutManager =
-//            GridLayoutManager(requireContext(), 2)
-//        binding.productRv.adapter = adapter
-//
-//
-//    }
+    private fun initViews() {
+
+        binding.productRv.layoutManager =
+            GridLayoutManager(requireContext(), 2)
+        binding.productRv.adapter = adapter
+
+
+    }
 
     private fun initListeners() {
         binding.topBar.setNavigationOnClickListener {

@@ -1,3 +1,7 @@
 package com.example.nopshop.model.category
 
-class CustomProperties
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+class CustomProperties:Parcelable

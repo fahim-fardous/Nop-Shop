@@ -37,7 +37,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         bestSellingAdapter = BestSellingAdapter {}
 
         featureProductsAdapter = FeatureProductsAdapter {
-            onProductClick(it)
+            //onProductClick(it)
         }
 
         womenHeelAdapter = WomenHeelAdapter {}
@@ -49,12 +49,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         categoryAdapter = CategoryAdapter {}
 
         categoryListAdapter = CategoryListAdapter {
-
+            onProductClick(it)
         }
     }
 
-    private fun onProductClick(product: Data) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(product.Id)
+    private fun onProductClick(product: com.example.nopshop.model.category.Data) {
+        val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(product.Products.toTypedArray())
         findNavController().navigate(action)
     }
 

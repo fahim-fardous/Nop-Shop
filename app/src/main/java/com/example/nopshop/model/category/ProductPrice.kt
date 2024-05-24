@@ -1,8 +1,11 @@
 package com.example.nopshop.model.category
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class ProductPrice(
     val AvailableForPreOrder: Boolean,
-    val BasePricePAngV: Any,
     val BasePricePAngVValue: Double,
     val CustomProperties: CustomProperties,
     val DisableAddToCompareListButton: Boolean,
@@ -12,8 +15,6 @@ data class ProductPrice(
     val ForceRedirectionAfterAddingToCart: Boolean,
     val IsRental: Boolean,
     val OldPrice: String,
-    val OldPriceValue: Any,
-    val PreOrderAvailabilityStartDateTimeUtc: Any,
     val Price: String,
     val PriceValue: Double
-)
+):Parcelable

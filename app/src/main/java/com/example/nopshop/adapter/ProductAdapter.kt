@@ -5,20 +5,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.nopshop.databinding.ItemProductBinding
 import com.example.nopshop.model.ProductItem
+import com.example.nopshop.model.products.ProductsItem
 
-class ProductAdapter(private val onClick: (ProductItem) -> Unit) :
-    ListAdapter<ProductItem, ProductAdapter.ViewHolder>(DIFF_CALLBACK) {
+class ProductAdapter(private val onClick: (ProductsItem) -> Unit) :
+    ListAdapter<ProductsItem, ProductAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
         private val binding: ItemProductBinding,
-        private val onClick: (ProductItem) -> Unit
+        private val onClick: (ProductsItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ProductItem) {
-            binding.productImg.setImageResource(item.productImage)
-            binding.productNameTv.text = item.productName
-            binding.productRating.rating = item.rating
-            binding.productPriceTv.text = "$${item.price}"
+        fun bind(item: ProductsItem) {
+            binding.productImg.load(item.Data.PictureModels[0].ImageUrl)
+            binding.productNameTv.text = item.Data.Name
+            binding.productRating.rating =
+                if (item.Data.ProductReviewOverview.TotalReviews == 0) 0f else (item.Data.ProductReviewOverview.RatingSum / item.Data.ProductReviewOverview.TotalReviews).toFloat()
+            binding.productPriceTv.text = "$${item.Data.ProductPrice}"
 
             binding.root.setOnClickListener {
                 onClick(item)
@@ -45,15 +48,15 @@ class ProductAdapter(private val onClick: (ProductItem) -> Unit) :
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ProductItem>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ProductsItem>() {
             override fun areItemsTheSame(
-                oldItem: ProductItem, newItem: ProductItem
+                oldItem: ProductsItem, newItem: ProductsItem
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.Data.Id == newItem.Data.Id
             }
 
             override fun areContentsTheSame(
-                oldItem: ProductItem, newItem: ProductItem
+                oldItem: ProductsItem, newItem: ProductsItem
             ): Boolean {
                 return oldItem == newItem
             }
