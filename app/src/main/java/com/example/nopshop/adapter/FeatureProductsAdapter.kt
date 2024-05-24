@@ -20,7 +20,7 @@ class FeatureProductsAdapter(private val onClick: (Data) -> Unit) :
             binding.productNameTv.text = item.Name
             binding.productRating.rating =
                 if (item.ReviewOverviewModel.TotalReviews == 0) 0f else (item.ReviewOverviewModel.RatingSum / item.ReviewOverviewModel.TotalReviews).toFloat()
-            binding.productPriceTv.text = "$${item.ProductPrice.Price}"
+            binding.productPriceTv.text = "${item.ProductPrice.Price}"
         }
     }
 
