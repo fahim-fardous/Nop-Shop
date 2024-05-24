@@ -21,7 +21,7 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private val viewModel: ProductDetailsViewModel by viewModels()
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initObserver()
@@ -51,7 +51,7 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
         binding.discountPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     private fun initObserver() {
         viewModel.productResponse.observe(this) {
             binding.stockTv.text = it.Data.StockAvailability
