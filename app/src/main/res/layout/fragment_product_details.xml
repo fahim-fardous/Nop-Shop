@@ -251,6 +251,7 @@
                 app:layout_constraintHorizontal_bias=".22"
                 app:layout_constraintStart_toEndOf="@id/availability_title"
                 app:layout_constraintTop_toTopOf="@id/availability_title"
+                app:layout_constraintBottom_toBottomOf="@id/availability_title"
                 tools:text="In stock" />
 
             <TextView
@@ -261,7 +262,7 @@
                 android:background="@drawable/round_corner_with_stroke"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="5"
+                android:text="1"
                 android:textColor="#A9AABF"
                 app:layout_constraintBottom_toBottomOf="@id/quantity_title"
                 app:layout_constraintEnd_toStartOf="@id/remove_btn"
