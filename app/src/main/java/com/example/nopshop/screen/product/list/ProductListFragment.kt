@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.nopshop.R
 import com.example.nopshop.adapter.ProductAdapter
 import com.example.nopshop.databinding.FragmentProductListBinding
 import com.example.nopshop.databinding.ItemCategoryListBinding
 import com.example.nopshop.model.ProductItem
+import com.example.nopshop.model.category.Product
 import com.example.nopshop.model.products.ProductsItem
 
 
@@ -19,7 +21,7 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private lateinit var binding: FragmentProductListBinding
 
     private lateinit var adapter: ProductAdapter
-    private lateinit var args: ProductListFragmentArgs
+    private val args: ProductListFragmentArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = ProductAdapter { product ->
@@ -28,10 +30,10 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
         initObserver()
     }
 
-    private fun onClick(it: ProductsItem) {
-//        val action =
-//            ProductListFragmentDirections.actionProductListFragmentToProductDetailsFragment()
-//        findNavController().navigate(action)
+    private fun onClick(it: Product) {
+        val action =
+            ProductListFragmentDirections.actionProductListFragmentToProductDetailsFragment(it.Id)
+        findNavController().navigate(action)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,7 +48,7 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     }
 
     private fun initObserver() {
-        view
+
     }
 
     private fun loadData() {
@@ -58,7 +60,8 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
         binding.productRv.layoutManager =
             GridLayoutManager(requireContext(), 2)
         binding.productRv.adapter = adapter
-
+        adapter.submitList(args.productList.toMutableList())
+        binding.categoryTitleTv.text = args.categoryName
 
     }
 

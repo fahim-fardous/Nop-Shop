@@ -1,7 +1,7 @@
 package com.example.nopshop.model.category
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Product(
@@ -18,4 +18,4 @@ data class Product(
     val SeName: String,
     val ShortDescription: String,
     val Sku: String
-):Parcelable
+) : Parcelable

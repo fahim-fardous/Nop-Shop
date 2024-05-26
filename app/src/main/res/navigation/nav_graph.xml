@@ -51,6 +51,9 @@
         <argument
             android:name="productList"
             app:argType="com.example.nopshop.model.category.Product[]" />
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"

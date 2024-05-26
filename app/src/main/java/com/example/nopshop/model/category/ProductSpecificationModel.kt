@@ -1,9 +1,11 @@
 package com.example.nopshop.model.category
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.RawValue
 
 @Parcelize
 data class ProductSpecificationModel(
-    val CustomProperties: CustomProperties
-):Parcelable
+    val CustomProperties: CustomProperties,
+    val Groups: @RawValue List<Any>
+) : Parcelable
