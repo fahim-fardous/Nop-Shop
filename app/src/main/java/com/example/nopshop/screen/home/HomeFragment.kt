@@ -15,8 +15,11 @@ import com.example.nopshop.adapter.FurnitureCollectionAdapter
 import com.example.nopshop.adapter.SalmonFishAdapter
 import com.example.nopshop.adapter.WomenHeelAdapter
 import com.example.nopshop.databinding.FragmentHomeBinding
+import com.example.nopshop.db.dbmodel.toData
 import com.example.nopshop.model.ProductItem
+import com.example.nopshop.model.common.BaseCategoryItem
 import com.example.nopshop.model.featureProducts.Data
+import com.example.nopshop.utils.NoInternet
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
 
 
@@ -29,7 +32,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var furnitureCollectionAdapter: FurnitureCollectionAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryListAdapter: CategoryListAdapter
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels() {
+        HomeViewModelFactory(requireContext().applicationContext)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initObserver()
@@ -72,22 +78,46 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
     private fun initObserver() {
-        viewModel.sliderImageResponse.observe(this) {
-            println(it.Sliders.size)
-            for (image in it.Sliders) {
-                binding.adCarousel.addData(
-                    CarouselItem(
-                        imageUrl = image.ImageUrl
+        if (NoInternet.isOnline(requireContext().applicationContext)) {
+            viewModel.sliderImageResponse.observe(this) { slider ->
+                for (image in slider) {
+                    binding.adCarousel.addData(
+                        CarouselItem(
+                            imageUrl = image.ImageUrl
+                        )
                     )
-                )
+                }
+            }
+        } else {
+            viewModel.sliderImageResponseFromDb.observe(this) { slider ->
+                for (image in slider) {
+                    binding.adCarousel.addData(
+                        CarouselItem(
+                            imageUrl = image.ImageUrl
+                        )
+                    )
+                }
             }
         }
         viewModel.featureProductsResponse.observe(this) {
             featureProductsAdapter.submitList(it.Data)
         }
-        viewModel.categoryWiseProductsResponse.observe(this) {
-            categoryListAdapter.submitList(it.Data)
+        if (NoInternet.isOnline(requireContext().applicationContext)) {
+            viewModel.categoryWiseProductsResponse.observe(this) { it ->
+                categoryListAdapter.submitList(it.Data)
+            }
+        } else {
+            viewModel.categoryWiseProductsResponseFromDb.observe(this) {
+                val list = mutableListOf<com.example.nopshop.model.category.Data>()
+                for (item in it) {
+                    list.add(
+                        item.toData()
+                    )
+                }
+                categoryListAdapter.submitList(list)
+            }
         }
+
 
     }
 
@@ -104,9 +134,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun loadData() {
-        viewModel.getImageSlider()
+        viewModel.getImageSlider(requireContext())
         viewModel.getFeatureProducts()
-        viewModel.getCategoryWiseProducts()
+        viewModel.getCategoryWiseProducts(requireContext())
     }
 
     private fun initListeners() {
