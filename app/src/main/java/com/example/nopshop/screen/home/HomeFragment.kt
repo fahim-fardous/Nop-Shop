@@ -48,13 +48,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         categoryAdapter = CategoryAdapter {}
 
-        categoryListAdapter = CategoryListAdapter {
+        categoryListAdapter = CategoryListAdapter { list, name ->
+            onCategoryClick(list, name)
 
         }
     }
 
-    private fun onProductClick(product: Data) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(product.Id)
+    private fun onProductClick(it: Data) {
+        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
+        findNavController().navigate(action)
+    }
+
+    private fun onCategoryClick(
+        product: com.example.nopshop.model.category.Data,
+        categoryName: String
+    ) {
+        val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
+            product.Products.toTypedArray(),
+            categoryName
+        )
         findNavController().navigate(action)
     }
 

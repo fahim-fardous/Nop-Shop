@@ -10,18 +10,18 @@ import com.example.nopshop.databinding.ItemCategoryBinding
 import com.example.nopshop.model.category.Data
 
 class CategoryListAdapter(
-    private val onCategoryClick: (Data) -> Unit
+    private val onCategoryClick: (Data, String) -> Unit
 ) : ListAdapter<Data, CategoryListAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
         private val binding: ItemCategoryBinding,
-        private val onCategoryClick: (Data) -> Unit
+        private val onCategoryClick: (Data, String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(category: Data) {
             binding.categoryImg.load(category.Products[0].PictureModels[0].ImageUrl)
             binding.categoryName.text = category.Name
             binding.root.setOnClickListener {
-                onCategoryClick(category)
+                onCategoryClick(category, category.Name)
             }
         }
 

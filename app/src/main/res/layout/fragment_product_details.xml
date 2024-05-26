@@ -87,14 +87,14 @@
                 android:layout_width="0dp"
                 android:layout_height="300dp"
                 android:scaleType="fitXY"
-                tools:src="@drawable/furniture"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent=".45"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
+                app:layout_constraintVertical_bias="0"
+                tools:src="@drawable/furniture" />
 
             <TextView
                 android:id="@+id/product_title_tv"
@@ -247,11 +247,11 @@
                 android:fontFamily="@font/lato_bold"
                 android:textColor="@color/appTheme"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/availability_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias=".22"
                 app:layout_constraintStart_toEndOf="@id/availability_title"
                 app:layout_constraintTop_toTopOf="@id/availability_title"
-                app:layout_constraintBottom_toBottomOf="@id/availability_title"
                 tools:text="In stock" />
 
             <TextView
@@ -329,17 +329,18 @@
                     android:layout_weight="1"
                     android:background="@drawable/top_left_round_corner"
                     android:padding="16dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+ ADD TO CART"
                         android:fontFamily="@font/lato"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="+ ADD TO CART"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -350,29 +351,31 @@
                     android:layout_weight="1"
                     android:background="@drawable/top_right_round_corner"
                     android:padding="16dp">
+
                     <ImageView
                         android:id="@+id/cart_img"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@drawable/img"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias=".2"/>
+                        app:layout_constraintHorizontal_bias=".2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <TextView
                         android:id="@+id/btn_buy_now"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/buy_now_"
                         android:fontFamily="@font/lato"
-                        app:layout_constraintTop_toTopOf="@id/cart_img"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/cart_img"
-                        app:layout_constraintBottom_toBottomOf="@id/cart_img"
+                        android:text="@string/buy_now_"
                         android:textColor="@color/white"
                         android:textSize="14sp"
-                        app:layout_constraintHorizontal_bias="0.1"/>
+                        app:layout_constraintBottom_toBottomOf="@id/cart_img"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.1"
+                        app:layout_constraintStart_toEndOf="@id/cart_img"
+                        app:layout_constraintTop_toTopOf="@id/cart_img" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
