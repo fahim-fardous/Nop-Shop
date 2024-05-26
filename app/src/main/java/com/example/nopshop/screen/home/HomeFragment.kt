@@ -16,8 +16,8 @@ import com.example.nopshop.adapter.SalmonFishAdapter
 import com.example.nopshop.adapter.WomenHeelAdapter
 import com.example.nopshop.databinding.FragmentHomeBinding
 import com.example.nopshop.db.dbmodel.toData
+import com.example.nopshop.db.toFeatureData
 import com.example.nopshop.model.ProductItem
-import com.example.nopshop.model.common.BaseCategoryItem
 import com.example.nopshop.model.featureProducts.Data
 import com.example.nopshop.utils.NoInternet
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
@@ -99,8 +99,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             }
         }
-        viewModel.featureProductsResponse.observe(this) {
-            featureProductsAdapter.submitList(it.Data)
+        if (NoInternet.isOnline(requireContext().applicationContext)) {
+            viewModel.featureProductsResponse.observe(this) {
+                featureProductsAdapter.submitList(it.Data)
+            }
+        } else {
+            viewModel.featureProductsResponseFromDb.observe(this) {
+                val list = mutableListOf<Data>()
+                for (item in it) {
+                    list.add(
+                        item.toFeatureData()
+                    )
+                }
+
+                featureProductsAdapter.submitList(list)
+            }
         }
         if (NoInternet.isOnline(requireContext().applicationContext)) {
             viewModel.categoryWiseProductsResponse.observe(this) { it ->
@@ -135,7 +148,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun loadData() {
         viewModel.getImageSlider(requireContext())
-        viewModel.getFeatureProducts()
+        viewModel.getFeatureProducts(requireContext())
         viewModel.getCategoryWiseProducts(requireContext())
     }
 

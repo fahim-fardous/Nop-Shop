@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.nopshop.databinding.ItemCategoryBinding
 import com.example.nopshop.model.category.Data
-import com.example.nopshop.model.common.BaseCategoryItem
 
 class CategoryListAdapter(
     private val onCategoryClick: (Data, String) -> Unit

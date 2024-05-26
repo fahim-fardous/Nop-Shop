@@ -7,18 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nopshop.db.AppDatabase
 import com.example.nopshop.db.dbmodel.CategoryEntity
+import com.example.nopshop.db.FeatureProductsEntity
 import com.example.nopshop.db.dbmodel.SliderEntity
 import com.example.nopshop.model.category.CategoryWiseProductsItem
 import com.example.nopshop.model.featureProducts.FeatureProductItem
-import com.example.nopshop.model.slider.Data
-import com.example.nopshop.model.slider.ImageSliderItem
 import com.example.nopshop.model.slider.Slider
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.HomeApi
 import com.example.nopshop.repository.HomeRepository
 import com.example.nopshop.utils.NoInternet
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class HomeViewModel(context: Context) : ViewModel() {
     private val _sliderImageResponse: MutableLiveData<List<Slider>> by lazy {
@@ -47,12 +45,19 @@ class HomeViewModel(context: Context) : ViewModel() {
     val categoryWiseProductsResponseFromDb: LiveData<List<CategoryEntity>>
         get() = _categoryWiseProductsResponseFromDb
 
+    private val _featureProductsResponseFromDb: MutableLiveData<List<FeatureProductsEntity>> by lazy {
+        MutableLiveData<List<FeatureProductsEntity>>()
+    }
+
+    val featureProductsResponseFromDb: LiveData<List<FeatureProductsEntity>>
+        get() = _featureProductsResponseFromDb
     private val _featureProductsResponse: MutableLiveData<FeatureProductItem> by lazy {
         MutableLiveData<FeatureProductItem>()
     }
 
     val featureProductsResponse: LiveData<FeatureProductItem>
         get() = _featureProductsResponse
+
 
 
     private val apiClient = ApiClient.getRetrofit().create(HomeApi::class.java)
@@ -81,9 +86,15 @@ class HomeViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun getFeatureProducts() = viewModelScope.launch {
-        val response = repository.getFeatureProducts()
-        _featureProductsResponse.value = response.body()
+    fun getFeatureProducts(context: Context) = viewModelScope.launch {
+        if(NoInternet.isOnline(context.applicationContext)){
+            val response = repository.getFeatureProducts()
+            _featureProductsResponse.value = response.body()
+        }
+        else{
+            val response = repository.getFeatureProductsFromDb()
+            _featureProductsResponseFromDb.value = response
+        }
     }
 
 

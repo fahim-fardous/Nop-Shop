@@ -6,7 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.nopshop.converter.Converters
+import com.example.nopshop.converter.FeatureProductsConverter
 import com.example.nopshop.db.dao.CategoryDao
+import com.example.nopshop.db.dao.FeatureProductsDao
 import com.example.nopshop.db.dao.SliderDao
 import com.example.nopshop.db.dbmodel.CategoryEntity
 import com.example.nopshop.db.dbmodel.SliderEntity
@@ -15,12 +17,14 @@ import com.example.nopshop.db.dbmodel.SliderEntity
     entities = [
         SliderEntity::class,
         CategoryEntity::class,
+        FeatureProductsEntity::class
     ], version = 1
 )
-@TypeConverters(Converters::class)
+@TypeConverters(Converters::class, FeatureProductsConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun sliderDao(): SliderDao
     abstract fun categoryDao(): CategoryDao
+    abstract fun featureProductDao(): FeatureProductsDao
 
     companion object {
         operator fun invoke(context: Context) = buildDatabase(context)

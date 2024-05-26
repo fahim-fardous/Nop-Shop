@@ -3,14 +3,11 @@ package com.example.nopshop.repository
 import android.content.Context
 import com.example.nopshop.db.AppDatabase
 import com.example.nopshop.model.category.asEntity
-import com.example.nopshop.model.slider.ImageSliderItem
-import com.example.nopshop.model.slider.Slider
+import com.example.nopshop.model.featureProducts.asEntity
 import com.example.nopshop.model.slider.asEntity
 import com.example.nopshop.network.api.HomeApi
-import com.example.nopshop.utils.NoInternet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 
 class HomeRepository(
     private val context: Context,
@@ -38,7 +35,16 @@ class HomeRepository(
     }
 
     suspend fun getFeatureProducts() = withContext(Dispatchers.IO) {
-        return@withContext api.getFeatureProducts()
+        val featureProducts = api.getFeatureProducts()
+
+        featureProducts.let {
+            featureProducts.body()?.Data.let { it1->
+                if (it1 != null) {
+                    db.featureProductDao().saveFeatureProducts(it1.map{it.asEntity()})
+                }
+            }
+        }
+        featureProducts
     }
     // Database
     suspend fun getImageSliderFromDb() = withContext(Dispatchers.IO) {
@@ -48,6 +54,10 @@ class HomeRepository(
     suspend fun getCategoryWiseProductsFromDb() = withContext(Dispatchers.IO) {
         return@withContext db.categoryDao().getAllCategory()
 
+    }
+
+    suspend fun getFeatureProductsFromDb() = withContext(Dispatchers.IO) {
+        return@withContext db.featureProductDao().getFeatureProducts()
     }
 
 }
