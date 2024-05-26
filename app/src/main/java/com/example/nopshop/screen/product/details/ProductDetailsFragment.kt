@@ -14,6 +14,8 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.nopshop.R
 import com.example.nopshop.databinding.FragmentProductDetailsBinding
+import org.jsoup.Jsoup
+import org.jsoup.parser.Parser
 
 class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private lateinit var binding: FragmentProductDetailsBinding
@@ -57,13 +59,26 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
             binding.productImg.load(it.Data.PictureModels[0].ImageUrl)
             binding.productTitleTv.text = it.Data.Name
             binding.stockTv.text = it.Data.StockAvailability
-            binding.productSubtitleTv.text =
-                Html.fromHtml(it.Data.ShortDescription, Html.FROM_HTML_MODE_COMPACT).toString()
+            if (isHtmlString(it.Data.ShortDescription)) {
+                binding.productSubtitleTv.text =
+                    Html.fromHtml(it.Data.ShortDescription, Html.FROM_HTML_MODE_COMPACT).toString()
+            } else {
+                binding.productSubtitleTv.text = it.Data.ShortDescription
+            }
             binding.descriptionTv.text =
                 Html.fromHtml(it.Data.FullDescription, Html.FROM_HTML_MODE_COMPACT).toString()
             binding.discountPrice.text = it.Data.ProductPrice.BasePricePAngVValue.toString()
             binding.originalPrice.text = it.Data.ProductPrice.Price
             binding.originalPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        }
+    }
+
+    private fun isHtmlString(description: String): Boolean {
+        return try {
+            val doc = Jsoup.parse(description, "", Parser.xmlParser())
+            doc.body().children().isNotEmpty()
+        } catch (e: Exception) {
+            false
         }
     }
 

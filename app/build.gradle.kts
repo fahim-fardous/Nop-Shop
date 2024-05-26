@@ -61,6 +61,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     // Coil
     implementation("io.coil-kt:coil:2.6.0")
+    // Jsoup
+    implementation ("org.jsoup:jsoup:1.17.2")
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
