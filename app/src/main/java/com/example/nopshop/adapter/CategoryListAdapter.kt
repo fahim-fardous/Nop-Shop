@@ -18,8 +18,8 @@ class CategoryListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(category: Data) {
-            binding.categoryImg.load(category.Products[0].PictureModels[0].ImageUrl)
             binding.categoryName.text = category.Name
+            binding.categoryImg.load(category.Products[0].PictureModels[0].ImageUrl)
             binding.root.setOnClickListener {
                 onCategoryClick(category, category.Name)
             }

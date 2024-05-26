@@ -7,5 +7,4 @@ import kotlinx.parcelize.RawValue
 @Parcelize
 data class ProductSpecificationModel(
     val CustomProperties: CustomProperties,
-    val Groups: @RawValue List<Any>
 ) : Parcelable

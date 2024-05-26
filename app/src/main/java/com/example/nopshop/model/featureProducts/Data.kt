@@ -1,7 +1,9 @@
 package com.example.nopshop.model.featureProducts
 
+import com.example.nopshop.db.FeatureProductsEntity
+
 data class Data(
-    val CustomProperties: CustomProperties,
+    val CustomProperties: com.example.nopshop.model.featureProducts.CustomProperties,
     val FullDescription: String,
     val Id: Int,
     val MarkAsNew: Boolean,
@@ -14,4 +16,20 @@ data class Data(
     val SeName: String,
     val ShortDescription: String,
     val Sku: String
+)
+
+fun Data.asEntity() = FeatureProductsEntity(
+    CustomProperties = CustomProperties,
+    FullDescription = FullDescription,
+    Id = Id,
+    MarkAsNew = MarkAsNew,
+    Name = Name,
+    PictureModels = PictureModels,
+    ProductPrice = ProductPrice,
+    ProductSpecificationModel = ProductSpecificationModel,
+    ProductType = ProductType,
+    ReviewOverviewModel = ReviewOverviewModel,
+    SeName = SeName,
+    ShortDescription = ShortDescription,
+    Sku = Sku
 )
