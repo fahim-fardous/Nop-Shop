@@ -3,7 +3,7 @@ package com.example.nopshop.model.featureProducts
 import com.example.nopshop.db.dbmodel.featureProduct.FeatureProductsEntity
 
 data class Data(
-    val CustomProperties: com.example.nopshop.model.featureProducts.CustomProperties,
+    val CustomProperties: CustomProperties,
     val FullDescription: String,
     val Id: Int,
     val MarkAsNew: Boolean,

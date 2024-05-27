@@ -65,7 +65,6 @@ class LogInFragment : Fragment(R.layout.fragment_log_in) {
             if (message.isNotEmpty()) {
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 }
