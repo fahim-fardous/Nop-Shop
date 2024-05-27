@@ -15,8 +15,8 @@ import com.example.nopshop.adapter.FurnitureCollectionAdapter
 import com.example.nopshop.adapter.SalmonFishAdapter
 import com.example.nopshop.adapter.WomenHeelAdapter
 import com.example.nopshop.databinding.FragmentHomeBinding
-import com.example.nopshop.db.dbmodel.toData
-import com.example.nopshop.db.toFeatureData
+import com.example.nopshop.db.dbmodel.category.toData
+import com.example.nopshop.db.dbmodel.featureProduct.toFeatureData
 import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.featureProducts.Data
 import com.example.nopshop.utils.NoInternet

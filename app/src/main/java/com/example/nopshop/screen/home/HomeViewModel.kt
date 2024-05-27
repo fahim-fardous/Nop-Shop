@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nopshop.db.AppDatabase
-import com.example.nopshop.db.dbmodel.CategoryEntity
-import com.example.nopshop.db.FeatureProductsEntity
-import com.example.nopshop.db.dbmodel.SliderEntity
+import com.example.nopshop.db.dbmodel.category.CategoryEntity
+import com.example.nopshop.db.dbmodel.featureProduct.FeatureProductsEntity
+import com.example.nopshop.db.dbmodel.slider.SliderEntity
 import com.example.nopshop.model.category.CategoryWiseProductsItem
 import com.example.nopshop.model.featureProducts.FeatureProductItem
 import com.example.nopshop.model.slider.Slider

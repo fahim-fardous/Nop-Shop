@@ -10,8 +10,9 @@ import com.example.nopshop.converter.FeatureProductsConverter
 import com.example.nopshop.db.dao.CategoryDao
 import com.example.nopshop.db.dao.FeatureProductsDao
 import com.example.nopshop.db.dao.SliderDao
-import com.example.nopshop.db.dbmodel.CategoryEntity
-import com.example.nopshop.db.dbmodel.SliderEntity
+import com.example.nopshop.db.dbmodel.category.CategoryEntity
+import com.example.nopshop.db.dbmodel.featureProduct.FeatureProductsEntity
+import com.example.nopshop.db.dbmodel.slider.SliderEntity
 
 @Database(
     entities = [

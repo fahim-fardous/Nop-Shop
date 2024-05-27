@@ -1,6 +1,6 @@
 package com.example.nopshop.model.category
 
-import com.example.nopshop.db.dbmodel.CategoryEntity
+import com.example.nopshop.db.dbmodel.category.CategoryEntity
 
 data class Data(
     val CustomProperties: CustomProperties = CustomProperties(),

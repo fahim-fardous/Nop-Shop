@@ -1,4 +1,4 @@
-package com.example.nopshop.db
+package com.example.nopshop.db.dbmodel.featureProduct
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

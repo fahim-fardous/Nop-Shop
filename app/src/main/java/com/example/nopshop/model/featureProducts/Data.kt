@@ -1,6 +1,6 @@
 package com.example.nopshop.model.featureProducts
 
-import com.example.nopshop.db.FeatureProductsEntity
+import com.example.nopshop.db.dbmodel.featureProduct.FeatureProductsEntity
 
 data class Data(
     val CustomProperties: com.example.nopshop.model.featureProducts.CustomProperties,

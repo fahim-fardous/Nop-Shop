@@ -1,4 +1,4 @@
-package com.example.nopshop.db.dbmodel
+package com.example.nopshop.db.dbmodel.category
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -10,7 +10,6 @@ import com.example.nopshop.model.category.ProductPrice
 import com.example.nopshop.model.category.ProductSpecificationModel
 import com.example.nopshop.model.category.ReviewOverviewModel
 import com.example.nopshop.model.category.SubCategory
-import kotlinx.parcelize.RawValue
 
 class CustomProperties
 data class Product(

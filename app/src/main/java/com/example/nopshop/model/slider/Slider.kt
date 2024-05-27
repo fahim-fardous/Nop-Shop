@@ -1,6 +1,6 @@
 package com.example.nopshop.model.slider
 
-import com.example.nopshop.db.dbmodel.SliderEntity
+import com.example.nopshop.db.dbmodel.slider.SliderEntity
 
 
 data class Slider(

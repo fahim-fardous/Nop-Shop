@@ -1,4 +1,4 @@
-package com.example.nopshop.db.dbmodel
+package com.example.nopshop.db.dbmodel.slider
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
