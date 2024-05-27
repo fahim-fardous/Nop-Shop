@@ -66,12 +66,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onCategoryClick(
-        product: com.example.nopshop.model.category.Data,
-        categoryName: String
+        product: com.example.nopshop.model.category.Data, categoryName: String
     ) {
         val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
-            product.Products.toTypedArray(),
-            categoryName
+            product.Products.toTypedArray(), categoryName
         )
         findNavController().navigate(action)
     }
@@ -88,6 +86,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     )
                 }
             }
+            viewModel.featureProductsResponse.observe(this) {
+                featureProductsAdapter.submitList(it.Data)
+            }
+            viewModel.categoryWiseProductsResponse.observe(this) { it ->
+                categoryListAdapter.submitList(it.Data)
+            }
         } else {
             viewModel.sliderImageResponseFromDb.observe(this) { slider ->
                 for (image in slider) {
@@ -98,12 +102,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     )
                 }
             }
-        }
-        if (NoInternet.isOnline(requireContext().applicationContext)) {
-            viewModel.featureProductsResponse.observe(this) {
-                featureProductsAdapter.submitList(it.Data)
-            }
-        } else {
             viewModel.featureProductsResponseFromDb.observe(this) {
                 val list = mutableListOf<Data>()
                 for (item in it) {
@@ -114,12 +112,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                 featureProductsAdapter.submitList(list)
             }
-        }
-        if (NoInternet.isOnline(requireContext().applicationContext)) {
-            viewModel.categoryWiseProductsResponse.observe(this) { it ->
-                categoryListAdapter.submitList(it.Data)
-            }
-        } else {
             viewModel.categoryWiseProductsResponseFromDb.observe(this) {
                 val list = mutableListOf<com.example.nopshop.model.category.Data>()
                 for (item in it) {
@@ -130,8 +122,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 categoryListAdapter.submitList(list)
             }
         }
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -162,55 +152,35 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         bestSellingList.add(
             ProductItem(
-                0,
-                R.drawable.orange,
-                "California Orange 8 Pcs",
-                3.0f,
-                15.00
+                0, R.drawable.orange, "California Orange 8 Pcs", 3.0f, 15.00
 
             )
         )
 
         bestSellingList.add(
             ProductItem(
-                0,
-                R.drawable.steak,
-                "California Orange 8 Pcs",
-                3f,
-                15.00
+                0, R.drawable.steak, "California Orange 8 Pcs", 3f, 15.00
 
             )
         )
 
         bestSellingList.add(
             ProductItem(
-                0,
-                R.drawable.furniture,
-                "California Orange 8 Pcs",
-                3f,
-                15.00
+                0, R.drawable.furniture, "California Orange 8 Pcs", 3f, 15.00
 
             )
         )
 
         bestSellingList.add(
             ProductItem(
-                0,
-                R.drawable.furniture_3,
-                "California Orange 8 Pcs",
-                3f,
-                15.00
+                0, R.drawable.furniture_3, "California Orange 8 Pcs", 3f, 15.00
 
             )
         )
 
         bestSellingList.add(
             ProductItem(
-                0,
-                R.drawable.furniture_2,
-                "California Orange 8 Pcs",
-                3f,
-                15.00
+                0, R.drawable.furniture_2, "California Orange 8 Pcs", 3f, 15.00
 
             )
         )

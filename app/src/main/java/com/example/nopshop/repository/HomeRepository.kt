@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class HomeRepository(
-    private val context: Context,
     private val api: HomeApi,
     private val db: AppDatabase
 ) {
@@ -53,7 +52,6 @@ class HomeRepository(
 
     suspend fun getCategoryWiseProductsFromDb() = withContext(Dispatchers.IO) {
         return@withContext db.categoryDao().getAllCategory()
-
     }
 
     suspend fun getFeatureProductsFromDb() = withContext(Dispatchers.IO) {

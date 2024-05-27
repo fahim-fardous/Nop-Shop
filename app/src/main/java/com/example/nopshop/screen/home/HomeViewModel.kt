@@ -62,7 +62,7 @@ class HomeViewModel(context: Context) : ViewModel() {
 
     private val apiClient = ApiClient.getRetrofit().create(HomeApi::class.java)
     private val db = AppDatabase.invoke(context)
-    private val repository = HomeRepository(context, apiClient, db)
+    private val repository = HomeRepository(apiClient, db)
 
     fun getImageSlider(context:Context) = viewModelScope.launch {
         if(NoInternet.isOnline(context.applicationContext)){
