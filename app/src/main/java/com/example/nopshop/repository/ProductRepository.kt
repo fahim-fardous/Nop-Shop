@@ -2,6 +2,8 @@ package com.example.nopshop.repository
 
 import com.example.nopshop.db.AppDatabase
 import com.example.nopshop.db.dbmodel.product.ProductEntity
+import com.example.nopshop.model.cart.AddToCartItem
+import com.example.nopshop.model.cart.FormValue
 import com.example.nopshop.model.products.Data
 import com.example.nopshop.network.api.ProductApi
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,11 @@ class ProductRepository(
     // Database
     suspend fun getProductDetailsFromDb(id: Int) = withContext(Dispatchers.IO) {
         return@withContext db.productDao().getProduct(id)
+    }
+
+    suspend fun addProductToCart(request:AddToCartItem, productId:Int) = withContext(Dispatchers.IO) {
+
+        return@withContext api.addToCart(productId,request)
     }
 
 }
