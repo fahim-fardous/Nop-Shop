@@ -1,16 +1,20 @@
 package com.example.nopshop.screen.product.details
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.nopshop.db.AppDatabase
+import com.example.nopshop.db.dbmodel.product.ProductEntity
 import com.example.nopshop.model.products.ProductsItem
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
+import com.example.nopshop.utils.NoInternet
 import kotlinx.coroutines.launch
 
-class ProductDetailsViewModel:ViewModel() {
+class ProductDetailsViewModel(context: Context) : ViewModel() {
     private val _productResponse: MutableLiveData<ProductsItem> by lazy {
         MutableLiveData<ProductsItem>()
     }
@@ -18,13 +22,26 @@ class ProductDetailsViewModel:ViewModel() {
     val productResponse: LiveData<ProductsItem>
         get() = _productResponse
 
-    val apiClient = ApiClient.getRetrofit().create(ProductApi::class.java)
-    val repository = ProductRepository(apiClient)
+    private val _productResponseFromDb: MutableLiveData<ProductEntity> by lazy {
+        MutableLiveData<ProductEntity>()
+    }
 
-    fun getProducts(id: Int) = viewModelScope.launch {
+    val productResponseFromDb: LiveData<ProductEntity>
+        get() = _productResponseFromDb
+
+    private val apiClient = ApiClient.getRetrofit().create(ProductApi::class.java)
+    private val db = AppDatabase.invoke(context)
+    private val repository = ProductRepository(db, apiClient)
+
+    fun getProducts(context: Context, id: Int) = viewModelScope.launch {
         try {
-            val response = repository.getProductDetails(id)
-            _productResponse.value = response.body()
+            if (NoInternet.isOnline(context.applicationContext)) {
+                val response = repository.getProductDetails(id)
+                _productResponse.value = response.body()
+            } else {
+                _productResponseFromDb.value = repository.getProductDetailsFromDb(id)
+            }
+
         } catch (e: Exception) {
 
         }

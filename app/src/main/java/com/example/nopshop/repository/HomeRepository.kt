@@ -1,6 +1,5 @@
 package com.example.nopshop.repository
 
-import android.content.Context
 import com.example.nopshop.db.AppDatabase
 import com.example.nopshop.model.category.asEntity
 import com.example.nopshop.model.featureProducts.asEntity
@@ -15,6 +14,7 @@ class HomeRepository(
 ) {
     suspend fun getImageSlider() = withContext(Dispatchers.IO) {
         val sliders = api.getSliderImages()
+
         sliders.let {
             sliders.body()?.Data?.Sliders?.let { it1 ->
                 db.sliderDao().saveImageSlider(it1.map { it.asEntity() })
@@ -25,6 +25,7 @@ class HomeRepository(
 
     suspend fun getCategoryWiseProducts() = withContext(Dispatchers.IO) {
         val categories = api.getCategoriesWithProducts()
+
         categories.let {
             categories.body()?.Data?.let {list->
                 list.map { it.asEntity() }.let { it2 -> db.categoryDao().saveCategory(it2) }
@@ -47,14 +48,17 @@ class HomeRepository(
     }
     // Database
     suspend fun getImageSliderFromDb() = withContext(Dispatchers.IO) {
+        //println(db.sliderDao().getImageSlider().size)
         return@withContext db.sliderDao().getImageSlider()
     }
 
     suspend fun getCategoryWiseProductsFromDb() = withContext(Dispatchers.IO) {
+        //println(db.categoryDao().getAllCategory().size)
         return@withContext db.categoryDao().getAllCategory()
     }
 
     suspend fun getFeatureProductsFromDb() = withContext(Dispatchers.IO) {
+        //println(db.featureProductDao().getFeatureProducts().size)
         return@withContext db.featureProductDao().getFeatureProducts()
     }
 
