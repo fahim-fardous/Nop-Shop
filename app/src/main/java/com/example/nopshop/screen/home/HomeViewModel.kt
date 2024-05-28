@@ -1,6 +1,7 @@
 package com.example.nopshop.screen.home
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,9 @@ import com.example.nopshop.db.AppDatabase
 import com.example.nopshop.db.dbmodel.category.CategoryEntity
 import com.example.nopshop.db.dbmodel.featureProduct.FeatureProductsEntity
 import com.example.nopshop.db.dbmodel.slider.SliderEntity
+import com.example.nopshop.model.cart.AddToCartItem
+import com.example.nopshop.model.cart.AddToCartResponse
+import com.example.nopshop.model.cart.FormValue
 import com.example.nopshop.model.category.CategoryWiseProductsItem
 import com.example.nopshop.model.featureProducts.FeatureProductItem
 import com.example.nopshop.model.slider.Slider
@@ -57,45 +61,70 @@ class HomeViewModel(context: Context) : ViewModel() {
 
     val featureProductsResponse: LiveData<FeatureProductItem>
         get() = _featureProductsResponse
+    private val _productAddedToCart: MutableLiveData<AddToCartResponse> by lazy {
+        MutableLiveData<AddToCartResponse>()
+    }
+
+    val productAddedToCart: LiveData<AddToCartResponse>
+        get() = _productAddedToCart
 
 
+    private val token =
+        context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE).getString("token", null)
 
-    private val apiClient = ApiClient.getRetrofit().create(HomeApi::class.java)
+
+    private val apiClient = ApiClient.getRetrofit(token).create(HomeApi::class.java)
     private val db = AppDatabase.invoke(context)
     private val repository = HomeRepository(apiClient, db)
 
-    fun getImageSlider(context:Context) = viewModelScope.launch {
-        if(NoInternet.isOnline(context.applicationContext)){
+    fun getImageSlider(context: Context) = viewModelScope.launch {
+        if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getImageSlider()
             _sliderImageResponse.value = response.body()?.Data?.Sliders
-        }
-        else{
+        } else {
             val response = repository.getImageSliderFromDb()
             _sliderImageResponseFromDb.value = response
         }
     }
 
     fun getCategoryWiseProducts(context: Context) = viewModelScope.launch {
-        if(NoInternet.isOnline(context.applicationContext)){
+        if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getCategoryWiseProducts()
             _categoryWiseProductsResponse.value = response.body()
-        }
-        else{
+        } else {
             val response = repository.getCategoryWiseProductsFromDb()
             _categoryWiseProductsResponseFromDb.value = response
         }
     }
 
     fun getFeatureProducts(context: Context) = viewModelScope.launch {
-        if(NoInternet.isOnline(context.applicationContext)){
+        if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getFeatureProducts()
             _featureProductsResponse.value = response.body()
-        }
-        else{
+        } else {
             val response = repository.getFeatureProductsFromDb()
             _featureProductsResponseFromDb.value = response
         }
     }
+    fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
+        try {
+            val response = repository.addProductToCart(
+                AddToCartItem(
+                    listOf(
+                        FormValue(
+                            "addtocart_$productId.EnteredQuantity",
+                            "$quantity"
+                        )
+                    )
+                ), productId
+            )
+            _productAddedToCart.value = response.body()
+        } catch (e: Exception) {
+
+        }
+
+    }
+
 
 
 }

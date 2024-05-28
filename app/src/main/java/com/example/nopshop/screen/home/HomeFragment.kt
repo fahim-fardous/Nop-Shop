@@ -3,6 +3,7 @@ package com.example.nopshop.screen.home
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.example.nopshop.db.dbmodel.category.toData
 import com.example.nopshop.db.dbmodel.featureProduct.toFeatureData
 import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.featureProducts.Data
+import com.example.nopshop.screen.product.details.ProductDetailsViewModel
 import com.example.nopshop.utils.NoInternet
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
 
@@ -36,15 +38,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         HomeViewModelFactory(requireContext().applicationContext)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initObserver()
 
         bestSellingAdapter = BestSellingAdapter {}
 
-        featureProductsAdapter = FeatureProductsAdapter {
-            onProductClick(it)
-        }
+        featureProductsAdapter = FeatureProductsAdapter(
+            { product ->
+                onProductClick(product)
+            },
+            { product ->
+                onAddToCartClick(product)
+            }
+        )
 
         womenHeelAdapter = WomenHeelAdapter {}
 
@@ -56,8 +64,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         categoryListAdapter = CategoryListAdapter { list, name ->
             onCategoryClick(list, name)
-
         }
+    }
+
+    private fun onAddToCartClick(product: Data) {
+        viewModel.addProductToCart(product.Id, 1)
     }
 
     private fun onProductClick(it: Data) {
@@ -91,6 +102,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
             viewModel.categoryWiseProductsResponse.observe(this) { it ->
                 categoryListAdapter.submitList(it.Data)
+            }
+            viewModel.productAddedToCart.observe(this) {
+                Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
             }
         } else {
             viewModel.sliderImageResponseFromDb.observe(this) { slider ->
