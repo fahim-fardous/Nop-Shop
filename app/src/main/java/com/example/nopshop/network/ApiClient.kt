@@ -9,24 +9,41 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiClient {
     companion object {
-        private fun buildClient(): OkHttpClient {
-            return OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
-                this.level = HttpLoggingInterceptor.Level.BODY
-            }).addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("Content-Type", Constants.CONTENT_TYPE)
-                    .addHeader("DeviceId", Constants.DEVICE_ID)
-                    .addHeader(
-                        "NST", Constants.NST
-                    )
-                    .addHeader("User-Agent", Constants.USER_AGENT).build()
+        private fun buildClient(token: String?): OkHttpClient {
+            if (token == null) {
+                return OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
+                    this.level = HttpLoggingInterceptor.Level.BODY
+                }).addInterceptor { chain ->
+                    val request = chain.request().newBuilder()
+                        .addHeader("Content-Type", Constants.CONTENT_TYPE)
+                        .addHeader("DeviceId", Constants.DEVICE_ID)
+                        .addHeader(
+                            "NST", Constants.NST
+                        )
+                        .addHeader("User-Agent", Constants.USER_AGENT).build()
 
-                chain.proceed(request)
-            }.build()
+                    chain.proceed(request)
+                }.build()
+            } else {
+                return OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
+                    this.level = HttpLoggingInterceptor.Level.BODY
+                }).addInterceptor { chain ->
+                    val request = chain.request().newBuilder()
+                        .addHeader("Token", token)
+                        .addHeader("Content-Type", Constants.CONTENT_TYPE)
+                        .addHeader("DeviceId", Constants.DEVICE_ID)
+                        .addHeader(
+                            "NST", Constants.NST
+                        )
+                        .addHeader("User-Agent", Constants.USER_AGENT).build()
+
+                    chain.proceed(request)
+                }.build()
+            }
         }
 
-        fun getRetrofit(): Retrofit {
-            return Retrofit.Builder().baseUrl(Constants.BASE_URL).client(buildClient())
+        fun getRetrofit(token: String?): Retrofit {
+            return Retrofit.Builder().baseUrl(Constants.BASE_URL).client(buildClient(token))
                 .addConverterFactory(GsonConverterFactory.create()).build()
         }
     }

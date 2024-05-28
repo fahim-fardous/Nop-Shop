@@ -11,11 +11,15 @@ import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.category.Product
 import com.example.nopshop.model.products.ProductsItem
 
-class ProductAdapter(private val onClick: (Product) -> Unit) :
+class ProductAdapter(
+    private val onClick: (Product) -> Unit,
+    private val onAddToCart: (Product) -> Unit
+) :
     ListAdapter<Product, ProductAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
         private val binding: ItemProductBinding,
-        private val onClick: (Product) -> Unit
+        private val onClick: (Product) -> Unit,
+        private val onAddToCart: (Product) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Product) {
             binding.productImg.load(item.PictureModels[0].ImageUrl)
@@ -23,7 +27,9 @@ class ProductAdapter(private val onClick: (Product) -> Unit) :
             binding.productRating.rating =
                 if (item.ReviewOverviewModel.TotalReviews == 0) 0f else (item.ReviewOverviewModel.RatingSum / item.ReviewOverviewModel.TotalReviews).toFloat()
             binding.productPriceTv.text = item.ProductPrice.Price
-
+            binding.addToCartBtn.setOnClickListener{
+                onAddToCart(item)
+            }
             binding.root.setOnClickListener {
                 onClick(item)
             }
@@ -36,7 +42,7 @@ class ProductAdapter(private val onClick: (Product) -> Unit) :
     ): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemProductBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(binding, onClick)
+        return ViewHolder(binding, onClick, onAddToCart)
     }
 
     override fun onBindViewHolder(

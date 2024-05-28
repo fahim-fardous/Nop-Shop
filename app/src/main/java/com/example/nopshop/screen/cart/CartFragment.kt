@@ -5,27 +5,70 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nopshop.R
 import com.example.nopshop.adapter.CartAdapter
 import com.example.nopshop.databinding.FragmentCartBinding
 import com.example.nopshop.model.CartItem
+import com.example.nopshop.model.cart.Item
 
 
 class CartFragment : Fragment(R.layout.fragment_cart) {
     private lateinit var binding: FragmentCartBinding
     private lateinit var adapter: CartAdapter
+    private val viewModel: CartViewModel by viewModels {
+        CartViewModelFactory(requireContext().applicationContext)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = CartAdapter {
-
-        }
-        //initObserver()
+        adapter = CartAdapter(
+            { item ->
+                removeItem(item)
+            },
+            { item, quantity ->
+                updateItem(item, quantity)
+            }
+        )
+        initObserver()
     }
 
     private fun initObserver() {
-        TODO("Not yet implemented")
+        viewModel.cartResponse.observe(this) { item ->
+            item.let {
+                adapter.submitList(item.Data.Cart.Items)
+            }
+            binding.subtotalPriceTv.text = item.Data.OrderTotals.SubTotal
+            binding.shippingPriceTv.text = item.Data.OrderTotals.Shipping
+            binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
+            binding.itemCountTv.text =
+                "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
+        }
+        viewModel.cartUpdateResponse.observe(this) { item ->
+            Toast.makeText(requireContext(), "Item Updated", Toast.LENGTH_SHORT).show()
+            item.let {
+                adapter.submitList(item.Data.Cart.Items)
+            }
+            binding.subtotalPriceTv.text = item.Data.OrderTotals.SubTotal
+            binding.shippingPriceTv.text = item.Data.OrderTotals.Shipping
+            binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
+            binding.itemCountTv.text =
+                "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
+        }
+        viewModel.cartRemoveResponse.observe(this) { item ->
+            Toast.makeText(requireContext(), "Item Removed", Toast.LENGTH_SHORT).show()
+            item.let {
+                adapter.submitList(item.Data.Cart.Items)
+            }
+            binding.subtotalPriceTv.text = item.Data.OrderTotals.SubTotal
+            binding.shippingPriceTv.text = item.Data.OrderTotals.Shipping
+            binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
+            binding.itemCountTv.text =
+                "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,11 +78,11 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
 
         initViews()
         initListeners()
-        //loadData()
+        loadData()
     }
 
     private fun loadData() {
-        TODO("Not yet implemented")
+        viewModel.getCartProducts()
     }
 
     private fun initListeners() {
@@ -49,95 +92,24 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     }
 
     private fun initViews() {
-        val list = mutableListOf<CartItem>()
-
-        list.add(
-            CartItem(
-                id = 0,
-                productImage = R.drawable.mobile,
-                productName = "Iphone 12",
-                productQuantity = 1,
-                originalPrice = 599.0,
-                discountPrice = 699.0
-            )
-        )
-
-        list.add(
-            CartItem(
-                id = 0,
-                productImage = R.drawable.steak,
-                productName = "Beef Rib Steak",
-                productQuantity = 1,
-                originalPrice = 599.0,
-                discountPrice = 699.0
-            )
-        )
-        list.add(
-            CartItem(
-                id = 0,
-                productImage = R.drawable.mobile,
-                productName = "Iphone 12",
-                productQuantity = 1,
-                originalPrice = 599.0,
-                discountPrice = 699.0
-            )
-        )
-
-        list.add(
-            CartItem(
-                id = 0,
-                productImage = R.drawable.steak,
-                productName = "Beef Rib Steak",
-                productQuantity = 1,
-                originalPrice = 599.0,
-                discountPrice = 699.0
-            )
-        )
-        list.add(
-            CartItem(
-                id = 0,
-                productImage = R.drawable.mobile,
-                productName = "Iphone 12",
-                productQuantity = 1,
-                originalPrice = 599.0,
-                discountPrice = 699.0
-            )
-        )
-
-        list.add(
-            CartItem(
-                id = 0,
-                productImage = R.drawable.steak,
-                productName = "Beef Rib Steak",
-                productQuantity = 1,
-                originalPrice = 599.0,
-                discountPrice = 699.0
-            )
-        )
-        list.add(
-            CartItem(
-                id = 0,
-                productImage = R.drawable.mobile,
-                productName = "Iphone 12",
-                productQuantity = 1,
-                originalPrice = 599.0,
-                discountPrice = 699.0
-            )
-        )
-
-        list.add(
-            CartItem(
-                id = 0,
-                productImage = R.drawable.steak,
-                productName = "Beef Rib Steak",
-                productQuantity = 1,
-                originalPrice = 599.0,
-                discountPrice = 699.0
-            )
-        )
-        binding.itemCountTv.text = "${list.size} ITEM (S)"
         binding.cartRv.layoutManager = LinearLayoutManager(requireContext())
         binding.cartRv.adapter = adapter
-        adapter.submitList(list)
+    }
+
+    private fun removeItem(cartItem: Item) {
+        viewModel.removeCart(
+            item = cartItem,
+        )
+    }
+
+    private fun updateItem(cartItem: Item, quantity: Int) {
+        if (quantity == 0) {
+            removeItem(cartItem)
+        } else {
+            viewModel.updateCart(
+                item = cartItem,
+                quantity = quantity
+            )
+        }
     }
 }

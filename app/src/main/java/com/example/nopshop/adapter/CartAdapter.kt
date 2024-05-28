@@ -5,25 +5,38 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.nopshop.databinding.ItemCartBinding
 import com.example.nopshop.model.CartItem
+import com.example.nopshop.model.cart.Item
 
 class CartAdapter(
-    private val onClick: (CartItem) -> Unit
-) : ListAdapter<CartItem, CartAdapter.ViewHolder>(DIFF_CALLBACK) {
+    private val onRemoveClick: (Item) -> Unit,
+    private val onQuantityBtnClick: (Item, Int) -> Unit
+) : ListAdapter<Item, CartAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
         private val binding: ItemCartBinding,
-        private val onClick: (CartItem) -> Unit
+        private val onRemoveClick: (Item) -> Unit,
+        private val onQuantityBtnClick: (Item, Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: CartItem) {
-            binding.productImg.setImageResource(item.productImage)
-            binding.productNameTv.text = item.productName
-            binding.quantityTv.text = "${item.productQuantity}"
-            binding.originalPrice.text = "$${item.originalPrice}"
-            binding.discountPrice.text = "$${item.discountPrice}"
-            binding.root.setOnClickListener {
-                onClick(item)
+        fun bind(item: Item) {
+            binding.productImg.load(item.Picture.ImageUrl)
+            binding.productNameTv.text = item.ProductName
+            binding.quantityTv.text = "${item.Quantity}"
+            binding.originalPrice.text = "$${item.UnitPriceValue}"
+            binding.quantityAddBtn.setOnClickListener {
+                binding.quantityTv.text =
+                    (binding.quantityTv.text.toString().toInt() + 1).toString()
+                onQuantityBtnClick(item, binding.quantityTv.text.toString().toInt())
+            }
+            binding.quantityRemoveBtn.setOnClickListener {
+                binding.quantityTv.text =
+                    (binding.quantityTv.text.toString().toInt() - 1).toString()
+                onQuantityBtnClick(item, binding.quantityTv.text.toString().toInt())
+            }
+            binding.closeBtn.setOnClickListener {
+                onRemoveClick(item)
             }
         }
 
@@ -32,7 +45,7 @@ class CartAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemCartBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(binding, onClick)
+        return ViewHolder(binding, onRemoveClick, onQuantityBtnClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -41,12 +54,12 @@ class CartAdapter(
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CartItem>() {
-            override fun areItemsTheSame(oldItem: CartItem, newItem: CartItem): Boolean {
-                return oldItem.id == newItem.id
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Item>() {
+            override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+                return oldItem.Id == newItem.Id
             }
 
-            override fun areContentsTheSame(oldItem: CartItem, newItem: CartItem): Boolean {
+            override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
                 return oldItem == newItem
             }
 

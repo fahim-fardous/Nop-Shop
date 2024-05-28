@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nopshop.db.AppDatabase
 import com.example.nopshop.db.dbmodel.product.ProductEntity
 import com.example.nopshop.model.cart.AddToCartItem
-import com.example.nopshop.model.cart.AddToCartResponseItem
+import com.example.nopshop.model.cart.AddToCartResponse
 import com.example.nopshop.model.cart.FormValue
 import com.example.nopshop.model.products.ProductsItem
 import com.example.nopshop.network.ApiClient
@@ -32,15 +32,15 @@ class ProductDetailsViewModel(context: Context) : ViewModel() {
     val productResponseFromDb: LiveData<ProductEntity>
         get() = _productResponseFromDb
 
-    private val _productAddedToCart: MutableLiveData<AddToCartResponseItem> by lazy {
-        MutableLiveData<AddToCartResponseItem>()
+    private val _productAddedToCart: MutableLiveData<AddToCartResponse> by lazy {
+        MutableLiveData<AddToCartResponse>()
     }
 
-    val productAddedToCart: LiveData<AddToCartResponseItem>
+    val productAddedToCart: LiveData<AddToCartResponse>
         get() = _productAddedToCart
 
 
-    private val apiClient = ApiClient.getRetrofit().create(ProductApi::class.java)
+    private val apiClient = ApiClient.getRetrofit(null).create(ProductApi::class.java)
     private val db = AppDatabase.invoke(context)
     private val repository = ProductRepository(db, apiClient)
 
@@ -61,14 +61,14 @@ class ProductDetailsViewModel(context: Context) : ViewModel() {
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
         try {
             val response = repository.addProductToCart(
-
-                    AddToCartItem(
-                        listOf(FormValue(
+                AddToCartItem(
+                    listOf(
+                        FormValue(
                             "addtocart_$productId.EnteredQuantity",
                             "$quantity"
-                        ))
+                        )
                     )
-                , productId
+                ), productId
             )
             _productAddedToCart.value = response.body()
         } catch (e: Exception) {

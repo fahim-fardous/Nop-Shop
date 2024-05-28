@@ -27,7 +27,7 @@ class LogInViewModel : ViewModel() {
     val showMessage: LiveData<String>
         get() = _showMessage
 
-    private val apiClient = ApiClient.getRetrofit().create(AuthenticationApi::class.java)
+    private val apiClient = ApiClient.getRetrofit(null).create(AuthenticationApi::class.java)
     private val repository = LoginRepository(apiClient)
 
     private fun isValid(userEmail: String, userPassword: String): Boolean {
@@ -49,11 +49,9 @@ class LogInViewModel : ViewModel() {
             )
         )
         if (response.isSuccessful) {
-            println(response.code())
-            println(response.body()?.Data?.Token)
             _response.value = response.body()
         } else {
-            println(response.code())
+
         }
     }
 

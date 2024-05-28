@@ -1,6 +1,7 @@
 package com.example.nopshop.repository
 
 import com.example.nopshop.db.AppDatabase
+import com.example.nopshop.model.cart.AddToCartItem
 import com.example.nopshop.model.category.asEntity
 import com.example.nopshop.model.featureProducts.asEntity
 import com.example.nopshop.model.slider.asEntity
@@ -46,19 +47,21 @@ class HomeRepository(
         }
         featureProducts
     }
+    suspend fun addProductToCart(request:AddToCartItem, productId:Int) = withContext(Dispatchers.IO) {
+
+        return@withContext api.addToCart(productId,request)
+    }
+
     // Database
     suspend fun getImageSliderFromDb() = withContext(Dispatchers.IO) {
-        //println(db.sliderDao().getImageSlider().size)
         return@withContext db.sliderDao().getImageSlider()
     }
 
     suspend fun getCategoryWiseProductsFromDb() = withContext(Dispatchers.IO) {
-        //println(db.categoryDao().getAllCategory().size)
         return@withContext db.categoryDao().getAllCategory()
     }
 
     suspend fun getFeatureProductsFromDb() = withContext(Dispatchers.IO) {
-        //println(db.featureProductDao().getFeatureProducts().size)
         return@withContext db.featureProductDao().getFeatureProducts()
     }
 

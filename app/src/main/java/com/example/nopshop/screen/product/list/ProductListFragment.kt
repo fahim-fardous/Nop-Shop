@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,19 +17,31 @@ import com.example.nopshop.databinding.ItemCategoryListBinding
 import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.category.Product
 import com.example.nopshop.model.products.ProductsItem
+import com.example.nopshop.screen.product.details.ProductDetailsViewModel
 
 
 class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private lateinit var binding: FragmentProductListBinding
-
+    private  val viewModel: ProductListViewModel by viewModels(){
+        ProductListViewModelFactory(requireContext().applicationContext)
+    }
     private lateinit var adapter: ProductAdapter
     private val args: ProductListFragmentArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = ProductAdapter { product ->
-            onClick(product)
-        }
+        adapter = ProductAdapter(
+            { product ->
+                onClick(product)
+            },
+            {product ->
+                onAddToCartClick(product)
+            }
+        )
         initObserver()
+    }
+
+    private fun onAddToCartClick(product: Product) {
+        viewModel.addProductToCart(product.Id, 1)
     }
 
     private fun onClick(it: Product) {
@@ -41,14 +55,16 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
 
         binding = FragmentProductListBinding.bind(view)
 
-        //initListeners()
+        initListeners()
         initViews()
         //loadData()
 
     }
 
     private fun initObserver() {
-
+        viewModel.productAddedToCart.observe(this){
+            Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadData() {
@@ -68,6 +84,10 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private fun initListeners() {
         binding.topBar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+        binding.cartBtn.setOnClickListener {
+            val action = ProductListFragmentDirections.actionProductListFragmentToCartFragment()
+            findNavController().navigate(action)
         }
     }
 }

@@ -25,7 +25,6 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private val viewModel: ProductDetailsViewModel by viewModels() {
         ProductDetailsViewModelFactory(requireContext())
     }
-    var quantity = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +65,12 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
         binding.btnAddToCart.setOnClickListener {
             viewModel.addProductToCart(args.productId, binding.quantityTv.text.toString().toInt())
         }
+
+        binding.cartBtn.setOnClickListener {
+            val action =
+                ProductDetailsFragmentDirections.actionProductDetailsFragmentToCartFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun initViews() {
@@ -76,7 +81,6 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private fun initObserver() {
         if (NoInternet.isOnline(requireContext())) {
             viewModel.productResponse.observe(this) {
-                println(it.Data.PictureModels[0].ImageUrl)
                 binding.productImg.load(it.Data.PictureModels[0].ImageUrl)
                 binding.productTitleTv.text = it.Data.Name
                 binding.stockTv.text = it.Data.StockAvailability
