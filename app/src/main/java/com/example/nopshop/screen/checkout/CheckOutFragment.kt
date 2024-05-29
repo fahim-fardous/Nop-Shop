@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.Shop
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +37,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
@@ -50,6 +53,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
@@ -80,9 +84,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -94,71 +96,56 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun CheckOutScreen(
-
-    ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFF0BF7EB),
-                                    Color(0xFF07C5FB),
-                                    Color(0xFF088DF9),
-                                )
-                            )
-                        ),
-                    title = {
-                        Text(
-                            text = "One Page Checkout",
-                            color = Color.White,
-                            fontSize = 18.sp
+    fun CheckOutScreen() {
+        Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+            TopAppBar(modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            Color(0xFF0BF7EB),
+                            Color(0xFF07C5FB),
+                            Color(0xFF088DF9),
                         )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = "Back",
-                                tint = Color.White
-                            )
-                        }
-                    },
-                    actions = {
-                        BadgedBox(badge = {
-                            Badge(containerColor = Color.White) {
-                                Text(
-                                    text = "2",
-                                    modifier = Modifier.semantics { }
-                                )
-                            }
-                        }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_cart),
-                                contentDescription = "Go to cart",
-                                tint = Color.White
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                    )
+                ), title = {
+                Text(
+                    text = "One Page Checkout", color = Color.White, fontSize = 18.sp
                 )
-            }
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Column(
+            }, navigationIcon = {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+            }, actions = {
+                BadgedBox(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(horizontal = 16.dp), badge = {
+                        Badge(containerColor = Color.White) {
+                            Text(text = "2", modifier = Modifier.semantics { })
+                        }
+                    }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_cart),
+                        contentDescription = "Go to cart",
+                        tint = Color.White
+                    )
+                }
+            }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            )
+        }) { innerPadding ->
+            Column {
+                OutlinedCard(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(top = 16.dp, start = 16.dp, bottom = 16.dp, end = 16.dp),
+                    shape = RoundedCornerShape(1.dp),
+                    elevation = CardDefaults.cardElevation(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Box(
                         modifier = Modifier
@@ -180,16 +167,14 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         )
                     }
                     Text(
-                        modifier = Modifier
-                            .padding(top = 16.dp, start = 16.dp),
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                         text = "Address",
                         fontWeight = FontWeight.Bold
                     )
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
-                            .height(25.dp),
+                    TextField(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .height(25.dp),
                         value = "",
                         onValueChange = {},
                         placeholder = { Text(text = "Existing Address") },
@@ -208,8 +193,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         ),
                         trailingIcon = {
                             Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
-                        }
-                    )
+                        })
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -225,24 +209,20 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         )
                     }
                     Text(
-                        modifier = Modifier
-                            .padding(start = 16.dp, top = 16.dp),
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp),
                         text = "Select A Billing Address",
                         fontWeight = FontWeight.Bold,
                     )
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
-                            .height(25.dp),
+                    TextField(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .height(25.dp),
                         value = "",
                         onValueChange = {},
                         placeholder = { Text(text = "New") },
                         label = {
                             Text(
-                                text = "New",
-                                fontSize = 14.sp,
-                                color = Color((0xFF7D828B))
+                                text = "New", fontSize = 14.sp, color = Color((0xFF7D828B))
                             )
                         },
                         colors = TextFieldDefaults.colors(
@@ -253,8 +233,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         ),
                         trailingIcon = {
                             Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
-                        }
-                    )
+                        })
                     TextFieldCustom(label = "First Name", value = "") {
 
                     }
@@ -285,6 +264,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                     TextFieldCustom(label = "Fax Number", value = "") {
 
                     }
+
 
                 }
             }

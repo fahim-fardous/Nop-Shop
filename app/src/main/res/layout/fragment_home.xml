@@ -59,8 +59,6 @@
                     app:layout_constraintTop_toTopOf="@id/cart_btn" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
-
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

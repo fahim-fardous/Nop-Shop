@@ -49,6 +49,7 @@ class ProductDetailsViewModel(context: Context) : ViewModel() {
             if (NoInternet.isOnline(context.applicationContext)) {
                 val response = repository.getProductDetails(id)
                 _productResponse.value = response.body()
+                println("Aya porchi")
             } else {
                 _productResponseFromDb.value = repository.getProductDetailsFromDb(id)
             }

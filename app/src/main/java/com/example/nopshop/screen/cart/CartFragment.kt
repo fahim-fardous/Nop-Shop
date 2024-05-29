@@ -33,11 +33,13 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                 updateItem(item, quantity)
             }
         )
-        initObserver()
+
     }
 
     private fun initObserver() {
-        viewModel.cartResponse.observe(this) { item ->
+        binding.cartRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.cartRv.adapter = adapter
+        viewModel.cartResponse.observe(viewLifecycleOwner) { item ->
             item.let {
                 adapter.submitList(item.Data.Cart.Items)
             }
@@ -46,8 +48,9 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
             binding.itemCountTv.text =
                 "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
+            initViews()
         }
-        viewModel.cartUpdateResponse.observe(this) { item ->
+        viewModel.cartUpdateResponse.observe(viewLifecycleOwner) { item ->
             Toast.makeText(requireContext(), "Item Updated", Toast.LENGTH_SHORT).show()
             item.let {
                 adapter.submitList(item.Data.Cart.Items)
@@ -57,8 +60,9 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
             binding.itemCountTv.text =
                 "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
+            initViews()
         }
-        viewModel.cartRemoveResponse.observe(this) { item ->
+        viewModel.cartRemoveResponse.observe(viewLifecycleOwner) { item ->
             Toast.makeText(requireContext(), "Item Removed", Toast.LENGTH_SHORT).show()
             item.let {
                 adapter.submitList(item.Data.Cart.Items)
@@ -68,6 +72,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
             binding.itemCountTv.text =
                 "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
+            initViews()
         }
     }
 
@@ -75,10 +80,17 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentCartBinding.bind(view)
-
+        initObserver()
         initViews()
+        initShimmerEffect()
         initListeners()
         loadData()
+    }
+
+    private fun initShimmerEffect() {
+        binding.scrollView.visibility = View.GONE
+        binding.cartItemShimmerLayout.visibility =View.VISIBLE
+        binding.cartItemShimmerLayout.startShimmer()
     }
 
     private fun loadData() {
@@ -92,8 +104,10 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     }
 
     private fun initViews() {
-        binding.cartRv.layoutManager = LinearLayoutManager(requireContext())
-        binding.cartRv.adapter = adapter
+        binding.cartItemShimmerLayout.stopShimmer()
+        binding.cartItemShimmerLayout.visibility = View.GONE
+        binding.scrollView.visibility = View.VISIBLE
+
     }
 
     private fun removeItem(cartItem: Item) {

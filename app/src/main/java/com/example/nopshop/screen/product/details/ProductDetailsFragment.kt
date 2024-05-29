@@ -28,7 +28,6 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initObserver()
 
     }
 
@@ -36,9 +35,17 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentProductDetailsBinding.bind(view)
+        initObserver()
         initViews()
         initListeners()
+        initShimmerEffect()
         loadData()
+    }
+
+    private fun initShimmerEffect() {
+        binding.scrollView.visibility = View.GONE
+        binding.productDetailsShimmer.visibility =View.VISIBLE
+        binding.productDetailsShimmer.startShimmer()
     }
 
     private fun loadData() {
@@ -74,49 +81,62 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     }
 
     private fun initViews() {
-
+        binding.productDetailsShimmer.stopShimmer()
+        binding.productDetailsShimmer.visibility = View.GONE
+        binding.scrollView.visibility = View.VISIBLE
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun initObserver() {
         if (NoInternet.isOnline(requireContext())) {
-            viewModel.productResponse.observe(this) {
+            viewModel.productResponse.observe(viewLifecycleOwner) {
+                println("Ami ekhane eshechi -->" + it.Data)
                 binding.productImg.load(it.Data.PictureModels[0].ImageUrl)
                 binding.productTitleTv.text = it.Data.Name
-                binding.stockTv.text = it.Data.StockAvailability
+                binding.stockTv.text = it.Data.StockAvailability ?: "Out of Stock"
                 if (isHtmlString(it.Data.ShortDescription)) {
                     binding.productSubtitleTv.text =
-                        Html.fromHtml(it.Data.ShortDescription, Html.FROM_HTML_MODE_COMPACT)
-                            .toString()
+                        Html.fromHtml(it.Data.ShortDescription, Html.FROM_HTML_MODE_LEGACY) ?: ""
                 } else {
-                    binding.productSubtitleTv.text = it.Data.ShortDescription
+                    binding.productSubtitleTv.text = it.Data.ShortDescription ?: ""
                 }
-                binding.descriptionTv.text =
-                    Html.fromHtml(it.Data.FullDescription, Html.FROM_HTML_MODE_COMPACT).toString()
-                binding.discountPrice.text = it.Data.ProductPrice.BasePricePAngVValue.toString()
-                binding.originalPrice.text = it.Data.ProductPrice.Price
+                if (isHtmlString(it.Data.FullDescription)) {
+                    binding.descriptionTv.text =
+                        Html.fromHtml(it.Data.FullDescription, Html.FROM_HTML_MODE_LEGACY) ?: ""
+                } else {
+                    binding.descriptionTv.text = it.Data.FullDescription ?: ""
+                }
+                binding.discountPrice.text = "$%.2f".format(it.Data.ProductPrice.BasePricePAngVValue)
+                binding.originalPrice.text = "$%.2f".format(it.Data.ProductPrice.PriceValue)
                 binding.originalPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                initViews()
             }
-            viewModel.productAddedToCart.observe(this) {
+            viewModel.productAddedToCart.observe(viewLifecycleOwner) {
                 Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
             }
         } else {
-            viewModel.productResponseFromDb.observe(this) {
+            viewModel.productResponseFromDb.observe(viewLifecycleOwner) {
                 binding.productImg.load(it.productImage)
                 binding.productTitleTv.text = it.productName
                 binding.stockTv.text = it.stock
-                if (isHtmlString(it.productShortDescription)) {
+                if (it.productShortDescription?.let { it1 -> isHtmlString(it1) } == true) {
                     binding.productSubtitleTv.text =
                         Html.fromHtml(it.productShortDescription, Html.FROM_HTML_MODE_COMPACT)
                             .toString()
                 } else {
                     binding.productSubtitleTv.text = it.productShortDescription
                 }
-                binding.descriptionTv.text =
-                    Html.fromHtml(it.productLongDescription, Html.FROM_HTML_MODE_COMPACT).toString()
+                if (it.productLongDescription?.let { it1 -> isHtmlString(it1) } == true) {
+                    binding.descriptionTv.text =
+                        Html.fromHtml(it.productLongDescription, Html.FROM_HTML_MODE_LEGACY) ?: ""
+                } else {
+                    binding.descriptionTv.text = it.productLongDescription ?: ""
+                }
                 binding.discountPrice.text = it.newPrice
                 binding.originalPrice.text = it.oldPrice
                 binding.originalPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                initViews()
             }
         }
     }
