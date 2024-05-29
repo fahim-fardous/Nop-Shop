@@ -107,6 +107,8 @@ dependencies {
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:2.6.1")
     // Kotlin Extensions and Coroutines support for Room
+    // Shimmer
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)

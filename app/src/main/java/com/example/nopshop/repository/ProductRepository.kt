@@ -17,11 +17,10 @@ class ProductRepository(
 
     suspend fun getProductDetails(id: Int) = withContext(Dispatchers.IO) {
         val product = api.getProductDetails(id)
-
-        val response = product.let {
-            it.body()?.Data?.let { it1 -> dataToProductEntity(it1) }
+        if (product.isSuccessful) {
+            println("Aya porchi repo te")
+            db.productDao().saveProduct(product.body()?.Data?.let { it1 -> dataToProductEntity(it1) }!!)
         }
-        db.productDao().saveProduct(response!!)
         return@withContext product
     }
 
