@@ -9,53 +9,11 @@ import com.example.nopshop.model.featureProducts.ProductSpecificationModel
 import com.example.nopshop.model.featureProducts.ReviewOverviewModel
 import com.example.nopshop.model.featureProducts.Data
 
-
-class CustomProperties
-data class PictureModel(
-    val AlternateText: String,
-    val CustomProperties: CustomProperties,
-    val FullSizeImageUrl: String,
-    val ImageUrl: String,
-    val ThumbImageUrl: Any,
-    val Title: String
-)
-
-data class ProductPrice(
-    val AvailableForPreOrder: Boolean,
-    val BasePricePAngV: Any,
-    val BasePricePAngVValue: Double,
-    val CustomProperties: CustomProperties,
-    val DisableAddToCompareListButton: Boolean,
-    val DisableBuyButton: Boolean,
-    val DisableWishlistButton: Boolean,
-    val DisplayTaxShippingInfo: Boolean,
-    val ForceRedirectionAfterAddingToCart: Boolean,
-    val IsRental: Boolean,
-    val OldPrice: Any,
-    val OldPriceValue: Any,
-    val PreOrderAvailabilityStartDateTimeUtc: Any,
-    val Price: String,
-    val PriceValue: Double
-)
-
-data class ProductSpecificationModel(
-    val CustomProperties: CustomProperties,
-)
-
-data class ReviewOverviewModel(
-    val AllowCustomerReviews: Boolean,
-    val CanAddNewReview: Boolean,
-    val CustomProperties: CustomProperties,
-    val ProductId: Int,
-    val RatingSum: Int,
-    val TotalReviews: Int
-)
-
 @Entity(tableName = "feature_products")
 data class FeatureProductsEntity(
     val CustomProperties: CustomProperties = CustomProperties(),
     val FullDescription: String,
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val Id: Int,
     val MarkAsNew: Boolean,
     val Name: String,

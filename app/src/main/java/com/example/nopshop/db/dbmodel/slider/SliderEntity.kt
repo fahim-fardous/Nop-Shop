@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "slider")
 data class SliderEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val Id: Int,
     val EntityId: Int,
     val ImageUrl: String,
