@@ -5,20 +5,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.nopshop.databinding.ItemCategoryBinding
 import com.example.nopshop.model.CategoryItem
+import com.example.nopshop.model.category.CategoryWiseProductsItem
+import com.example.nopshop.model.category.Data
 
 class CategoryAdapter(
-    private val onCategoryClick: (CategoryItem) -> Unit
-) : ListAdapter<CategoryItem, CategoryAdapter.ViewHolder>(DIFF_CALLBACK) {
+    private val onCategoryClick: (Data) -> Unit
+) : ListAdapter<Data, CategoryAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
         private val binding: ItemCategoryBinding,
-        private val onCategoryClick: (CategoryItem) -> Unit
+        private val onCategoryClick: (Data) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(category: CategoryItem) {
-            binding.categoryImg.setImageResource(category.categoryImage)
-            binding.categoryName.text = category.categoryName
+        fun bind(category: Data) {
+            binding.categoryImg.load(category.Products[0].PictureModels[0].ImageUrl)
+            binding.categoryName.text = category.Name
         }
 
     }
@@ -35,12 +38,12 @@ class CategoryAdapter(
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CategoryItem>() {
-            override fun areItemsTheSame(oldItem: CategoryItem, newItem: CategoryItem): Boolean {
-                return oldItem.id == newItem.id
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Data>() {
+            override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
+                return oldItem.Id == newItem.Id
             }
 
-            override fun areContentsTheSame(oldItem: CategoryItem, newItem: CategoryItem): Boolean {
+            override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {
                 return oldItem == newItem
             }
 
