@@ -27,11 +27,9 @@ fun TextFieldCustom(
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 12.dp)
-            .height(28.dp),
-        value = "",
-        onValueChange = {},
-        placeholder = { Text(text = "$label :") },
+            .padding(horizontal = 12.dp, vertical = 12.dp),
+        value = value,
+        onValueChange = onValueChange,
         label = {
             Text(
                 text = "$label :",

@@ -22,9 +22,11 @@ import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.featureProducts.Data
 import com.example.nopshop.screen.product.details.ProductDetailsViewModel
 import com.example.nopshop.utils.NoInternet
+import dagger.hilt.android.AndroidEntryPoint
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
 
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var bestSellingAdapter: BestSellingAdapter
@@ -34,9 +36,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var furnitureCollectionAdapter: FurnitureCollectionAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryListAdapter: CategoryListAdapter
-    private val viewModel: HomeViewModel by viewModels() {
-        HomeViewModelFactory(requireContext().applicationContext)
-    }
+    private val viewModel: HomeViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -20,9 +20,16 @@ import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.HomeApi
 import com.example.nopshop.repository.HomeRepository
 import com.example.nopshop.utils.NoInternet
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(context: Context) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: HomeRepository,
+    @ApplicationContext private val context: Context
+) : ViewModel() {
     private val _sliderImageResponse: MutableLiveData<List<Slider>> by lazy {
         MutableLiveData<List<Slider>>()
     }
@@ -73,10 +80,6 @@ class HomeViewModel(context: Context) : ViewModel() {
         context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE).getString("token", null)
 
 
-    private val apiClient = ApiClient.getRetrofit(token).create(HomeApi::class.java)
-    private val db = AppDatabase.invoke(context)
-    private val repository = HomeRepository(apiClient, db)
-
     fun getImageSlider(context: Context) = viewModelScope.launch {
         if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getImageSlider()
@@ -106,6 +109,7 @@ class HomeViewModel(context: Context) : ViewModel() {
             _featureProductsResponseFromDb.value = response
         }
     }
+
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
         try {
             val response = repository.addProductToCart(
@@ -124,7 +128,6 @@ class HomeViewModel(context: Context) : ViewModel() {
         }
 
     }
-
 
 
 }

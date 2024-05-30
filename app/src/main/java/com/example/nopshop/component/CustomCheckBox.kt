@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomCheckBox(
-    isChecked: Boolean = true,
+    isChecked: Boolean,
     onCheckChange: (Boolean) -> Unit = {}
 ) {
     Box(modifier = Modifier
@@ -35,10 +35,12 @@ fun CustomCheckBox(
         }
     )
     {
-        Icon(
-            Icons.Filled.Check,
-            contentDescription = "Check"
-        )
+        if(isChecked){
+            Icon(
+                Icons.Filled.Check,
+                contentDescription = "Check"
+            )
+        }
     }
 }
 
@@ -46,6 +48,9 @@ fun CustomCheckBox(
 @Composable
 private fun CustomCheckBoxPreview() {
     Surface(modifier = Modifier.background(Color.White)) {
-        CustomCheckBox()
+        CustomCheckBox(
+            isChecked = true,
+            onCheckChange = {}
+        )
     }
 }

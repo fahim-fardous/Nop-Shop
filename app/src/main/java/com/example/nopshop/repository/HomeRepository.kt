@@ -8,8 +8,9 @@ import com.example.nopshop.model.slider.asEntity
 import com.example.nopshop.network.api.HomeApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class HomeRepository(
+class HomeRepository @Inject constructor(
     private val api: HomeApi,
     private val db: AppDatabase
 ) {

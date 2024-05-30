@@ -19,7 +19,7 @@ import com.example.nopshop.db.dbmodel.slider.SliderEntity
 
 @Database(
     entities = [SliderEntity::class, CategoryEntity::class, FeatureProductsEntity::class, ProductEntity::class],
-    version = 1
+    version = 1, exportSchema = false
 )
 @TypeConverters(Converters::class, FeatureProductsConverter::class)
 abstract class AppDatabase : RoomDatabase() {

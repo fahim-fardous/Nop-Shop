@@ -19,9 +19,7 @@ import com.example.nopshop.model.cart.Item
 class CartFragment : Fragment(R.layout.fragment_cart) {
     private lateinit var binding: FragmentCartBinding
     private lateinit var adapter: CartAdapter
-    private val viewModel: CartViewModel by viewModels {
-        CartViewModelFactory(requireContext().applicationContext)
-    }
+    private val viewModel: CartViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,7 +1,7 @@
 package com.example.nopshop.model.authentication
 
 data class Login(
-    val authenticationData: authenticationData,
+    val Data: Data,
     val FormValues: List<Any> = emptyList(),
     val UploadPicture: UploadPicture = UploadPicture()
 )

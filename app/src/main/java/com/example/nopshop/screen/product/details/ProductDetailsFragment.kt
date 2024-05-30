@@ -22,9 +22,7 @@ import org.jsoup.parser.Parser
 class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private lateinit var binding: FragmentProductDetailsBinding
     private val args: ProductDetailsFragmentArgs by navArgs()
-    private val viewModel: ProductDetailsViewModel by viewModels() {
-        ProductDetailsViewModelFactory(requireContext())
-    }
+    private val viewModel: ProductDetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

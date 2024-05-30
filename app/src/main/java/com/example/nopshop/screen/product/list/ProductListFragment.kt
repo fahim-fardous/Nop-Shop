@@ -22,9 +22,7 @@ import com.example.nopshop.screen.product.details.ProductDetailsViewModel
 
 class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private lateinit var binding: FragmentProductListBinding
-    private  val viewModel: ProductListViewModel by viewModels(){
-        ProductListViewModelFactory(requireContext().applicationContext)
-    }
+    private  val viewModel: ProductListViewModel by viewModels()
     private lateinit var adapter: ProductAdapter
     private val args: ProductListFragmentArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {

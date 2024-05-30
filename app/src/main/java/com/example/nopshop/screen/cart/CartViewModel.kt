@@ -13,9 +13,16 @@ import com.example.nopshop.model.cart.Item
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CartViewModel(context: Context) : ViewModel() {
+@HiltViewModel
+class CartViewModel @Inject constructor(
+    private val repository: ProductRepository,
+    @ApplicationContext private val context: Context
+) : ViewModel() {
     private val _cartResponse: MutableLiveData<CartItemResponse> by lazy {
         MutableLiveData<CartItemResponse>()
     }
@@ -37,11 +44,6 @@ class CartViewModel(context: Context) : ViewModel() {
     val cartRemoveResponse: LiveData<CartItemResponse>
         get() = _cartRemoveResponse
 
-    private val token =
-        context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE).getString("token", null)
-    private val apiClient = ApiClient.getRetrofit(token).create(ProductApi::class.java)
-    private val db = AppDatabase.invoke(context)
-    private val repository = ProductRepository(db, apiClient)
 
     fun getCartProducts() = viewModelScope.launch {
         try {

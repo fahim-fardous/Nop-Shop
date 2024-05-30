@@ -6,10 +6,13 @@ import com.example.nopshop.network.api.AuthenticationApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import javax.inject.Inject
 
-class LoginRepository(private val api: AuthenticationApi) {
+class LoginRepository @Inject constructor(private val api: AuthenticationApi) {
 
-    suspend fun userLogin(logInRequest: Login): Response<LoginResponse> = withContext(Dispatchers.IO) {
-        return@withContext api.userLogin(logInRequest)
-    }
+    suspend fun userLogin(logInRequest: Login): Response<LoginResponse> =
+        withContext(Dispatchers.IO) {
+            println("response asteche")
+            return@withContext api.userLogin(logInRequest)
+        }
 }

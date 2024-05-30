@@ -47,6 +47,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -75,7 +80,6 @@ import com.example.nopshop.component.TextFieldCustom
 import com.example.nopshop.databinding.FragmentCheckOutBinding
 import kotlin.math.round
 
-
 class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     private lateinit var binding: FragmentCheckOutBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +89,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -97,6 +101,45 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun CheckOutScreen() {
+        var existingAddress by remember {
+            mutableStateOf("")
+        }
+        var billingAddress by remember {
+            mutableStateOf("")
+        }
+        var firstName by remember {
+            mutableStateOf("")
+        }
+        var lastName by remember {
+            mutableStateOf("")
+        }
+        var email by remember {
+            mutableStateOf("")
+        }
+        var company by remember {
+            mutableStateOf("")
+        }
+        var country by remember {
+            mutableStateOf("")
+        }
+        var state by remember {
+            mutableStateOf("")
+        }
+        var zip by remember {
+            mutableStateOf("")
+        }
+        var city by remember {
+            mutableStateOf("")
+        }
+        var phoneNumber by remember {
+            mutableStateOf("")
+        }
+        var faxNumber by remember {
+            mutableStateOf("")
+        }
+        var checked by remember {
+            mutableStateOf(false)
+        }
         Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
             TopAppBar(modifier = Modifier
                 .fillMaxWidth()
@@ -121,13 +164,11 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                     )
                 }
             }, actions = {
-                BadgedBox(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp), badge = {
-                        Badge(containerColor = Color.White) {
-                            Text(text = "2", modifier = Modifier.semantics { })
-                        }
-                    }) {
+                BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
+                    Badge(containerColor = Color.White) {
+                        Text(text = "2", modifier = Modifier.semantics { })
+                    }
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_cart),
                         contentDescription = "Go to cart",
@@ -137,7 +178,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
         }) { innerPadding ->
-            Column {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 OutlinedCard(
                     modifier = Modifier
                         .fillMaxSize()
@@ -173,11 +214,9 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                     )
                     TextField(modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .height(25.dp),
-                        value = "",
-                        onValueChange = {},
-                        placeholder = { Text(text = "Existing Address") },
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                        value = existingAddress,
+                        onValueChange = {existingAddress = it},
                         label = {
                             Text(
                                 text = "Existing Address",
@@ -200,7 +239,10 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                             .padding(top = 16.dp, start = 16.dp, end = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        CustomCheckBox()
+                        CustomCheckBox(
+                            isChecked = checked,
+                            onCheckChange = { checked = it }
+                        )
                         Text(
                             modifier = Modifier.padding(start = 12.dp),
                             text = "Ship to the same address",
@@ -215,11 +257,9 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                     )
                     TextField(modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .height(25.dp),
-                        value = "",
-                        onValueChange = {},
-                        placeholder = { Text(text = "New") },
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                        value = billingAddress,
+                        onValueChange = { billingAddress = it },
                         label = {
                             Text(
                                 text = "New", fontSize = 14.sp, color = Color((0xFF7D828B))
@@ -234,36 +274,55 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         trailingIcon = {
                             Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
                         })
-                    TextFieldCustom(label = "First Name", value = "") {
-
-                    }
-                    TextFieldCustom(label = "Last Name", value = "") {
-
-                    }
-                    TextFieldCustom(label = "Email", value = "") {
-
-                    }
-                    TextFieldCustom(label = "Company", value = "") {
-
-                    }
-                    TextFieldCustom(label = "Country", value = "") {
-
-                    }
-                    TextFieldCustom(label = "State/Province", value = "") {
-
-                    }
-                    TextFieldCustom(label = "Zip / Postal Code", value = "") {
-
-                    }
-                    TextFieldCustom(label = "City", value = "") {
-
-                    }
-                    TextFieldCustom(label = "Phone Number", value = "") {
-
-                    }
-                    TextFieldCustom(label = "Fax Number", value = "") {
-
-                    }
+                    TextFieldCustom(
+                        label = "First Name",
+                        value = firstName,
+                        onValueChange = { firstName = it })
+                    TextFieldCustom(
+                        label = "Last Name",
+                        value = lastName,
+                        onValueChange = { lastName = it }
+                    )
+                    TextFieldCustom(
+                        label = "Email",
+                        value = email,
+                        onValueChange = { email = it }
+                    )
+                    TextFieldCustom(
+                        label = "Company",
+                        value = company,
+                        onValueChange = { company = it }
+                    )
+                    TextFieldCustom(
+                        label = "Country",
+                        value = country,
+                        onValueChange = { country = it }
+                    )
+                    TextFieldCustom(
+                        label = "State/Province",
+                        value = state,
+                        onValueChange = { state = it }
+                    )
+                    TextFieldCustom(
+                        label = "Zip / Postal Code",
+                        value = zip,
+                        onValueChange = { zip = it }
+                    )
+                    TextFieldCustom(
+                        label = "City",
+                        value = city,
+                        onValueChange = { city = it }
+                    )
+                    TextFieldCustom(
+                        label = "Phone Number",
+                        value = phoneNumber,
+                        onValueChange = { phoneNumber = it }
+                    )
+                    TextFieldCustom(
+                        label = "Fax Number",
+                        value = faxNumber,
+                        onValueChange = { faxNumber = it }
+                    )
 
 
                 }

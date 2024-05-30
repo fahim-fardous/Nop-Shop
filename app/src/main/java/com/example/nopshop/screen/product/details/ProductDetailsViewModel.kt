@@ -15,9 +15,16 @@ import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
 import com.example.nopshop.utils.NoInternet
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProductDetailsViewModel(context: Context) : ViewModel() {
+@HiltViewModel
+class ProductDetailsViewModel @Inject constructor(
+    private val repository: ProductRepository,
+    @ApplicationContext private val context: Context
+) : ViewModel() {
     private val _productResponse: MutableLiveData<ProductsItem> by lazy {
         MutableLiveData<ProductsItem>()
     }
@@ -40,16 +47,11 @@ class ProductDetailsViewModel(context: Context) : ViewModel() {
         get() = _productAddedToCart
 
 
-    private val apiClient = ApiClient.getRetrofit(null).create(ProductApi::class.java)
-    private val db = AppDatabase.invoke(context)
-    private val repository = ProductRepository(db, apiClient)
-
     fun getProducts(context: Context, id: Int) = viewModelScope.launch {
         try {
             if (NoInternet.isOnline(context.applicationContext)) {
                 val response = repository.getProductDetails(id)
                 _productResponse.value = response.body()
-                println("Aya porchi")
             } else {
                 _productResponseFromDb.value = repository.getProductDetailsFromDb(id)
             }

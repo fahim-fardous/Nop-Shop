@@ -9,8 +9,9 @@ import com.example.nopshop.network.api.ProductApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import javax.inject.Inject
 
-class ProductRepository(
+class ProductRepository @Inject constructor(
     private val db: AppDatabase,
     private val api: ProductApi
 ) {
@@ -18,7 +19,6 @@ class ProductRepository(
     suspend fun getProductDetails(id: Int) = withContext(Dispatchers.IO) {
         val product = api.getProductDetails(id)
         if (product.isSuccessful) {
-            println("Aya porchi repo te")
             db.productDao().saveProduct(product.body()?.Data?.let { it1 -> dataToProductEntity(it1) }!!)
         }
         return@withContext product

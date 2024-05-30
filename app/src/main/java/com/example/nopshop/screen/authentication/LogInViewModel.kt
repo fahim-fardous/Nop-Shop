@@ -1,18 +1,26 @@
 package com.example.nopshop.screen.authentication
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nopshop.model.authentication.authenticationData
+import com.example.nopshop.model.authentication.Data
 import com.example.nopshop.model.authentication.Login
 import com.example.nopshop.model.authentication.LoginResponse
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.AuthenticationApi
 import com.example.nopshop.repository.LoginRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LogInViewModel : ViewModel() {
+@HiltViewModel
+class LogInViewModel @Inject constructor(
+    private val repository: LoginRepository,
+    @ApplicationContext private val context: Context
+) : ViewModel() {
     private val _response: MutableLiveData<LoginResponse> by lazy {
         MutableLiveData<LoginResponse>()
     }
@@ -27,8 +35,6 @@ class LogInViewModel : ViewModel() {
     val showMessage: LiveData<String>
         get() = _showMessage
 
-    private val apiClient = ApiClient.getRetrofit(null).create(AuthenticationApi::class.java)
-    private val repository = LoginRepository(apiClient)
 
     private fun isValid(userEmail: String, userPassword: String): Boolean {
         if (userEmail.isEmpty() || userPassword.isEmpty()) {
@@ -42,16 +48,17 @@ class LogInViewModel : ViewModel() {
         if (!isValid(userEmail, userPassword)) return@launch
         val response = repository.userLogin(
             Login(
-                authenticationData = authenticationData(
+                Data = Data(
                     Email = userEmail,
                     Password = userPassword,
                 )
             )
         )
         if (response.isSuccessful) {
+            println( "Token: " + response.body()?.Data?.Token)
             _response.value = response.body()
         } else {
-
+            println()
         }
     }
 

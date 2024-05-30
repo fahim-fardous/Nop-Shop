@@ -18,7 +18,9 @@ import com.example.nopshop.screen.authentication.LogInFragment
 import com.example.nopshop.screen.category.CategoryFragment
 import com.example.nopshop.screen.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
