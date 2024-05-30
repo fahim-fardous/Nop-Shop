@@ -16,9 +16,11 @@ import coil.load
 import com.example.nopshop.R
 import com.example.nopshop.databinding.FragmentProductDetailsBinding
 import com.example.nopshop.utils.NoInternet
+import dagger.hilt.android.AndroidEntryPoint
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 
+@AndroidEntryPoint
 class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private lateinit var binding: FragmentProductDetailsBinding
     private val args: ProductDetailsFragmentArgs by navArgs()

@@ -53,6 +53,7 @@ class ProductDetailsViewModel @Inject constructor(
                 val response = repository.getProductDetails(id)
                 _productResponse.value = response.body()
             } else {
+                println(repository.getProductDetailsFromDb(id).productName)
                 _productResponseFromDb.value = repository.getProductDetailsFromDb(id)
             }
 

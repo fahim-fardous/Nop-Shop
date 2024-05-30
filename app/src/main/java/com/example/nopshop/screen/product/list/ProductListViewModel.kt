@@ -13,10 +13,12 @@ import com.example.nopshop.model.products.ProductsItem
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ProductListViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     @ApplicationContext private val context: Context

@@ -18,8 +18,10 @@ import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.category.Product
 import com.example.nopshop.model.products.ProductsItem
 import com.example.nopshop.screen.product.details.ProductDetailsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private lateinit var binding: FragmentProductListBinding
     private  val viewModel: ProductListViewModel by viewModels()

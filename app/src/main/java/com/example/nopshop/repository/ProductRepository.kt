@@ -43,6 +43,7 @@ class ProductRepository @Inject constructor(
 
     // Database
     suspend fun getProductDetailsFromDb(id: Int) = withContext(Dispatchers.IO) {
+        println("Asche"+db.productDao().getProduct(id))
         return@withContext db.productDao().getProduct(id)
     }
 
@@ -51,7 +52,6 @@ class ProductRepository @Inject constructor(
 
 fun dataToProductEntity(data: Data): ProductEntity {
     return ProductEntity(
-        id = 0,
         productId = data.Id,
         productName = data.Name,
         productShortDescription = data.ShortDescription,

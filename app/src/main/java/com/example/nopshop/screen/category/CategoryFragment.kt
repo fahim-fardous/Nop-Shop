@@ -11,7 +11,9 @@ import com.example.nopshop.adapter.CategoryAdapter
 import com.example.nopshop.adapter.CategoryListAdapter
 import com.example.nopshop.databinding.FragmentCategoryBinding
 import com.example.nopshop.model.CategoryItem
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private lateinit var binding: FragmentCategoryBinding
