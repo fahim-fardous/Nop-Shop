@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.nopshop.converter.Converters
 import com.example.nopshop.converter.FeatureProductsConverter
-import com.example.nopshop.converter.ProductDetailsConverter
 import com.example.nopshop.db.dao.CategoryDao
 import com.example.nopshop.db.dao.FeatureProductsDao
 import com.example.nopshop.db.dao.ProductDao
