@@ -14,8 +14,10 @@ import com.example.nopshop.adapter.CartAdapter
 import com.example.nopshop.databinding.FragmentCartBinding
 import com.example.nopshop.model.CartItem
 import com.example.nopshop.model.cart.Item
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class CartFragment : Fragment(R.layout.fragment_cart) {
     private lateinit var binding: FragmentCartBinding
     private lateinit var adapter: CartAdapter
