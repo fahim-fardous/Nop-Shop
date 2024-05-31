@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,6 +18,7 @@ import com.example.nopshop.databinding.ActivityMainBinding
 import com.example.nopshop.screen.authentication.LogInFragment
 import com.example.nopshop.screen.category.CategoryFragment
 import com.example.nopshop.screen.home.HomeFragment
+import com.example.nopshop.utils.Value
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 

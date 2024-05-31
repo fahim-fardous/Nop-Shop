@@ -22,8 +22,10 @@ import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.featureProducts.Data
 import com.example.nopshop.screen.product.details.ProductDetailsViewModel
 import com.example.nopshop.utils.NoInternet
+import com.example.nopshop.utils.Value
 import dagger.hilt.android.AndroidEntryPoint
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
+import kotlin.reflect.jvm.internal.ReflectProperties.Val
 
 
 @AndroidEntryPoint
@@ -67,76 +69,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun onAddToCartClick(product: Data) {
-        viewModel.addProductToCart(product.Id, 1)
-    }
-
-    private fun onProductClick(it: Data) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
-        findNavController().navigate(action)
-    }
-
-    private fun onCategoryClick(
-        product: com.example.nopshop.model.category.Data, categoryName: String
-    ) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
-            product.Products.toTypedArray(), categoryName
-        )
-        findNavController().navigate(action)
-    }
-
-
-    private fun initObserver() {
-        if (NoInternet.isOnline(requireContext().applicationContext)) {
-            viewModel.sliderImageResponse.observe(this) { slider ->
-                for (image in slider) {
-                    binding.adCarousel.addData(
-                        CarouselItem(
-                            imageUrl = image.ImageUrl
-                        )
-                    )
-                }
-            }
-            viewModel.featureProductsResponse.observe(this) {
-                featureProductsAdapter.submitList(it.Data)
-            }
-            viewModel.categoryWiseProductsResponse.observe(this) { it ->
-                categoryListAdapter.submitList(it.Data)
-            }
-            viewModel.productAddedToCart.observe(this) {
-                Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            viewModel.sliderImageResponseFromDb.observe(this) { slider ->
-                for (image in slider) {
-                    binding.adCarousel.addData(
-                        CarouselItem(
-                            imageUrl = image.ImageUrl
-                        )
-                    )
-                }
-            }
-            viewModel.featureProductsResponseFromDb.observe(this) {
-                val list = mutableListOf<Data>()
-                for (item in it) {
-                    list.add(
-                        item.toFeatureData()
-                    )
-                }
-
-                featureProductsAdapter.submitList(list)
-            }
-            viewModel.categoryWiseProductsResponseFromDb.observe(this) {
-                val list = mutableListOf<com.example.nopshop.model.category.Data>()
-                for (item in it) {
-                    list.add(
-                        item.toData()
-                    )
-                }
-                categoryListAdapter.submitList(list)
-            }
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -146,18 +78,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.adCarousel.registerLifecycle(viewLifecycleOwner)
 
         initViews()
-        //initListeners()
+        initListeners()
         loadData()
-    }
-
-    private fun loadData() {
-        viewModel.getImageSlider(requireContext())
-        viewModel.getFeatureProducts(requireContext())
-        viewModel.getCategoryWiseProducts(requireContext())
-    }
-
-    private fun initListeners() {
-
     }
 
     private fun initViews() {
@@ -199,132 +121,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             )
         )
 
-        val womenHeelList = mutableListOf<ProductItem>()
-
-        womenHeelList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.womenheel_1,
-                productName = "Women heel type 1",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-        womenHeelList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.womenheel_2,
-                productName = "Women heel type 2",
-                rating = 4.5f,
-                price = 15.00
-            )
-        )
-
-        womenHeelList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.womenheel_1,
-                productName = "Women heel type 3",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-        womenHeelList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.womenheel_2,
-                productName = "Women heel type 4",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-        val salmonFishList = mutableListOf<ProductItem>()
-
-        salmonFishList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.salmon_fish,
-                productName = "Salmon fish fry",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-        salmonFishList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.salmon_fish_steak,
-                productName = "Salmon fish steak",
-                rating = 4.5f,
-                price = 15.00
-            )
-        )
-
-        salmonFishList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.salmon_fish,
-                productName = "Salmon fish fry",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-        salmonFishList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.salmon_fish_steak,
-                productName = "Salmon fish steak",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-        val furnitureList = mutableListOf<ProductItem>()
-
-        furnitureList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.furniture,
-                productName = "Furniture sofa 1",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-        furnitureList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.furniture_2,
-                productName = "Furniture sofa 2",
-                rating = 4.5f,
-                price = 15.00
-            )
-        )
-
-        furnitureList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.furniture_collection_1,
-                productName = "Furniture sofa 3",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-        furnitureList.add(
-            ProductItem(
-                id = 0,
-                productImage = R.drawable.furniture_collection_2,
-                productName = "Furniture chair",
-                rating = 4.0f,
-                price = 15.00
-            )
-        )
-
-
-        //binding.adCarousel.setData(list)
-
         binding.bestSellingRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.bestSellingRv.adapter = bestSellingAdapter
@@ -340,26 +136,98 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.featureProductRv.adapter = featureProductsAdapter
 
-        binding.womenHeelRv.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.womenHeelRv.adapter = womenHeelAdapter
-        womenHeelAdapter.submitList(womenHeelList)
+        binding.cartBadge.text = Value.getValue().toString()
+    }
 
-        binding.salmonFishRv.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.salmonFishRv.adapter = salmonFishAdapter
-        salmonFishAdapter.submitList(salmonFishList)
+    private fun onAddToCartClick(product: Data) {
+        viewModel.addProductToCart(product.Id, 1)
+        //Value.incrementValue()
+    }
 
-        binding.furnitureCollectionRv.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.furnitureCollectionRv.adapter = furnitureCollectionAdapter
-        furnitureCollectionAdapter.submitList(furnitureList)
+    private fun onProductClick(it: Data) {
+        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
+        findNavController().navigate(action)
+    }
 
+    private fun onCategoryClick(
+        product: com.example.nopshop.model.category.Data, categoryName: String
+    ) {
+        val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
+            product.Products.toTypedArray(), categoryName
+        )
+        findNavController().navigate(action)
+    }
+
+
+    private fun initObserver() {
+        if (NoInternet.isOnline(requireContext().applicationContext)) {
+            viewModel.sliderImageResponse.observe(this) { slider ->
+                for (image in slider) {
+                    binding.adCarousel.addData(
+                        CarouselItem(
+                            imageUrl = image.ImageUrl
+                        )
+                    )
+                }
+            }
+            viewModel.featureProductsResponse.observe(this) {
+                featureProductsAdapter.submitList(it.Data)
+            }
+            viewModel.categoryWiseProductsResponse.observe(this) { it ->
+                categoryListAdapter.submitList(it.Data)
+            }
+            viewModel.productAddedToCart.observe(this) {
+                Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
+                if(it.Message.isNotEmpty()){
+                    viewModel.getCartItemCount()
+                }
+            }
+            viewModel.itemCount.observe(this){
+                binding.cartBadge.text = it.Data.Cart.Items.size.toString()
+            }
+        } else {
+            viewModel.sliderImageResponseFromDb.observe(this) { slider ->
+                for (image in slider) {
+                    binding.adCarousel.addData(
+                        CarouselItem(
+                            imageUrl = image.ImageUrl
+                        )
+                    )
+                }
+            }
+            viewModel.featureProductsResponseFromDb.observe(this) {
+                val list = mutableListOf<Data>()
+                for (item in it) {
+                    list.add(
+                        item.toFeatureData()
+                    )
+                }
+
+                featureProductsAdapter.submitList(list)
+            }
+            viewModel.categoryWiseProductsResponseFromDb.observe(this) {
+                val list = mutableListOf<com.example.nopshop.model.category.Data>()
+                for (item in it) {
+                    list.add(
+                        item.toData()
+                    )
+                }
+                categoryListAdapter.submitList(list)
+            }
+        }
+    }
+
+    private fun loadData() {
+        viewModel.getImageSlider()
+        viewModel.getFeatureProducts()
+        viewModel.getCategoryWiseProducts()
+        viewModel.getCartItemCount()
+    }
+
+    private fun initListeners() {
         binding.cartBtn.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToCartFragment()
             findNavController().navigate(action)
         }
-
-
     }
 }

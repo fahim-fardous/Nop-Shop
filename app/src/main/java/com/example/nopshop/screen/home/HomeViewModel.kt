@@ -12,6 +12,7 @@ import com.example.nopshop.db.dbmodel.featureProduct.FeatureProductsEntity
 import com.example.nopshop.db.dbmodel.slider.SliderEntity
 import com.example.nopshop.model.cart.AddToCartItem
 import com.example.nopshop.model.cart.AddToCartResponse
+import com.example.nopshop.model.cart.CartItemResponse
 import com.example.nopshop.model.cart.FormValue
 import com.example.nopshop.model.category.CategoryWiseProductsItem
 import com.example.nopshop.model.featureProducts.FeatureProductItem
@@ -19,7 +20,9 @@ import com.example.nopshop.model.slider.Slider
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.HomeApi
 import com.example.nopshop.repository.HomeRepository
+import com.example.nopshop.repository.ProductRepository
 import com.example.nopshop.utils.NoInternet
+import com.example.nopshop.utils.Value
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -28,6 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: HomeRepository,
+    private val productRepository: ProductRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _sliderImageResponse: MutableLiveData<List<Slider>> by lazy {
@@ -68,6 +72,7 @@ class HomeViewModel @Inject constructor(
 
     val featureProductsResponse: LiveData<FeatureProductItem>
         get() = _featureProductsResponse
+
     private val _productAddedToCart: MutableLiveData<AddToCartResponse> by lazy {
         MutableLiveData<AddToCartResponse>()
     }
@@ -75,12 +80,15 @@ class HomeViewModel @Inject constructor(
     val productAddedToCart: LiveData<AddToCartResponse>
         get() = _productAddedToCart
 
+    private val _itemCount: MutableLiveData<CartItemResponse> by lazy {
+        MutableLiveData<CartItemResponse>()
+    }
 
-    private val token =
-        context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE).getString("token", null)
+    val itemCount: LiveData<CartItemResponse>
+        get() = _itemCount
 
 
-    fun getImageSlider(context: Context) = viewModelScope.launch {
+    fun getImageSlider() = viewModelScope.launch {
         if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getImageSlider()
             _sliderImageResponse.value = response.body()?.Data?.Sliders
@@ -90,7 +98,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getCategoryWiseProducts(context: Context) = viewModelScope.launch {
+    fun getCategoryWiseProducts() = viewModelScope.launch {
         if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getCategoryWiseProducts()
             _categoryWiseProductsResponse.value = response.body()
@@ -100,7 +108,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getFeatureProducts(context: Context) = viewModelScope.launch {
+    fun getFeatureProducts() = viewModelScope.launch {
         if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getFeatureProducts()
             _featureProductsResponse.value = response.body()
@@ -111,22 +119,28 @@ class HomeViewModel @Inject constructor(
     }
 
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
-        try {
-            val response = repository.addProductToCart(
-                AddToCartItem(
-                    listOf(
-                        FormValue(
-                            "addtocart_$productId.EnteredQuantity",
-                            "$quantity"
-                        )
+        val response = repository.addProductToCart(
+            AddToCartItem(
+                listOf(
+                    FormValue(
+                        "addtocart_$productId.EnteredQuantity",
+                        "$quantity"
                     )
-                ), productId
-            )
-            _productAddedToCart.value = response.body()
+                )
+            ), productId
+        )
+        if (response.isSuccessful) _productAddedToCart.value = response.body()
+    }
+
+    fun getCartItemCount() = viewModelScope.launch {
+        try {
+            val response = productRepository.getCartItems()
+            val count = response.body()
+            println(count)
+            _itemCount.value = count
+            println(_itemCount.value)
         } catch (e: Exception) {
-
         }
-
     }
 
 

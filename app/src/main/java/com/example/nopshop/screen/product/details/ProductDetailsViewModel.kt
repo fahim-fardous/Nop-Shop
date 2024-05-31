@@ -9,6 +9,7 @@ import com.example.nopshop.db.AppDatabase
 import com.example.nopshop.db.dbmodel.product.ProductEntity
 import com.example.nopshop.model.cart.AddToCartItem
 import com.example.nopshop.model.cart.AddToCartResponse
+import com.example.nopshop.model.cart.CartItemResponse
 import com.example.nopshop.model.cart.FormValue
 import com.example.nopshop.model.products.ProductsItem
 import com.example.nopshop.network.ApiClient
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     private val repository: ProductRepository,
+    private val productRepository: ProductRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _productResponse: MutableLiveData<ProductsItem> by lazy {
@@ -46,6 +48,13 @@ class ProductDetailsViewModel @Inject constructor(
     val productAddedToCart: LiveData<AddToCartResponse>
         get() = _productAddedToCart
 
+    private val _itemCount: MutableLiveData<CartItemResponse> by lazy {
+        MutableLiveData<CartItemResponse>()
+    }
+
+    val itemCount: LiveData<CartItemResponse>
+        get() = _itemCount
+
 
     fun getProducts(context: Context, id: Int) = viewModelScope.launch {
         try {
@@ -63,21 +72,26 @@ class ProductDetailsViewModel @Inject constructor(
     }
 
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
-        try {
-            val response = repository.addProductToCart(
-                AddToCartItem(
-                    listOf(
-                        FormValue(
-                            "addtocart_$productId.EnteredQuantity",
-                            "$quantity"
-                        )
+        val response = repository.addProductToCart(
+            AddToCartItem(
+                listOf(
+                    FormValue(
+                        "addtocart_$productId.EnteredQuantity",
+                        "$quantity"
                     )
-                ), productId
-            )
-            _productAddedToCart.value = response.body()
+                )
+            ), productId
+        )
+        if (response.isSuccessful) _productAddedToCart.value = response.body()
+    }
+    fun getCartItemCount() = viewModelScope.launch {
+        try {
+            val response = productRepository.getCartItems()
+            val count = response.body()
+            println(count)
+            _itemCount.value = count
+            println(_itemCount.value)
         } catch (e: Exception) {
-
         }
-
     }
 }
