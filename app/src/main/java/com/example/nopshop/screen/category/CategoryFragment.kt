@@ -43,11 +43,15 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun loadData() {
         viewModel.getCategories()
+        viewModel.getCartItemCount()
     }
 
     private fun initObserver() {
         viewModel.category.observe(this){
             adapter.submitList(it.Data)
+        }
+        viewModel.itemCount.observe(this){
+            binding.cartBadge.text = it.Data.Cart.Items.size.toString()
         }
     }
 

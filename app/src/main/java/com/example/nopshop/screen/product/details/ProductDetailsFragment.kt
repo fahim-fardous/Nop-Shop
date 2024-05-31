@@ -50,6 +50,7 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
 
     private fun loadData() {
         viewModel.getProducts(requireContext(), args.productId)
+        viewModel.getCartItemCount()
     }
 
     private fun initListeners() {
@@ -114,6 +115,12 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
             }
             viewModel.productAddedToCart.observe(viewLifecycleOwner) {
                 Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
+                if(it.Message.isNotEmpty()){
+                    viewModel.getCartItemCount()
+                }
+            }
+            viewModel.itemCount.observe(viewLifecycleOwner){
+                binding.cartBadge.text = it.Data.Cart.Items.size.toString()
             }
         } else {
             viewModel.productResponseFromDb.observe(viewLifecycleOwner) {

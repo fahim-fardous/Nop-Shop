@@ -140,7 +140,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onAddToCartClick(product: Data) {
-        println("Clicked")
         viewModel.addProductToCart(product.Id, 1)
         //Value.incrementValue()
     }
