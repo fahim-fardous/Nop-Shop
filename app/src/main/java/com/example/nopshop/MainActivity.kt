@@ -54,11 +54,8 @@ class MainActivity : AppCompatActivity() {
                         binding.bottomNavBar.visibility = View.GONE
                     }
                 }
-
-                R.id.cartFragment -> binding.bottomNavBar.visibility = View.GONE
                 else -> binding.bottomNavBar.visibility = View.VISIBLE
             }
         }
-
     }
 }

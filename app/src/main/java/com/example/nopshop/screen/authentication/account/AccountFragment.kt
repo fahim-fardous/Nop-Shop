@@ -22,6 +22,4 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
 
         binding = FragmentAccountBinding.bind(view)
     }
-
-
 }

@@ -60,9 +60,8 @@ class LogInFragment : Fragment(R.layout.fragment_log_in) {
             println(data.Data.Token)
             editor.putBoolean("isLoggedIn", true)
             editor.apply()
-            println(sharedPreferences.getBoolean("isLoggedIn", false))
             Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(LogInFragmentDirections.actionLogInFragmentToHomeFragment2())
+            findNavController().popBackStack()
         }
         viewModel.showMessage.observe(this) { message ->
             if (message.isNotEmpty()) {

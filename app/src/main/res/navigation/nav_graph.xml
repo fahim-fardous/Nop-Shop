@@ -50,13 +50,7 @@
         android:id="@+id/logInFragment"
         android:name="com.example.nopshop.screen.authentication.LogInFragment"
         android:label="fragment_log_in"
-        tools:layout="@layout/fragment_log_in" >
-        <action
-            android:id="@+id/action_logInFragment_to_homeFragment2"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_log_in" />
     <fragment
         android:id="@+id/productListFragment"
         android:name="com.example.nopshop.screen.product.list.ProductListFragment"
