@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomCheckBox(
+    modifier: Modifier = Modifier,
     isChecked: Boolean,
     onCheckChange: (Boolean) -> Unit = {}
 ) {
