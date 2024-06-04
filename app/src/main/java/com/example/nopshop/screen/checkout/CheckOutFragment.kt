@@ -63,6 +63,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.semantics
@@ -76,7 +77,10 @@ import androidx.compose.ui.zIndex
 import androidx.room.util.TableInfo
 import com.example.nopshop.R
 import com.example.nopshop.component.CustomCheckBox
+import com.example.nopshop.component.PaymentOptionCard
 import com.example.nopshop.component.TextFieldCustom
+import com.example.nopshop.component.Title
+import com.example.nopshop.component.TotalCard
 import com.example.nopshop.databinding.FragmentCheckOutBinding
 import kotlin.math.round
 
@@ -188,25 +192,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                     elevation = CardDefaults.cardElevation(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color(0xFF0BF7EB),
-                                        Color(0xFF07C5FB),
-                                        Color(0xFF088DF9),
-                                    )
-                                )
-                            )
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            text = "Billing Address",
-                            color = Color.White
-                        )
-                    }
+                    Title(label = "Billing Address")
                     Text(
                         modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                         text = "Address",
@@ -216,7 +202,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         .fillMaxWidth()
                         .padding(horizontal = 12.dp, vertical = 4.dp),
                         value = existingAddress,
-                        onValueChange = {existingAddress = it},
+                        onValueChange = { existingAddress = it },
                         label = {
                             Text(
                                 text = "Existing Address",
@@ -323,11 +309,34 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         value = faxNumber,
                         onValueChange = { faxNumber = it }
                     )
-
-
+                    Title(label = "Payment Method")
+                    PaymentOptionCard()
+                    Title(label = "Payment Information")
+                    TotalCard()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .background(
+                                Brush.horizontalGradient(
+                                    colors = listOf(
+                                        Color(0xFF0AE5F2),
+                                        Color(0xFF088EFA),
+                                    )
+                                )
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(12.dp),
+                            text = "Confirm",
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
-
         }
     }
 

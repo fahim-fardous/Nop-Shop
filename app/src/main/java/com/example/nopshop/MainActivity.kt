@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        sharedPreferences = getSharedPreferences("TokenPrefs", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -45,7 +45,16 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.logInFragment -> binding.bottomNavBar.visibility = View.GONE
+                R.id.logInFragment -> {
+                    println(sharedPreferences.getBoolean("isLoggedIn", false))
+                    if (sharedPreferences.getBoolean("isLoggedIn", false)) {
+                        navController.navigate(R.id.accountFragment)
+                        binding.bottomNavBar.visibility = View.VISIBLE
+                    } else {
+                        binding.bottomNavBar.visibility = View.GONE
+                    }
+                }
+
                 R.id.cartFragment -> binding.bottomNavBar.visibility = View.GONE
                 else -> binding.bottomNavBar.visibility = View.VISIBLE
             }

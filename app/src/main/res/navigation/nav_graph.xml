@@ -33,7 +33,14 @@
         android:id="@+id/cartFragment"
         android:name="com.example.nopshop.screen.cart.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_checkOutFragment"
+            app:destination="@id/checkOutFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_logInFragment"
+            app:destination="@id/logInFragment" />
+    </fragment>
     <fragment
         android:id="@+id/checkOutFragment"
         android:name="com.example.nopshop.screen.checkout.CheckOutFragment"
@@ -43,7 +50,13 @@
         android:id="@+id/logInFragment"
         android:name="com.example.nopshop.screen.authentication.LogInFragment"
         android:label="fragment_log_in"
-        tools:layout="@layout/fragment_log_in" />
+        tools:layout="@layout/fragment_log_in" >
+        <action
+            android:id="@+id/action_logInFragment_to_homeFragment2"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/productListFragment"
         android:name="com.example.nopshop.screen.product.list.ProductListFragment"

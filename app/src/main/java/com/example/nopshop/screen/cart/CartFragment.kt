@@ -1,5 +1,6 @@
 package com.example.nopshop.screen.cart
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.example.nopshop.databinding.FragmentCartBinding
 import com.example.nopshop.model.CartItem
 import com.example.nopshop.model.cart.Item
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -23,16 +25,16 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     private lateinit var adapter: CartAdapter
     private val viewModel: CartViewModel by viewModels()
 
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = CartAdapter(
-            { item ->
-                removeItem(item)
-            },
-            { item, quantity ->
-                updateItem(item, quantity)
-            }
-        )
+        adapter = CartAdapter({ item ->
+            removeItem(item)
+        }, { item, quantity ->
+            updateItem(item, quantity)
+        })
 
     }
 
@@ -89,7 +91,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
 
     private fun initShimmerEffect() {
         binding.scrollView.visibility = View.GONE
-        binding.cartItemShimmerLayout.visibility =View.VISIBLE
+        binding.cartItemShimmerLayout.visibility = View.VISIBLE
         binding.cartItemShimmerLayout.startShimmer()
     }
 
@@ -100,6 +102,23 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     private fun initListeners() {
         binding.topBar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.checkoutBtn.setOnClickListener {
+            val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+            if (isLoggedIn) {
+                if (adapter.itemCount>0) {
+                    findNavController().navigate(CartFragmentDirections.actionCartFragmentToCheckOutFragment())
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Atleast add one item to proceed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                findNavController().navigate(CartFragmentDirections.actionCartFragmentToLogInFragment())
+            }
         }
     }
 
@@ -121,8 +140,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             removeItem(cartItem)
         } else {
             viewModel.updateCart(
-                item = cartItem,
-                quantity = quantity
+                item = cartItem, quantity = quantity
             )
         }
     }
