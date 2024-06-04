@@ -11,11 +11,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -144,9 +151,8 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
         var checked by remember {
             mutableStateOf(false)
         }
-        Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+        Scaffold(topBar = {
             TopAppBar(modifier = Modifier
-                .fillMaxWidth()
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
@@ -155,31 +161,35 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                             Color(0xFF088DF9),
                         )
                     )
-                ), title = {
-                Text(
-                    text = "One Page Checkout", color = Color.White, fontSize = 18.sp
-                )
-            }, navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.White
+                ),
+                title = {
+                    Text(
+                        text = "One Page Checkout", color = Color.White, fontSize = 18.sp
                     )
-                }
-            }, actions = {
-                BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
-                    Badge(containerColor = Color.White) {
-                        Text(text = "2", modifier = Modifier.semantics { })
+                },
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
                     }
-                }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_cart),
-                        contentDescription = "Go to cart",
-                        tint = Color.White
-                    )
-                }
-            }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                },
+                actions = {
+                    BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
+                        Badge(containerColor = Color.White) {
+                            Text(text = "2", modifier = Modifier.semantics { })
+                        }
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_cart),
+                            contentDescription = "Go to cart",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
         }) { innerPadding ->
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -225,10 +235,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                             .padding(top = 16.dp, start = 16.dp, end = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        CustomCheckBox(
-                            isChecked = checked,
-                            onCheckChange = { checked = it }
-                        )
+                        CustomCheckBox(isChecked = checked, onCheckChange = { checked = it })
                         Text(
                             modifier = Modifier.padding(start = 12.dp),
                             text = "Ship to the same address",
@@ -260,55 +267,32 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         trailingIcon = {
                             Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
                         })
-                    TextFieldCustom(
-                        label = "First Name",
+                    TextFieldCustom(label = "First Name",
                         value = firstName,
                         onValueChange = { firstName = it })
-                    TextFieldCustom(
-                        label = "Last Name",
+                    TextFieldCustom(label = "Last Name",
                         value = lastName,
-                        onValueChange = { lastName = it }
-                    )
-                    TextFieldCustom(
-                        label = "Email",
-                        value = email,
-                        onValueChange = { email = it }
-                    )
-                    TextFieldCustom(
-                        label = "Company",
+                        onValueChange = { lastName = it })
+                    TextFieldCustom(label = "Email", value = email, onValueChange = { email = it })
+                    TextFieldCustom(label = "Company",
                         value = company,
-                        onValueChange = { company = it }
-                    )
-                    TextFieldCustom(
-                        label = "Country",
+                        onValueChange = { company = it })
+                    TextFieldCustom(label = "Country",
                         value = country,
-                        onValueChange = { country = it }
-                    )
-                    TextFieldCustom(
-                        label = "State/Province",
+                        onValueChange = { country = it })
+                    TextFieldCustom(label = "State/Province",
                         value = state,
-                        onValueChange = { state = it }
-                    )
-                    TextFieldCustom(
-                        label = "Zip / Postal Code",
+                        onValueChange = { state = it })
+                    TextFieldCustom(label = "Zip / Postal Code",
                         value = zip,
-                        onValueChange = { zip = it }
-                    )
-                    TextFieldCustom(
-                        label = "City",
-                        value = city,
-                        onValueChange = { city = it }
-                    )
-                    TextFieldCustom(
-                        label = "Phone Number",
+                        onValueChange = { zip = it })
+                    TextFieldCustom(label = "City", value = city, onValueChange = { city = it })
+                    TextFieldCustom(label = "Phone Number",
                         value = phoneNumber,
-                        onValueChange = { phoneNumber = it }
-                    )
-                    TextFieldCustom(
-                        label = "Fax Number",
+                        onValueChange = { phoneNumber = it })
+                    TextFieldCustom(label = "Fax Number",
                         value = faxNumber,
-                        onValueChange = { faxNumber = it }
-                    )
+                        onValueChange = { faxNumber = it })
                     Title(label = "Payment Method")
                     PaymentOptionCard()
                     Title(label = "Payment Information")
@@ -324,8 +308,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                                         Color(0xFF088EFA),
                                     )
                                 )
-                            ),
-                        contentAlignment = Alignment.Center
+                            ), contentAlignment = Alignment.Center
                     ) {
                         Text(
                             modifier = Modifier.padding(12.dp),
