@@ -151,7 +151,8 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
         var checked by remember {
             mutableStateOf(false)
         }
-        Scaffold(topBar = {
+        Scaffold(modifier = Modifier.fillMaxSize(),
+            topBar = {
             TopAppBar(modifier = Modifier
                 .background(
                     Brush.horizontalGradient(
@@ -293,31 +294,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                     TextFieldCustom(label = "Fax Number",
                         value = faxNumber,
                         onValueChange = { faxNumber = it })
-                    Title(label = "Payment Method")
-                    PaymentOptionCard()
-                    Title(label = "Payment Information")
-                    TotalCard()
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .background(
-                                Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color(0xFF0AE5F2),
-                                        Color(0xFF088EFA),
-                                    )
-                                )
-                            ), contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(12.dp),
-                            text = "Confirm",
-                            color = Color.White,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+
                 }
             }
         }
