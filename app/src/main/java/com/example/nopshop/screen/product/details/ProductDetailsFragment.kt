@@ -92,7 +92,6 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private fun initObserver() {
         if (NoInternet.isOnline(requireContext())) {
             viewModel.productResponse.observe(viewLifecycleOwner) {
-                println("Ami ekhane eshechi -->" + it.Data)
                 binding.productImg.load(it.Data.PictureModels[0].ImageUrl)
                 binding.productTitleTv.text = it.Data.Name
                 binding.stockTv.text = it.Data.StockAvailability ?: "Out of Stock"

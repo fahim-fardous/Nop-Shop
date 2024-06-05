@@ -22,7 +22,6 @@ import com.example.nopshop.network.api.HomeApi
 import com.example.nopshop.repository.HomeRepository
 import com.example.nopshop.repository.ProductRepository
 import com.example.nopshop.utils.NoInternet
-import com.example.nopshop.utils.Value
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -136,9 +135,7 @@ class HomeViewModel @Inject constructor(
         try {
             val response = productRepository.getCartItems()
             val count = response.body()
-            println(count)
             _itemCount.value = count
-            println(_itemCount.value)
         } catch (e: Exception) {
         }
     }

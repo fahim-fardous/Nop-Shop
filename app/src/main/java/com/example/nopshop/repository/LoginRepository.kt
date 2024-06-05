@@ -12,7 +12,6 @@ class LoginRepository @Inject constructor(private val api: AuthenticationApi) {
 
     suspend fun userLogin(logInRequest: Login): Response<LoginResponse> =
         withContext(Dispatchers.IO) {
-            println("response asteche")
             return@withContext api.userLogin(logInRequest)
         }
 }

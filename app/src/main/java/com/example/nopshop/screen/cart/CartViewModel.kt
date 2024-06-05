@@ -86,7 +86,6 @@ class CartViewModel @Inject constructor(
             _cartUpdateResponse.value = response.body()
 
         } catch (e: Exception) {
-            println(e)
         }
     }
 }

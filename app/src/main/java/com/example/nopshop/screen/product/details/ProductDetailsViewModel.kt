@@ -62,7 +62,6 @@ class ProductDetailsViewModel @Inject constructor(
                 val response = repository.getProductDetails(id)
                 _productResponse.value = response.body()
             } else {
-                println(repository.getProductDetailsFromDb(id).productName)
                 _productResponseFromDb.value = repository.getProductDetailsFromDb(id)
             }
 
@@ -88,9 +87,7 @@ class ProductDetailsViewModel @Inject constructor(
         try {
             val response = productRepository.getCartItems()
             val count = response.body()
-            println(count)
             _itemCount.value = count
-            println(_itemCount.value)
         } catch (e: Exception) {
         }
     }
