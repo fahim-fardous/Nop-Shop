@@ -7,4 +7,5 @@ object Constants {
     const val NST =
         "eyJhbGciOiJIUzUxMiJ9.eyJOU1RfS0VZIjoiYm05d1UzUmhkR2x2YmxSdmEyVnUifQ.adqiIzFjqZdpJw5uHOHjE5qw2UvCDH2FwMmwlYvr5ljKyPG65ZQe_4wb8NYEQFXmyZZyVu-77xd5Njn310cjMw"
     const val USER_AGENT = "com.bs.ecommerce/1.0"
+    var TOKEN:String? = null
 }

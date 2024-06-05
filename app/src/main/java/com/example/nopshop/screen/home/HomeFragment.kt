@@ -1,5 +1,7 @@
 package com.example.nopshop.screen.home
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -21,8 +23,8 @@ import com.example.nopshop.db.dbmodel.featureProduct.toFeatureData
 import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.featureProducts.Data
 import com.example.nopshop.screen.product.details.ProductDetailsViewModel
+import com.example.nopshop.utils.Constants
 import com.example.nopshop.utils.NoInternet
-import com.example.nopshop.utils.Value
 import dagger.hilt.android.AndroidEntryPoint
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
 import kotlin.reflect.jvm.internal.ReflectProperties.Val
@@ -38,11 +40,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var furnitureCollectionAdapter: FurnitureCollectionAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryListAdapter: CategoryListAdapter
+    private lateinit var sharedPreferences: SharedPreferences
     private val viewModel: HomeViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences =  requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        Constants.TOKEN = sharedPreferences.getString("Token", null)
         initObserver()
 
         bestSellingAdapter = BestSellingAdapter {}
@@ -136,7 +141,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.featureProductRv.adapter = featureProductsAdapter
 
-        binding.cartBadge.text = Value.getValue().toString()
     }
 
     private fun onAddToCartClick(product: Data) {

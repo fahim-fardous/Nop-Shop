@@ -70,11 +70,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         }
     }
 
-//    private fun onClick(category: CategoryItem) {
-//        println("Clicked")
-//        val action = CategoryFragmentDirections.actionCategoryFragmentToProductListFragment(0)
-//        findNavController().navigate(action)
-//    }
 
 
 

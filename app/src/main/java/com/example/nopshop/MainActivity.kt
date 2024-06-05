@@ -15,11 +15,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.nopshop.databinding.ActivityMainBinding
-import com.example.nopshop.screen.authentication.LogInFragment
-import com.example.nopshop.screen.category.CategoryFragment
-import com.example.nopshop.screen.home.HomeFragment
-import com.example.nopshop.utils.Value
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.logInFragment -> {
-                    println(sharedPreferences.getBoolean("isLoggedIn", false))
                     if (sharedPreferences.getBoolean("isLoggedIn", false)) {
                         navController.navigate(R.id.accountFragment)
                         binding.bottomNavBar.visibility = View.VISIBLE

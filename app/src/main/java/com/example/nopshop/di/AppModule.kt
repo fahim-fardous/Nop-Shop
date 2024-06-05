@@ -32,14 +32,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideToken(sharedPreferences: SharedPreferences): String? {
-        return sharedPreferences.getString("token", null)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(token: String?): Retrofit {
-        return ApiClient.getRetrofit(token)
+    fun provideRetrofit(): Retrofit {
+        return ApiClient.getRetrofit()
     }
 
     @Provides

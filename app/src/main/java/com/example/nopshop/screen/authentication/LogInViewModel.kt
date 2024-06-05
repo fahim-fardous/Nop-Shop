@@ -55,10 +55,8 @@ class LogInViewModel @Inject constructor(
             )
         )
         if (response.isSuccessful) {
-            println( "Token: " + response.body()?.Data?.Token)
             _response.value = response.body()
         } else {
-            println()
         }
     }
 

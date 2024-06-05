@@ -9,7 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiClient {
     companion object {
-        private fun buildClient(token: String?): OkHttpClient {
+        private fun buildClient(): OkHttpClient {
+            val token = Constants.TOKEN
             if (token == null) {
                 return OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
                     this.level = HttpLoggingInterceptor.Level.BODY
@@ -42,8 +43,8 @@ class ApiClient {
             }
         }
 
-        fun getRetrofit(token: String?): Retrofit {
-            return Retrofit.Builder().baseUrl(Constants.BASE_URL).client(buildClient(token))
+        fun getRetrofit(): Retrofit {
+            return Retrofit.Builder().baseUrl(Constants.BASE_URL).client(buildClient())
                 .addConverterFactory(GsonConverterFactory.create()).build()
         }
     }

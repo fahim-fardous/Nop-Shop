@@ -44,9 +44,7 @@ class CategoryViewModel @Inject constructor(
         try {
             val response = productRepository.getCartItems()
             val count = response.body()
-            println(count)
             _itemCount.value = count
-            println(_itemCount.value)
         } catch (e: Exception) {
         }
     }
