@@ -36,7 +36,7 @@ fun CustomCheckBox(
         }
     )
     {
-        if(isChecked){
+        if (isChecked) {
             Icon(
                 Icons.Filled.Check,
                 contentDescription = "Check"

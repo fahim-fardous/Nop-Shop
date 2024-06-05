@@ -15,8 +15,7 @@ class CategoryAdapter(
     private val onCategoryClick: (Data) -> Unit
 ) : ListAdapter<Data, CategoryAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
-        private val binding: ItemCategoryBinding,
-        private val onCategoryClick: (Data) -> Unit
+        private val binding: ItemCategoryBinding, private val onCategoryClick: (Data) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(category: Data) {

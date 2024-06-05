@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Title(label:String) {
+fun Title(label: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -27,8 +27,7 @@ fun Title(label:String) {
                         Color(0xFF07C5FB),
                         Color(0xFF088DF9),
                     )
-                ),
-                shape = RoundedCornerShape(4.dp)
+                ), shape = RoundedCornerShape(4.dp)
             )
 
     ) {

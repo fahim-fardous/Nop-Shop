@@ -153,46 +153,47 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
         }
         Scaffold(modifier = Modifier.fillMaxSize(),
             topBar = {
-            TopAppBar(modifier = Modifier
-                .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(
-                            Color(0xFF0BF7EB),
-                            Color(0xFF07C5FB),
-                            Color(0xFF088DF9),
+                TopAppBar(
+                    modifier = Modifier
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color(0xFF0BF7EB),
+                                    Color(0xFF07C5FB),
+                                    Color(0xFF088DF9),
+                                )
+                            )
+                        ),
+                    title = {
+                        Text(
+                            text = "One Page Checkout", color = Color.White, fontSize = 18.sp
                         )
-                    )
-                ),
-                title = {
-                    Text(
-                        text = "One Page Checkout", color = Color.White, fontSize = 18.sp
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                },
-                actions = {
-                    BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
-                        Badge(containerColor = Color.White) {
-                            Text(text = "2", modifier = Modifier.semantics { })
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color.White
+                            )
                         }
-                    }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_cart),
-                            contentDescription = "Go to cart",
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-            )
-        }) { innerPadding ->
+                    },
+                    actions = {
+                        BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
+                            Badge(containerColor = Color.White) {
+                                Text(text = "2", modifier = Modifier.semantics { })
+                            }
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cart),
+                                contentDescription = "Go to cart",
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                )
+            }) { innerPadding ->
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 OutlinedCard(
                     modifier = Modifier
@@ -294,7 +295,10 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                     TextFieldCustom(label = "Fax Number",
                         value = faxNumber,
                         onValueChange = { faxNumber = it })
-
+                    Title(label = "Payment Method")
+                    PaymentOptionCard()
+                    Title(label = "Payment Information")
+                    TotalCard()
                 }
             }
         }

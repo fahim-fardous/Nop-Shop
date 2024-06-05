@@ -33,7 +33,11 @@ fun CircleCheckBox(
         contentAlignment = Alignment.Center
     ) {
         if (isChecked) {
-            Icon(Icons.Filled.Check, contentDescription = "Checked", modifier = Modifier.size(15.dp))
+            Icon(
+                Icons.Filled.Check,
+                contentDescription = "Checked",
+                modifier = Modifier.size(15.dp)
+            )
         }
     }
 

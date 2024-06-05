@@ -14,9 +14,6 @@ import com.example.nopshop.adapter.BestSellingAdapter
 import com.example.nopshop.adapter.CategoryAdapter
 import com.example.nopshop.adapter.CategoryListAdapter
 import com.example.nopshop.adapter.FeatureProductsAdapter
-import com.example.nopshop.adapter.FurnitureCollectionAdapter
-import com.example.nopshop.adapter.SalmonFishAdapter
-import com.example.nopshop.adapter.WomenHeelAdapter
 import com.example.nopshop.databinding.FragmentHomeBinding
 import com.example.nopshop.db.dbmodel.category.toData
 import com.example.nopshop.db.dbmodel.featureProduct.toFeatureData
@@ -35,9 +32,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var bestSellingAdapter: BestSellingAdapter
     private lateinit var featureProductsAdapter: FeatureProductsAdapter
-    private lateinit var womenHeelAdapter: WomenHeelAdapter
-    private lateinit var salmonFishAdapter: SalmonFishAdapter
-    private lateinit var furnitureCollectionAdapter: FurnitureCollectionAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryListAdapter: CategoryListAdapter
     private lateinit var sharedPreferences: SharedPreferences
@@ -61,19 +55,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         )
 
-        womenHeelAdapter = WomenHeelAdapter {}
-
-        salmonFishAdapter = SalmonFishAdapter {}
-
-        furnitureCollectionAdapter = FurnitureCollectionAdapter { }
-
         categoryAdapter = CategoryAdapter {}
 
         categoryListAdapter = CategoryListAdapter { list, name ->
             onCategoryClick(list, name)
         }
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

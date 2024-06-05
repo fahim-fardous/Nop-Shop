@@ -60,11 +60,10 @@ fun PaymentOptionCard() {
             Row(
                 modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically
             ) {
-                CircleCheckBox(isChecked = isCheckedCheck,
-                    onCheckedChange = {
-                        isCheckedCheck = it
-                        isCheckedCard = !it
-                    })
+                CircleCheckBox(isChecked = isCheckedCheck, onCheckedChange = {
+                    isCheckedCheck = it
+                    isCheckedCard = !it
+                })
                 Image(
                     modifier = Modifier
                         .size(width = 35.dp, height = 25.dp)
@@ -97,13 +96,10 @@ fun PaymentOptionCard() {
             Row(
                 modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically
             ) {
-                CircleCheckBox(
-                    isChecked = isCheckedCard,
-                    onCheckedChange = {
-                        isCheckedCard = it
-                        isCheckedCheck = !it
-                    }
-                )
+                CircleCheckBox(isChecked = isCheckedCard, onCheckedChange = {
+                    isCheckedCard = it
+                    isCheckedCheck = !it
+                })
                 Image(
                     modifier = Modifier
                         .size(width = 35.dp, height = 25.dp)

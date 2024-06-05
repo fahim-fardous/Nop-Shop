@@ -122,8 +122,7 @@ class HomeViewModel @Inject constructor(
             AddToCartItem(
                 listOf(
                     FormValue(
-                        "addtocart_$productId.EnteredQuantity",
-                        "$quantity"
+                        "addtocart_$productId.EnteredQuantity", "$quantity"
                     )
                 )
             ), productId

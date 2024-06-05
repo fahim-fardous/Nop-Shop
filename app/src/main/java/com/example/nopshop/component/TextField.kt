@@ -19,10 +19,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun TextFieldCustom(
-    modifier: Modifier = Modifier,
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit
+    modifier: Modifier = Modifier, label: String, value: String, onValueChange: (String) -> Unit
 ) {
     TextField(
         modifier = Modifier
@@ -32,9 +29,7 @@ fun TextFieldCustom(
         onValueChange = onValueChange,
         label = {
             Text(
-                text = "$label :",
-                fontSize = 14.sp,
-                color = Color((0xFF7D828B))
+                text = "$label :", fontSize = 14.sp, color = Color((0xFF7D828B))
             )
         },
         colors = TextFieldDefaults.colors(

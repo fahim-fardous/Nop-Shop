@@ -10,10 +10,8 @@ import com.example.nopshop.databinding.ItemProductBinding
 import com.example.nopshop.model.featureProducts.Data
 
 class FeatureProductsAdapter(
-    private val onClick: (Data) -> Unit,
-    private val onAddToCart: (Data) -> Unit
-) :
-    ListAdapter<Data, FeatureProductsAdapter.ViewHolder>(DIFF_CALLBACK) {
+    private val onClick: (Data) -> Unit, private val onAddToCart: (Data) -> Unit
+) : ListAdapter<Data, FeatureProductsAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
         private val binding: ItemProductBinding,
         private val onClick: (Data) -> Unit,
@@ -35,8 +33,7 @@ class FeatureProductsAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemProductBinding.inflate(layoutInflater, parent, false)
@@ -45,8 +42,7 @@ class FeatureProductsAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: ViewHolder,
-        position: Int
+        holder: ViewHolder, position: Int
     ) {
         val product = getItem(position)
         return holder.bind(product)

@@ -11,8 +11,7 @@ import com.example.nopshop.model.CartItem
 import com.example.nopshop.model.cart.Item
 
 class CartAdapter(
-    private val onRemoveClick: (Item) -> Unit,
-    private val onQuantityBtnClick: (Item, Int) -> Unit
+    private val onRemoveClick: (Item) -> Unit, private val onQuantityBtnClick: (Item, Int) -> Unit
 ) : ListAdapter<Item, CartAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(
         private val binding: ItemCartBinding,
