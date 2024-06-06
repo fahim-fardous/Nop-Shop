@@ -131,22 +131,37 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onAddToCartClick(product: Data) {
-        viewModel.addProductToCart(product.Id, 1)
+        if(NoInternet.isOnline(requireContext())){
+            viewModel.addProductToCart(product.Id, 1)
+        }
+        else{
+            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
+        }
         //Value.incrementValue()
     }
 
     private fun onProductClick(it: Data) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
-        findNavController().navigate(action)
+        if(NoInternet.isOnline(requireContext())){
+            val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
+            findNavController().navigate(action)
+        }
+        else{
+            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun onCategoryClick(
         product: com.example.nopshop.model.category.Data, categoryName: String
     ) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
-            product.Products.toTypedArray(), categoryName
-        )
-        findNavController().navigate(action)
+        if(NoInternet.isOnline(requireContext())){
+            val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
+                product.Products.toTypedArray(), categoryName
+            )
+            findNavController().navigate(action)
+        }
+        else{
+            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
