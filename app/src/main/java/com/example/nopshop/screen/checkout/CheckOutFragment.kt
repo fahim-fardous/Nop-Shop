@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -81,6 +82,9 @@ import androidx.compose.ui.tooling.preview.UiMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.room.util.TableInfo
 import com.example.nopshop.R
 import com.example.nopshop.component.CustomCheckBox
@@ -89,13 +93,26 @@ import com.example.nopshop.component.TextFieldCustom
 import com.example.nopshop.component.Title
 import com.example.nopshop.component.TotalCard
 import com.example.nopshop.databinding.FragmentCheckOutBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.round
 
+@AndroidEntryPoint
 class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     private lateinit var binding: FragmentCheckOutBinding
+    private val viewModel: CheckOutViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initObserver()
 
+    }
+
+    private fun initObserver() {
+        viewModel.showMessage.observe(this) {
+            if (it != "Please fill all the fields") {
+                findNavController().popBackStack()
+            }
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreateView(
@@ -298,7 +315,22 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                     Title(label = "Payment Method")
                     PaymentOptionCard()
                     Title(label = "Payment Information")
-                    TotalCard()
+                    TotalCard {
+                        viewModel.isValid(
+                            existingAddress,
+                            billingAddress,
+                            firstName,
+                            lastName,
+                            email,
+                            company,
+                            country,
+                            state,
+                            zip,
+                            city,
+                            phoneNumber,
+                            faxNumber
+                        )
+                    }
                 }
             }
         }

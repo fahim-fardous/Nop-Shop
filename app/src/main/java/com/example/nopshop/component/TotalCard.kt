@@ -1,6 +1,7 @@
 package com.example.nopshop.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,9 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nopshop.screen.checkout.CheckOutViewModel
 
 @Composable
-fun TotalCard() {
+fun TotalCard(
+    onCheckOutClick: () -> Unit
+) {
     OutlinedCard(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
@@ -96,7 +100,10 @@ fun TotalCard() {
                 text = "Confirm",
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable {
+                        onCheckOutClick()
+                    },
                 color = Color.White,
                 textAlign = TextAlign.Center
             )
@@ -108,7 +115,9 @@ fun TotalCard() {
 @Composable
 private fun TotalCardPreview() {
     Surface {
-        TotalCard()
+        TotalCard(
+            onCheckOutClick = {}
+        )
     }
 
 }

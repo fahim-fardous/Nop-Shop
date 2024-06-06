@@ -43,6 +43,7 @@ class ApiClient {
             }
         }
 
+
         fun getRetrofit(): Retrofit {
             return Retrofit.Builder().baseUrl(Constants.BASE_URL).client(buildClient())
                 .addConverterFactory(GsonConverterFactory.create()).build()

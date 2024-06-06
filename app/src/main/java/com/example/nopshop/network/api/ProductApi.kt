@@ -1,5 +1,6 @@
 package com.example.nopshop.network.api
 
+import com.example.nopshop.model.CheckoutResponse
 import com.example.nopshop.model.cart.AddToCartItem
 import com.example.nopshop.model.cart.AddToCartResponse
 import com.example.nopshop.model.cart.CartItemResponse
@@ -26,5 +27,8 @@ interface ProductApi {
 
     @POST("shoppingcart/updatecart")
     suspend fun updateCart(@Body body: AddToCartItem): Response<CartItemResponse>
+
+    @GET("confirmorder")
+    suspend fun getCheckOutResponse(): Response<CheckoutResponse>
 
 }
