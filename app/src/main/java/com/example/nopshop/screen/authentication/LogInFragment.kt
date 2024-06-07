@@ -59,6 +59,7 @@ class LogInFragment : Fragment(R.layout.fragment_log_in) {
             Constants.TOKEN = data.Data.Token
             println(Constants.TOKEN)
             editor.putBoolean("isLoggedIn", true)
+            editor.putString("email", binding.usernameEmailEt.text.toString().trimMargin())
             editor.apply()
             Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()

@@ -1,5 +1,7 @@
 package com.example.nopshop.screen.checkout
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -96,6 +98,7 @@ import com.example.nopshop.component.TextFieldCustom
 import com.example.nopshop.component.Title
 import com.example.nopshop.component.TotalCard
 import com.example.nopshop.databinding.FragmentCheckOutBinding
+import com.example.nopshop.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.round
 
@@ -103,22 +106,21 @@ import kotlin.math.round
 class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     private lateinit var binding: FragmentCheckOutBinding
     private val viewModel: CheckOutViewModel by viewModels()
+    private lateinit var sharedPreferences:SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences = requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         initObserver()
 
     }
 
     private fun initObserver() {
         viewModel.showMessage.observe(this) {
-            if (it == "Order placed successfully") {
-                viewModel.removeAllCartItem()
-            }
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            viewModel.removeAllCartItem()
         }
         viewModel.removeSuccess.observe(this) {
             if (it) {
-                Toast.makeText(requireContext(), "Order placed successfully", Toast.LENGTH_SHORT)
-                    .show()
                 val action = CheckOutFragmentDirections.actionCheckOutFragmentToHomeFragment()
                 findNavController().navigate(action)
             }
@@ -131,14 +133,18 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                CheckOutScreen()
+                CheckOutScreen(
+                    sharedPreferences.getString("Email", "")
+                )
             }
         }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun CheckOutScreen() {
+    fun CheckOutScreen(
+        email:String?
+    ) {
         var existingAddress by remember {
             mutableStateOf("")
         }
@@ -179,6 +185,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
             mutableStateOf(false)
         }
         val orders by viewModel.cart.observeAsState()
+        val checkoutResponse by viewModel.order.observeAsState()
         LaunchedEffect(Unit) {
             viewModel.getTotalOrder()
         }
@@ -190,49 +197,48 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                 CircularProgressIndicator()
             }
         } else {
-            Scaffold(modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopAppBar(
-                        modifier = Modifier
-                            .background(
-                                Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color(0xFF0BF7EB),
-                                        Color(0xFF07C5FB),
-                                        Color(0xFF088DF9),
-                                    )
-                                )
-                            ),
-                        title = {
-                            Text(
-                                text = "One Page Checkout", color = Color.White, fontSize = 18.sp
+            Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+                TopAppBar(
+                    modifier = Modifier.background(
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFF0BF7EB),
+                                Color(0xFF07C5FB),
+                                Color(0xFF088DF9),
                             )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = "Back",
-                                    tint = Color.White
-                                )
+                        )
+                    ),
+                    title = {
+                        Text(
+                            text = "One Page Checkout", color = Color.White, fontSize = 18.sp
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    actions = {
+                        BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
+                            Badge(containerColor = Color.White) {
+                                Text(text = orders!!.Data.Cart.Items.size.toString(),
+                                    modifier = Modifier.semantics { })
                             }
-                        },
-                        actions = {
-                            BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
-                                Badge(containerColor = Color.White) {
-                                    Text(text = orders!!.Data.Cart.Items.size.toString(), modifier = Modifier.semantics { })
-                                }
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_cart),
-                                    contentDescription = "Go to cart",
-                                    tint = Color.White
-                                )
-                            }
-                        },
-                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-                    )
-                }) { innerPadding ->
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cart),
+                                contentDescription = "Go to cart",
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                )
+            }) { innerPadding ->
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     OutlinedCard(
                         modifier = Modifier
@@ -311,23 +317,27 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         TextFieldCustom(label = "First Name",
                             value = firstName,
                             onValueChange = { firstName = it })
-                        TextFieldCustom(label = "Last Name",
+                        TextFieldCustom(
+                            label = "Last Name",
                             value = lastName,
                             onValueChange = { lastName = it })
-                        TextFieldCustom(
-                            label = "Email",
+                        TextFieldCustom(label = "Email",
                             value = email,
                             onValueChange = { email = it })
-                        TextFieldCustom(label = "Company",
+                        TextFieldCustom(
+                            label = "Company",
                             value = company,
                             onValueChange = { company = it })
-                        TextFieldCustom(label = "Country",
+                        TextFieldCustom(
+                            label = "Country",
                             value = country,
                             onValueChange = { country = it })
-                        TextFieldCustom(label = "State/Province",
+                        TextFieldCustom(
+                            label = "State/Province",
                             value = state,
                             onValueChange = { state = it })
-                        TextFieldCustom(label = "Zip / Postal Code",
+                        TextFieldCustom(
+                            label = "Zip / Postal Code",
                             value = zip,
                             onValueChange = { zip = it })
                         TextFieldCustom(label = "City", value = city, onValueChange = { city = it })
@@ -341,12 +351,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                         PaymentOptionCard()
                         Title(label = "Payment Information")
                         orders?.Data?.OrderTotals?.let {
-                            TotalCard(
-                                it.SubTotal,
-                                it.Tax,
-                                it.Shipping,
-                                it.OrderTotal
-                            ) {
+                            TotalCard(it.SubTotal, it.Tax, it.Shipping, it.OrderTotal) {
                                 viewModel.isValid(
                                     existingAddress,
                                     billingAddress,
@@ -359,7 +364,9 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                                     zip,
                                     city,
                                     phoneNumber,
-                                    faxNumber
+                                    faxNumber,
+                                    it.OrderTotal,
+                                    orders!!.Data.Cart.Items
                                 )
                             }
                         }
@@ -372,7 +379,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     @Composable
     @Preview
     fun CheckOutScreenPreview() {
-        CheckOutScreen()
+        CheckOutScreen(email = "")
     }
 
 
