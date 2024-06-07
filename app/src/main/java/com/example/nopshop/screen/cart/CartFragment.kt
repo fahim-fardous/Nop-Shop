@@ -48,6 +48,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             binding.subtotalPriceTv.text = item.Data.OrderTotals.SubTotal
             binding.shippingPriceTv.text = item.Data.OrderTotals.Shipping
             binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
+            binding.cartBadge.text = "${item.Data.Cart.Items.size}"
             binding.itemCountTv.text =
                 "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
             initViews()
@@ -60,6 +61,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             binding.subtotalPriceTv.text = item.Data.OrderTotals.SubTotal
             binding.shippingPriceTv.text = item.Data.OrderTotals.Shipping
             binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
+            binding.cartBadge.text = "${item.Data.Cart.Items.size}"
             binding.itemCountTv.text =
                 "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
             initViews()
@@ -72,6 +74,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             binding.subtotalPriceTv.text = item.Data.OrderTotals.SubTotal
             binding.shippingPriceTv.text = item.Data.OrderTotals.Shipping
             binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
+            binding.cartBadge.text = "${item.Data.Cart.Items.size}"
             binding.itemCountTv.text =
                 "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
             initViews()
@@ -103,7 +106,6 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         binding.topBar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-
         binding.checkoutBtn.setOnClickListener {
             val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
             if (isLoggedIn) {
@@ -120,6 +122,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                 findNavController().navigate(CartFragmentDirections.actionCartFragmentToLogInFragment())
             }
         }
+
     }
 
     private fun initViews() {

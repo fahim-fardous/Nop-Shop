@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nopshop.R
-import com.example.nopshop.adapter.BestSellingAdapter
 import com.example.nopshop.adapter.CategoryAdapter
 import com.example.nopshop.adapter.CategoryListAdapter
 import com.example.nopshop.adapter.FeatureProductsAdapter
@@ -30,7 +29,6 @@ import kotlin.reflect.jvm.internal.ReflectProperties.Val
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var bestSellingAdapter: BestSellingAdapter
     private lateinit var featureProductsAdapter: FeatureProductsAdapter
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryListAdapter: CategoryListAdapter
@@ -40,11 +38,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences =  requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        Constants.TOKEN = sharedPreferences.getString("Token", null)
         initObserver()
-
-        bestSellingAdapter = BestSellingAdapter {}
 
         featureProductsAdapter = FeatureProductsAdapter(
             { product ->
@@ -75,54 +69,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initViews() {
-
-        val bestSellingList = mutableListOf<ProductItem>()
-
-        bestSellingList.add(
-            ProductItem(
-                0, R.drawable.orange, "California Orange 8 Pcs", 3.0f, 15.00
-
-            )
-        )
-
-        bestSellingList.add(
-            ProductItem(
-                0, R.drawable.steak, "California Orange 8 Pcs", 3f, 15.00
-
-            )
-        )
-
-        bestSellingList.add(
-            ProductItem(
-                0, R.drawable.furniture, "California Orange 8 Pcs", 3f, 15.00
-
-            )
-        )
-
-        bestSellingList.add(
-            ProductItem(
-                0, R.drawable.furniture_3, "California Orange 8 Pcs", 3f, 15.00
-
-            )
-        )
-
-        bestSellingList.add(
-            ProductItem(
-                0, R.drawable.furniture_2, "California Orange 8 Pcs", 3f, 15.00
-
-            )
-        )
-
-        binding.bestSellingRv.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.bestSellingRv.adapter = bestSellingAdapter
-        bestSellingAdapter.submitList(bestSellingList)
-
-
         binding.categoryRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.categoryRv.adapter = categoryListAdapter
-
 
         binding.featureProductRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -131,24 +80,38 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onAddToCartClick(product: Data) {
-        viewModel.addProductToCart(product.Id, 1)
+        if(NoInternet.isOnline(requireContext())){
+            viewModel.addProductToCart(product.Id, 1)
+        }
+        else{
+            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
+        }
         //Value.incrementValue()
     }
 
     private fun onProductClick(it: Data) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
-        findNavController().navigate(action)
+        if(NoInternet.isOnline(requireContext())){
+            val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
+            findNavController().navigate(action)
+        }
+        else{
+            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun onCategoryClick(
         product: com.example.nopshop.model.category.Data, categoryName: String
     ) {
-        val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
-            product.Products.toTypedArray(), categoryName
-        )
-        findNavController().navigate(action)
+        if(NoInternet.isOnline(requireContext())){
+            val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
+                product.Products.toTypedArray(), categoryName
+            )
+            findNavController().navigate(action)
+        }
+        else{
+            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
+        }
     }
-
 
     private fun initObserver() {
         if (NoInternet.isOnline(requireContext().applicationContext)) {
@@ -220,5 +183,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val action = HomeFragmentDirections.actionHomeFragmentToCartFragment()
             findNavController().navigate(action)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences =  requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        Constants.TOKEN = sharedPreferences.getString("auth_token", null)
+        println(Constants.TOKEN)
     }
 }

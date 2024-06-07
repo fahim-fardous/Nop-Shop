@@ -118,16 +118,18 @@ class HomeViewModel @Inject constructor(
     }
 
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
-        val response = repository.addProductToCart(
-            AddToCartItem(
-                listOf(
-                    FormValue(
-                        "addtocart_$productId.EnteredQuantity", "$quantity"
+        if(NoInternet.isOnline(context.applicationContext)){
+            val response = repository.addProductToCart(
+                AddToCartItem(
+                    listOf(
+                        FormValue(
+                            "addtocart_$productId.EnteredQuantity", "$quantity"
+                        )
                     )
-                )
-            ), productId
-        )
-        if (response.isSuccessful) _productAddedToCart.value = response.body()
+                ), productId
+            )
+            if (response.isSuccessful) _productAddedToCart.value = response.body()
+        }
     }
 
     fun getCartItemCount() = viewModelScope.launch {
