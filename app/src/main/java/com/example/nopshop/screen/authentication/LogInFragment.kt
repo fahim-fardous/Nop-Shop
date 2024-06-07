@@ -57,6 +57,7 @@ class LogInFragment : Fragment(R.layout.fragment_log_in) {
             val editor = sharedPreferences.edit()
             editor.putString("auth_token", data.Data.Token)
             Constants.TOKEN = data.Data.Token
+            println(Constants.TOKEN)
             editor.putBoolean("isLoggedIn", true)
             editor.apply()
             Toast.makeText(requireContext(), "Login Successful", Toast.LENGTH_SHORT).show()

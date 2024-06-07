@@ -40,6 +40,7 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,7 +56,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -108,10 +111,17 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
 
     private fun initObserver() {
         viewModel.showMessage.observe(this) {
-            if (it != "Please fill all the fields") {
-                findNavController().popBackStack()
+            if (it == "Order placed successfully") {
+                viewModel.removeAllCartItem()
             }
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.removeSuccess.observe(this) {
+            if (it) {
+                Toast.makeText(requireContext(), "Order placed successfully", Toast.LENGTH_SHORT)
+                    .show()
+                val action = CheckOutFragmentDirections.actionCheckOutFragmentToHomeFragment()
+                findNavController().navigate(action)
+            }
         }
     }
 
@@ -168,168 +178,191 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
         var checked by remember {
             mutableStateOf(false)
         }
-        Scaffold(modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    modifier = Modifier
-                        .background(
-                            Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFF0BF7EB),
-                                    Color(0xFF07C5FB),
-                                    Color(0xFF088DF9),
-                                )
-                            )
-                        ),
-                    title = {
-                        Text(
-                            text = "One Page Checkout", color = Color.White, fontSize = 18.sp
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = "Back",
-                                tint = Color.White
-                            )
-                        }
-                    },
-                    actions = {
-                        BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
-                            Badge(containerColor = Color.White) {
-                                Text(text = "2", modifier = Modifier.semantics { })
-                            }
-                        }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_cart),
-                                contentDescription = "Go to cart",
-                                tint = Color.White
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-                )
-            }) { innerPadding ->
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                OutlinedCard(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(top = 16.dp, start = 16.dp, bottom = 16.dp, end = 16.dp),
-                    shape = RoundedCornerShape(1.dp),
-                    elevation = CardDefaults.cardElevation(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Title(label = "Billing Address")
-                    Text(
-                        modifier = Modifier.padding(top = 16.dp, start = 16.dp),
-                        text = "Address",
-                        fontWeight = FontWeight.Bold
-                    )
-                    TextField(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
-                        value = existingAddress,
-                        onValueChange = { existingAddress = it },
-                        label = {
-                            Text(
-                                text = "Existing Address",
-                                fontSize = 12.sp,
-                                color = Color((0xFF7D828B))
-                            )
-                        },
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color(0xFFCDD1D4),
-                            focusedIndicatorColor = Color(0xFFCDD1D4)
-                        ),
-                        trailingIcon = {
-                            Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
-                        })
-                    Row(
+        val orders by viewModel.cart.observeAsState()
+        LaunchedEffect(Unit) {
+            viewModel.getTotalOrder()
+        }
+        if (orders == null) {
+            Box(
+                modifier = Modifier,
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Scaffold(modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    TopAppBar(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CustomCheckBox(isChecked = checked, onCheckChange = { checked = it })
-                        Text(
-                            modifier = Modifier.padding(start = 12.dp),
-                            text = "Ship to the same address",
-                            fontSize = 12.sp,
-                            color = Color(0xFF384150)
-                        )
-                    }
-                    Text(
-                        modifier = Modifier.padding(start = 16.dp, top = 16.dp),
-                        text = "Select A Billing Address",
-                        fontWeight = FontWeight.Bold,
-                    )
-                    TextField(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
-                        value = billingAddress,
-                        onValueChange = { billingAddress = it },
-                        label = {
+                            .background(
+                                Brush.horizontalGradient(
+                                    colors = listOf(
+                                        Color(0xFF0BF7EB),
+                                        Color(0xFF07C5FB),
+                                        Color(0xFF088DF9),
+                                    )
+                                )
+                            ),
+                        title = {
                             Text(
-                                text = "New", fontSize = 14.sp, color = Color((0xFF7D828B))
+                                text = "One Page Checkout", color = Color.White, fontSize = 18.sp
                             )
                         },
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color(0xFFCDD1D4),
-                            focusedIndicatorColor = Color(0xFFCDD1D4)
-                        ),
-                        trailingIcon = {
-                            Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
-                        })
-                    TextFieldCustom(label = "First Name",
-                        value = firstName,
-                        onValueChange = { firstName = it })
-                    TextFieldCustom(label = "Last Name",
-                        value = lastName,
-                        onValueChange = { lastName = it })
-                    TextFieldCustom(label = "Email", value = email, onValueChange = { email = it })
-                    TextFieldCustom(label = "Company",
-                        value = company,
-                        onValueChange = { company = it })
-                    TextFieldCustom(label = "Country",
-                        value = country,
-                        onValueChange = { country = it })
-                    TextFieldCustom(label = "State/Province",
-                        value = state,
-                        onValueChange = { state = it })
-                    TextFieldCustom(label = "Zip / Postal Code",
-                        value = zip,
-                        onValueChange = { zip = it })
-                    TextFieldCustom(label = "City", value = city, onValueChange = { city = it })
-                    TextFieldCustom(label = "Phone Number",
-                        value = phoneNumber,
-                        onValueChange = { phoneNumber = it })
-                    TextFieldCustom(label = "Fax Number",
-                        value = faxNumber,
-                        onValueChange = { faxNumber = it })
-                    Title(label = "Payment Method")
-                    PaymentOptionCard()
-                    Title(label = "Payment Information")
-                    TotalCard {
-                        viewModel.isValid(
-                            existingAddress,
-                            billingAddress,
-                            firstName,
-                            lastName,
-                            email,
-                            company,
-                            country,
-                            state,
-                            zip,
-                            city,
-                            phoneNumber,
-                            faxNumber
+                        navigationIcon = {
+                            IconButton(onClick = { /*TODO*/ }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    contentDescription = "Back",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        actions = {
+                            BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
+                                Badge(containerColor = Color.White) {
+                                    Text(text = orders!!.Data.Cart.Items.size.toString(), modifier = Modifier.semantics { })
+                                }
+                            }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_cart),
+                                    contentDescription = "Go to cart",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                    )
+                }) { innerPadding ->
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    OutlinedCard(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(top = 16.dp, start = 16.dp, bottom = 16.dp, end = 16.dp),
+                        shape = RoundedCornerShape(1.dp),
+                        elevation = CardDefaults.cardElevation(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Title(label = "Billing Address")
+                        Text(
+                            modifier = Modifier.padding(top = 16.dp, start = 16.dp),
+                            text = "Address",
+                            fontWeight = FontWeight.Bold
                         )
+                        TextField(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp),
+                            value = existingAddress,
+                            onValueChange = { existingAddress = it },
+                            label = {
+                                Text(
+                                    text = "Existing Address",
+                                    fontSize = 12.sp,
+                                    color = Color((0xFF7D828B))
+                                )
+                            },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color(0xFFCDD1D4),
+                                focusedIndicatorColor = Color(0xFFCDD1D4)
+                            ),
+                            trailingIcon = {
+                                Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                            })
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CustomCheckBox(isChecked = checked, onCheckChange = { checked = it })
+                            Text(
+                                modifier = Modifier.padding(start = 12.dp),
+                                text = "Ship to the same address",
+                                fontSize = 12.sp,
+                                color = Color(0xFF384150)
+                            )
+                        }
+                        Text(
+                            modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+                            text = "Select A Billing Address",
+                            fontWeight = FontWeight.Bold,
+                        )
+                        TextField(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp),
+                            value = billingAddress,
+                            onValueChange = { billingAddress = it },
+                            label = {
+                                Text(
+                                    text = "New", fontSize = 14.sp, color = Color((0xFF7D828B))
+                                )
+                            },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color(0xFFCDD1D4),
+                                focusedIndicatorColor = Color(0xFFCDD1D4)
+                            ),
+                            trailingIcon = {
+                                Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                            })
+                        TextFieldCustom(label = "First Name",
+                            value = firstName,
+                            onValueChange = { firstName = it })
+                        TextFieldCustom(label = "Last Name",
+                            value = lastName,
+                            onValueChange = { lastName = it })
+                        TextFieldCustom(
+                            label = "Email",
+                            value = email,
+                            onValueChange = { email = it })
+                        TextFieldCustom(label = "Company",
+                            value = company,
+                            onValueChange = { company = it })
+                        TextFieldCustom(label = "Country",
+                            value = country,
+                            onValueChange = { country = it })
+                        TextFieldCustom(label = "State/Province",
+                            value = state,
+                            onValueChange = { state = it })
+                        TextFieldCustom(label = "Zip / Postal Code",
+                            value = zip,
+                            onValueChange = { zip = it })
+                        TextFieldCustom(label = "City", value = city, onValueChange = { city = it })
+                        TextFieldCustom(label = "Phone Number",
+                            value = phoneNumber,
+                            onValueChange = { phoneNumber = it })
+                        TextFieldCustom(label = "Fax Number",
+                            value = faxNumber,
+                            onValueChange = { faxNumber = it })
+                        Title(label = "Payment Method")
+                        PaymentOptionCard()
+                        Title(label = "Payment Information")
+                        orders?.Data?.OrderTotals?.let {
+                            TotalCard(
+                                it.SubTotal,
+                                it.Tax,
+                                it.Shipping,
+                                it.OrderTotal
+                            ) {
+                                viewModel.isValid(
+                                    existingAddress,
+                                    billingAddress,
+                                    firstName,
+                                    lastName,
+                                    email,
+                                    company,
+                                    country,
+                                    state,
+                                    zip,
+                                    city,
+                                    phoneNumber,
+                                    faxNumber
+                                )
+                            }
+                        }
                     }
                 }
             }

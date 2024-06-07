@@ -19,19 +19,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.nopshop.model.cart.OrderTotals
 import com.example.nopshop.screen.checkout.CheckOutViewModel
 
 @Composable
 fun TotalCard(
+    subTotal: String,
+    shipping: String,
+    tax: String,
+    orderTotal: String,
     onCheckOutClick: () -> Unit
 ) {
-    OutlinedCard(modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
+    OutlinedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
         elevation = CardDefaults.cardElevation(8.dp),
         shape = RoundedCornerShape(1.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        onClick = { /*TODO*/ }) {
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
         Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)) {
             Text(
                 modifier = Modifier.weight(1f),
@@ -40,7 +46,7 @@ fun TotalCard(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$5,355.00", color = Color(0xFF001844), fontWeight = FontWeight.Bold
+                text = subTotal, color = Color(0xFF001844), fontWeight = FontWeight.Bold
             )
         }
         Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)) {
@@ -51,7 +57,7 @@ fun TotalCard(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$0.00", color = Color(0xFF001844), fontWeight = FontWeight.Bold
+                text = shipping, color = Color(0xFF001844), fontWeight = FontWeight.Bold
             )
         }
         Row(
@@ -66,7 +72,7 @@ fun TotalCard(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$0.00", color = Color(0xFF001844), fontWeight = FontWeight.Bold
+                text = tax, color = Color(0xFF001844), fontWeight = FontWeight.Bold
             )
         }
         Row(
@@ -81,7 +87,7 @@ fun TotalCard(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$5,355.00", color = Color(0xFF001844), fontWeight = FontWeight.Bold
+                text = orderTotal, color = Color(0xFF001844), fontWeight = FontWeight.Bold
             )
         }
         Box(
@@ -116,6 +122,10 @@ fun TotalCard(
 private fun TotalCardPreview() {
     Surface {
         TotalCard(
+            subTotal = "$100",
+            shipping = "$10",
+            tax = "$10",
+            orderTotal = "$120",
             onCheckOutClick = {}
         )
     }

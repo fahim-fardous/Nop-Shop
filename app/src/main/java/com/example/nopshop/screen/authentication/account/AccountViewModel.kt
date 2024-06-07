@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.nopshop.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,6 +23,7 @@ class AccountViewModel @Inject constructor(
 
     fun logOut() = viewModelScope.launch {
         sharedPreferences.edit().clear().apply()
+        Constants.TOKEN = null
         _success.value = true
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nopshop.model.cart.AddToCartItem
+import com.example.nopshop.model.cart.CartItemResponse
 import com.example.nopshop.model.cart.FormValue
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
@@ -27,20 +28,55 @@ class CheckOutViewModel @Inject constructor(
     val showMessage: LiveData<String>
         get() = _showMessage
 
-    private fun removeAllCartItem() = viewModelScope.launch {
+    private val _removeSuccess: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    val removeSuccess: LiveData<Boolean>
+        get() = _removeSuccess
+
+    private val _cart: MutableLiveData<CartItemResponse> by lazy {
+        MutableLiveData<CartItemResponse>()
+    }
+
+    val cart: LiveData<CartItemResponse>
+        get() = _cart
+
+    private val _showLoading:MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    val showLoading:LiveData<Boolean>
+    get() = _showLoading
+
+    fun getTotalOrder() = viewModelScope.launch {
+        val response = productRepository.getCartItems()
+        if (response.isSuccessful) {
+            _cart.value = response.body()
+        }
+    }
+
+    fun removeAllCartItem() = viewModelScope.launch {
         val list = productRepository.getCartItems()
+        println(list.body())
         if (list.isSuccessful) {
-            for (item in list.body()?.Data?.Cart?.Items!!) {
-                productRepository.removeCart(
-                    AddToCartItem(
-                        listOf(
-                            FormValue(
-                                Key = "removefromcart", Value = "${item.Id}"
+            val cartList = list.body()?.Data?.Cart?.Items
+            if (cartList != null) {
+                for (item in cartList) {
+                    productRepository.removeCart(
+                        AddToCartItem(
+                            listOf(
+                                FormValue(
+                                    Key = "removefromcart", Value = "${item.Id}"
+                                )
                             )
                         )
                     )
-                )
+                }
+                _removeSuccess.value = true
             }
+        } else {
+            println("Something went wrong")
         }
     }
 
@@ -50,7 +86,6 @@ class CheckOutViewModel @Inject constructor(
             .create(ProductApi::class.java)
         val response = retrofit.getCheckOutResponse()
         if (response.isSuccessful) {
-            removeAllCartItem()
             _showMessage.value = response.body()?.message.toString()
         } else {
             _showMessage.value = "Something went wrong"

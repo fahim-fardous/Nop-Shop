@@ -38,6 +38,7 @@ class ProductRepository @Inject constructor(
     }
 
     suspend fun removeCart(request:AddToCartItem) = withContext(Dispatchers.IO){
+        println("Coming in repo")
         return@withContext api.updateCart(request)
     }
 
