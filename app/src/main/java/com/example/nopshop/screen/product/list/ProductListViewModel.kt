@@ -30,6 +30,13 @@ class ProductListViewModel @Inject constructor(
     val productAddedToCart: LiveData<AddToCartResponse>
         get() = _productAddedToCart
 
+    private val _itemCount: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
+    val itemCount: LiveData<Int>
+        get() = _itemCount
+
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
         try {
             val response = productRepository.addProductToCart(
@@ -47,6 +54,16 @@ class ProductListViewModel @Inject constructor(
 
         }
 
+    }
+    fun getCartItemCount() = viewModelScope.launch {
+        try {
+            val response = productRepository.getCartItems()
+            val count = response.body()
+            if (count != null) {
+                _itemCount.value = count.Data.Cart.Items.size
+            }
+        } catch (e: Exception) {
+        }
     }
 
 }

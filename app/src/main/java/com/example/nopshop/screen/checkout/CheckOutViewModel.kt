@@ -1,12 +1,16 @@
 package com.example.nopshop.screen.checkout
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.nopshop.db.dbmodel.order.OrderEntity
+import com.example.nopshop.model.CheckoutResponse
 import com.example.nopshop.model.cart.AddToCartItem
 import com.example.nopshop.model.cart.CartItemResponse
 import com.example.nopshop.model.cart.FormValue
+import com.example.nopshop.model.cart.Item
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
 import com.example.nopshop.utils.Constants
@@ -19,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CheckOutViewModel @Inject constructor(
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
     private val _showMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -27,10 +32,16 @@ class CheckOutViewModel @Inject constructor(
 
     val showMessage: LiveData<String>
         get() = _showMessage
-
     private val _removeSuccess: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
+
+    private val _order: MutableLiveData<CheckoutResponse> by lazy {
+        MutableLiveData<CheckoutResponse>()
+    }
+
+    val order: LiveData<CheckoutResponse>
+        get() = _order
 
     val removeSuccess: LiveData<Boolean>
         get() = _removeSuccess
@@ -42,12 +53,18 @@ class CheckOutViewModel @Inject constructor(
     val cart: LiveData<CartItemResponse>
         get() = _cart
 
-    private val _showLoading:MutableLiveData<Boolean> by lazy {
+    private val _showLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
 
-    val showLoading:LiveData<Boolean>
-    get() = _showLoading
+    val showLoading: LiveData<Boolean>
+        get() = _showLoading
+
+    private val _checkout: MutableLiveData<CheckoutResponse> by lazy {
+        MutableLiveData<CheckoutResponse>()
+    }
+    val checkout: LiveData<CheckoutResponse>
+        get() = _checkout
 
     fun getTotalOrder() = viewModelScope.launch {
         val response = productRepository.getCartItems()
@@ -80,17 +97,26 @@ class CheckOutViewModel @Inject constructor(
         }
     }
 
-    private fun checkOut() = viewModelScope.launch {
+    private fun checkOut(orderTotal: String, products: List<Item>) = viewModelScope.launch {
         val retrofit = Retrofit.Builder().baseUrl(Constants.CHECK_OUT_URL)
             .addConverterFactory(GsonConverterFactory.create()).build()
             .create(ProductApi::class.java)
         val response = retrofit.getCheckOutResponse()
         if (response.isSuccessful) {
+            saveToDb(
+                Constants.TOKEN!!,
+                orderTotal,
+                sharedPreferences.getString("email",""),
+                response.body()?.orderId.toString(),
+                products
+            )
+            _order.value = response.body()
             _showMessage.value = response.body()?.message.toString()
         } else {
             _showMessage.value = "Something went wrong"
         }
     }
+
 
     fun isValid(
         oldAddress: String,
@@ -104,7 +130,9 @@ class CheckOutViewModel @Inject constructor(
         zip: String,
         city: String,
         phone: String,
-        fax: String
+        fax: String,
+        orderTotal: String,
+        products: List<Item>
     ) = viewModelScope.launch {
         if (
             oldAddress.isEmpty() ||
@@ -122,7 +150,26 @@ class CheckOutViewModel @Inject constructor(
         ) {
             _showMessage.value = "Please fill all the fields"
         } else {
-            checkOut()
+            checkOut(orderTotal, products)
         }
+    }
+
+    private fun saveToDb(
+        token: String,
+        totalAmount: String,
+        email: String?,
+        orderId: String,
+        products: List<Item>
+    ) = viewModelScope.launch {
+        println("Aya porchi")
+        productRepository.saveOrderToDb(
+            OrderEntity(
+                token = token,
+                email = email!!,
+                totalAmount = totalAmount,
+                orderId = orderId,
+                products = products
+            )
+        )
     }
 }

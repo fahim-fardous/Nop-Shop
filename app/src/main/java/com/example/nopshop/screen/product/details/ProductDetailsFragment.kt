@@ -92,6 +92,7 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
     private fun initObserver() {
         if (NoInternet.isOnline(requireContext())) {
             viewModel.productResponse.observe(viewLifecycleOwner) {
+                binding.categoryTv.text = it.Data.Name
                 binding.productImg.load(it.Data.PictureModels[0].ImageUrl)
                 binding.productTitleTv.text = it.Data.Name
                 binding.stockTv.text = it.Data.StockAvailability ?: "Out of Stock"
@@ -123,6 +124,7 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
             }
         } else {
             viewModel.productResponseFromDb.observe(viewLifecycleOwner) {
+                binding.categoryTv.text = it.productName
                 binding.productImg.load(it.productImage)
                 binding.productTitleTv.text = it.productName
                 binding.stockTv.text = it.stock

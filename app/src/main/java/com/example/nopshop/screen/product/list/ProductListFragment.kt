@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ProductListFragment : Fragment(R.layout.fragment_product_list) {
     private lateinit var binding: FragmentProductListBinding
-    private  val viewModel: ProductListViewModel by viewModels()
+    private val viewModel: ProductListViewModel by viewModels()
     private lateinit var adapter: ProductAdapter
     private val args: ProductListFragmentArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
             { product ->
                 onClick(product)
             },
-            {product ->
+            { product ->
                 onAddToCartClick(product)
             }
         )
@@ -57,18 +57,21 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
 
         initListeners()
         initViews()
-        //loadData()
+        loadData()
 
     }
 
     private fun initObserver() {
-        viewModel.productAddedToCart.observe(this){
+        viewModel.productAddedToCart.observe(this) {
             Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.itemCount.observe(this) {
+            binding.cartBadge.text = it.toString()
         }
     }
 
     private fun loadData() {
-        TODO("Not yet implemented")
+        viewModel.getCartItemCount()
     }
 
     private fun initViews() {
@@ -78,6 +81,7 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
         binding.productRv.adapter = adapter
         adapter.submitList(args.productList.toMutableList())
         binding.categoryTitleTv.text = args.categoryName
+        binding.categoryTv.text = args.categoryName
 
     }
 

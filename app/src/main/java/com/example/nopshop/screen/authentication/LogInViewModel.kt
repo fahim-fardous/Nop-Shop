@@ -57,6 +57,7 @@ class LogInViewModel @Inject constructor(
         if (response.isSuccessful) {
             _response.value = response.body()
         } else {
+            _showMessage.value = "Incorrect email or password"
         }
     }
 

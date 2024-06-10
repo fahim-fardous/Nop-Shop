@@ -1,6 +1,7 @@
 package com.example.nopshop.repository
 
 import com.example.nopshop.db.AppDatabase
+import com.example.nopshop.db.dbmodel.order.OrderEntity
 import com.example.nopshop.db.dbmodel.product.ProductEntity
 import com.example.nopshop.model.cart.AddToCartItem
 import com.example.nopshop.model.cart.CartItemResponse
@@ -19,25 +20,27 @@ class ProductRepository @Inject constructor(
     suspend fun getProductDetails(id: Int) = withContext(Dispatchers.IO) {
         val product = api.getProductDetails(id)
         if (product.isSuccessful) {
-            db.productDao().saveProduct(product.body()?.Data?.let { it1 -> dataToProductEntity(it1) }!!)
+            db.productDao()
+                .saveProduct(product.body()?.Data?.let { it1 -> dataToProductEntity(it1) }!!)
         }
         return@withContext product
     }
 
-    suspend fun addProductToCart(request:AddToCartItem, productId:Int) = withContext(Dispatchers.IO) {
+    suspend fun addProductToCart(request: AddToCartItem, productId: Int) =
+        withContext(Dispatchers.IO) {
 
-        return@withContext api.addToCart(productId,request)
-    }
+            return@withContext api.addToCart(productId, request)
+        }
 
-    suspend fun getCartItems():Response<CartItemResponse> = withContext(Dispatchers.IO) {
+    suspend fun getCartItems(): Response<CartItemResponse> = withContext(Dispatchers.IO) {
         return@withContext api.getCart()
     }
 
-    suspend fun updateCart(request:AddToCartItem) = withContext(Dispatchers.IO){
+    suspend fun updateCart(request: AddToCartItem) = withContext(Dispatchers.IO) {
         return@withContext api.updateCart(request)
     }
 
-    suspend fun removeCart(request:AddToCartItem) = withContext(Dispatchers.IO){
+    suspend fun removeCart(request: AddToCartItem) = withContext(Dispatchers.IO) {
         println("Coming in repo")
         return@withContext api.updateCart(request)
     }
@@ -45,6 +48,14 @@ class ProductRepository @Inject constructor(
     // Database
     suspend fun getProductDetailsFromDb(id: Int) = withContext(Dispatchers.IO) {
         return@withContext db.productDao().getProduct(id)
+    }
+
+    suspend fun saveOrderToDb(orderEntity: OrderEntity) = withContext(Dispatchers.IO) {
+        return@withContext db.productDao().saveOrder(orderEntity)
+    }
+
+    suspend fun getOrdersFromDb(email: String) = withContext(Dispatchers.IO) {
+        return@withContext db.productDao().getOrders(email)
     }
 }
 
