@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -81,6 +82,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.UiMode
@@ -106,10 +108,11 @@ import kotlin.math.round
 class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     private lateinit var binding: FragmentCheckOutBinding
     private val viewModel: CheckOutViewModel by viewModels()
-    private lateinit var sharedPreferences:SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         initObserver()
 
     }
@@ -117,7 +120,6 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     private fun initObserver() {
         viewModel.showMessage.observe(this) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-            viewModel.removeAllCartItem()
         }
         viewModel.removeSuccess.observe(this) {
             if (it) {
@@ -143,7 +145,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun CheckOutScreen(
-        email:String?
+        email: String?
     ) {
         var existingAddress by remember {
             mutableStateOf("")
@@ -185,7 +187,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
             mutableStateOf(false)
         }
         val orders by viewModel.cart.observeAsState()
-        val checkoutResponse by viewModel.order.observeAsState()
+        val showLoading by viewModel.showLoading.observeAsState()
         LaunchedEffect(Unit) {
             viewModel.getTotalOrder()
         }
@@ -194,7 +196,9 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                 modifier = Modifier,
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    color = Color(0xFF088DF9)
+                )
             }
         } else {
             Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
@@ -267,6 +271,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                                     color = Color((0xFF7D828B))
                                 )
                             },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = Color.Transparent,
                                 unfocusedContainerColor = Color.Transparent,
@@ -295,9 +300,10 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                             text = "Select A Billing Address",
                             fontWeight = FontWeight.Bold,
                         )
-                        TextField(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 4.dp),
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 4.dp),
                             value = billingAddress,
                             onValueChange = { billingAddress = it },
                             label = {
@@ -313,61 +319,99 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                             ),
                             trailingIcon = {
                                 Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
-                            })
-                        TextFieldCustom(label = "First Name",
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                        )
+                        TextFieldCustom(
+                            label = "First Name",
                             value = firstName,
-                            onValueChange = { firstName = it })
+                            onValueChange = { firstName = it },
+                            type = "text"
+                        )
                         TextFieldCustom(
                             label = "Last Name",
                             value = lastName,
-                            onValueChange = { lastName = it })
-                        TextFieldCustom(label = "Email",
+                            onValueChange = { lastName = it },
+                            type = "text"
+                        )
+                        TextFieldCustom(
+                            label = "Email",
                             value = email,
-                            onValueChange = { email = it })
+                            onValueChange = { email = it },
+                            type = "email"
+                        )
                         TextFieldCustom(
                             label = "Company",
                             value = company,
-                            onValueChange = { company = it })
+                            onValueChange = { company = it },
+                            type = "text"
+                        )
                         TextFieldCustom(
                             label = "Country",
                             value = country,
-                            onValueChange = { country = it })
+                            onValueChange = { country = it },
+                            type = "text"
+                        )
                         TextFieldCustom(
                             label = "State/Province",
                             value = state,
-                            onValueChange = { state = it })
+                            onValueChange = { state = it },
+                            type = "text"
+                        )
                         TextFieldCustom(
                             label = "Zip / Postal Code",
                             value = zip,
-                            onValueChange = { zip = it })
-                        TextFieldCustom(label = "City", value = city, onValueChange = { city = it })
+                            onValueChange = { zip = it },
+                            type = "number"
+                        )
+                        TextFieldCustom(
+                            label = "City",
+                            value = city,
+                            onValueChange = { city = it },
+                            type = "text"
+                        )
                         TextFieldCustom(label = "Phone Number",
                             value = phoneNumber,
-                            onValueChange = { phoneNumber = it })
+                            onValueChange = { phoneNumber = it },
+                            type = "number")
                         TextFieldCustom(label = "Fax Number",
                             value = faxNumber,
-                            onValueChange = { faxNumber = it })
+                            onValueChange = { faxNumber = it },
+                            type = "number")
                         Title(label = "Payment Method")
                         PaymentOptionCard()
                         Title(label = "Payment Information")
                         orders?.Data?.OrderTotals?.let {
-                            TotalCard(it.SubTotal, it.Tax, it.Shipping, it.OrderTotal) {
-                                viewModel.isValid(
-                                    existingAddress,
-                                    billingAddress,
-                                    firstName,
-                                    lastName,
-                                    email,
-                                    company,
-                                    country,
-                                    state,
-                                    zip,
-                                    city,
-                                    phoneNumber,
-                                    faxNumber,
-                                    it.OrderTotal,
-                                    orders!!.Data.Cart.Items
-                                )
+                            if (showLoading == true) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator(
+                                        color = Color(0xFF088DF9)
+                                    )
+                                }
+                            } else {
+                                TotalCard(it.SubTotal, it.Tax, it.Shipping, it.OrderTotal) {
+                                    viewModel.isValid(
+                                        existingAddress,
+                                        billingAddress,
+                                        firstName,
+                                        lastName,
+                                        email,
+                                        company,
+                                        country,
+                                        state,
+                                        zip,
+                                        city,
+                                        phoneNumber,
+                                        faxNumber,
+                                        it.OrderTotal,
+                                        orders!!.Data.Cart.Items
+                                    )
+                                }
                             }
                         }
                     }

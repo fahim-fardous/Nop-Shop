@@ -3,6 +3,7 @@ package com.example.nopshop.component
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
@@ -12,14 +13,19 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun TextFieldCustom(
-    modifier: Modifier = Modifier, label: String, value: String, onValueChange: (String) -> Unit
+    modifier: Modifier = Modifier,
+    label: String,
+    value: String, onValueChange: (String) -> Unit,
+    type: String
 ) {
     TextField(
         modifier = Modifier
@@ -37,7 +43,15 @@ fun TextFieldCustom(
             unfocusedContainerColor = Color.Transparent,
             unfocusedIndicatorColor = Color(0xFFCDD1D4),
             focusedIndicatorColor = Color(0xFFCDD1D4)
-        )
+        ),
+        keyboardOptions = when (type) {
+            "number" -> KeyboardOptions(keyboardType = KeyboardType.Number)
+            "email" -> KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            )
+
+            else -> KeyboardOptions(keyboardType = KeyboardType.Text)
+        },
     )
 }
 
@@ -48,6 +62,7 @@ private fun TextFieldPreview() {
         value = "",
         onValueChange = {},
         label = "Address",
+        type = "number"
     )
 
 }

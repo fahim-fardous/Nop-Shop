@@ -54,7 +54,7 @@ class CheckOutViewModel @Inject constructor(
         get() = _cart
 
     private val _showLoading: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+        MutableLiveData<Boolean>(false)
     }
 
     val showLoading: LiveData<Boolean>
@@ -73,7 +73,7 @@ class CheckOutViewModel @Inject constructor(
         }
     }
 
-    fun removeAllCartItem() = viewModelScope.launch {
+    private fun removeAllCartItem() = viewModelScope.launch {
         val list = productRepository.getCartItems()
         println(list.body())
         if (list.isSuccessful) {
@@ -101,6 +101,7 @@ class CheckOutViewModel @Inject constructor(
         val retrofit = Retrofit.Builder().baseUrl(Constants.CHECK_OUT_URL)
             .addConverterFactory(GsonConverterFactory.create()).build()
             .create(ProductApi::class.java)
+        _showLoading.value = true
         val response = retrofit.getCheckOutResponse()
         if (response.isSuccessful) {
             saveToDb(
@@ -110,8 +111,10 @@ class CheckOutViewModel @Inject constructor(
                 response.body()?.orderId.toString(),
                 products
             )
+            removeAllCartItem()
             _order.value = response.body()
             _showMessage.value = response.body()?.message.toString()
+            _showLoading.value = false
         } else {
             _showMessage.value = "Something went wrong"
         }
