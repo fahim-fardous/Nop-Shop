@@ -21,6 +21,9 @@ class CategoryAdapter(
         fun bind(category: Data) {
             binding.categoryImg.load(category.Products[0].PictureModels[0].ImageUrl)
             binding.categoryName.text = category.Name
+            binding.root.setOnClickListener {
+                onCategoryClick(category)
+            }
         }
 
     }

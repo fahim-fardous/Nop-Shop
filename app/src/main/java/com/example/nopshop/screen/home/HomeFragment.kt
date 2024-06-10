@@ -67,7 +67,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         initListeners()
         loadData()
     }
-
     private fun initViews() {
         binding.categoryRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -80,37 +79,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onAddToCartClick(product: Data) {
-        if(NoInternet.isOnline(requireContext())){
+        if (NoInternet.isOnline(requireContext())) {
             viewModel.addProductToCart(product.Id, 1)
-        }
-        else{
+        } else {
             Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
         }
-        //Value.incrementValue()
     }
 
     private fun onProductClick(it: Data) {
-        if(NoInternet.isOnline(requireContext())){
-            val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
-            findNavController().navigate(action)
-        }
-        else{
-            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
-        }
+        val action = HomeFragmentDirections.actionHomeFragmentToProductDetailsFragment(it.Id)
+        findNavController().navigate(action)
     }
 
     private fun onCategoryClick(
         product: com.example.nopshop.model.category.Data, categoryName: String
     ) {
-        if(NoInternet.isOnline(requireContext())){
-            val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
-                product.Products.toTypedArray(), categoryName
-            )
-            findNavController().navigate(action)
-        }
-        else{
-            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
-        }
+        val action = HomeFragmentDirections.actionHomeFragmentToProductListFragment(
+            product.Products.toTypedArray(), categoryName
+        )
+        findNavController().navigate(action)
     }
 
     private fun initObserver() {
@@ -132,11 +119,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
             viewModel.productAddedToCart.observe(this) {
                 Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
-                if(it.Message.isNotEmpty()){
+                if (it.Message.isNotEmpty()) {
                     viewModel.getCartItemCount()
                 }
             }
-            viewModel.itemCount.observe(this){
+            viewModel.itemCount.observe(this) {
                 binding.cartBadge.text = it.Data.Cart.Items.size.toString()
             }
         } else {
@@ -187,7 +174,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onResume() {
         super.onResume()
-        sharedPreferences =  requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         Constants.TOKEN = sharedPreferences.getString("auth_token", null)
         println(Constants.TOKEN)
     }

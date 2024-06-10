@@ -12,6 +12,7 @@ import com.example.nopshop.adapter.CategoryAdapter
 import com.example.nopshop.adapter.CategoryListAdapter
 import com.example.nopshop.databinding.FragmentCategoryBinding
 import com.example.nopshop.model.CategoryItem
+import com.example.nopshop.model.category.Data
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,11 +24,18 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = CategoryAdapter { category ->
-            //onClick(category)
+            onClick(category)
         }
-
         initObserver()
 
+    }
+
+    private fun onClick(category: Data) {
+        val action = CategoryFragmentDirections.actionCategoryFragmentToProductListFragment(
+            category.Products.toTypedArray(),
+            category.Name
+        )
+        findNavController().navigate(action)
     }
 
 
@@ -36,7 +44,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
         binding = FragmentCategoryBinding.bind(view)
         initViews()
-        //initListeners()
+        initListeners()
         loadData(
         )
     }
@@ -47,10 +55,10 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     }
 
     private fun initObserver() {
-        viewModel.category.observe(this){
+        viewModel.category.observe(this) {
             adapter.submitList(it.Data)
         }
-        viewModel.itemCount.observe(this){
+        viewModel.itemCount.observe(this) {
             binding.cartBadge.text = it.Data.Cart.Items.size.toString()
         }
     }
@@ -69,8 +77,4 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             findNavController().navigate(action)
         }
     }
-
-
-
-
 }
