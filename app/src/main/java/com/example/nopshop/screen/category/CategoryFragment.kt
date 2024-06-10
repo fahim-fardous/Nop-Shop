@@ -3,6 +3,7 @@ package com.example.nopshop.screen.category
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +14,7 @@ import com.example.nopshop.adapter.CategoryListAdapter
 import com.example.nopshop.databinding.FragmentCategoryBinding
 import com.example.nopshop.model.CategoryItem
 import com.example.nopshop.model.category.Data
+import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -75,6 +77,13 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         binding.cartBtn.setOnClickListener {
             val action = CategoryFragmentDirections.actionCategoryFragmentToCartFragment()
             findNavController().navigate(action)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!NoInternet.isOnline(requireContext().applicationContext)){
+            Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
         }
     }
 }

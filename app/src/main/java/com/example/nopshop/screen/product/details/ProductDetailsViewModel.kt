@@ -55,6 +55,13 @@ class ProductDetailsViewModel @Inject constructor(
     val itemCount: LiveData<CartItemResponse>
         get() = _itemCount
 
+    private val _showMessage: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    val showMessage: LiveData<String>
+        get() = _showMessage
+
 
     fun getProducts(context: Context, id: Int) = viewModelScope.launch {
         try {
@@ -71,18 +78,31 @@ class ProductDetailsViewModel @Inject constructor(
     }
 
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
-        val response = repository.addProductToCart(
-            AddToCartItem(
-                listOf(
-                    FormValue(
-                        "addtocart_$productId.EnteredQuantity",
-                        "$quantity"
-                    )
+        if (NoInternet.isOnline(context.applicationContext)) {
+            try {
+                val response = repository.addProductToCart(
+                    AddToCartItem(
+                        listOf(
+                            FormValue(
+                                "addtocart_$productId.EnteredQuantity",
+                                "$quantity"
+                            )
+                        )
+                    ), productId
                 )
-            ), productId
-        )
-        if (response.isSuccessful) _productAddedToCart.value = response.body()
+                if (response.isSuccessful) _productAddedToCart.value = response.body()
+                else{
+                    _showMessage.value = "Unable to add to cart"
+                }
+            }
+            catch (e: Exception) {
+                _showMessage.value = "Something went wrong"
+            }
+        } else {
+            _showMessage.value = "No Internet Connection"
+        }
     }
+
     fun getCartItemCount() = viewModelScope.launch {
         try {
             val response = productRepository.getCartItems()

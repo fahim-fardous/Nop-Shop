@@ -82,7 +82,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         if (NoInternet.isOnline(requireContext())) {
             viewModel.addProductToCart(product.Id, 1)
         } else {
-            Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -101,60 +101,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initObserver() {
-        if (NoInternet.isOnline(requireContext().applicationContext)) {
-            viewModel.sliderImageResponse.observe(this) { slider ->
-                for (image in slider) {
-                    binding.adCarousel.addData(
-                        CarouselItem(
-                            imageUrl = image.ImageUrl
-                        )
+        viewModel.sliderImageResponse.observe(this) { slider ->
+            for (image in slider) {
+                binding.adCarousel.addData(
+                    CarouselItem(
+                        imageUrl = image.ImageUrl
                     )
-                }
+                )
             }
-            viewModel.featureProductsResponse.observe(this) {
-                featureProductsAdapter.submitList(it.Data)
+        }
+        viewModel.featureProductsResponse.observe(this) {
+            featureProductsAdapter.submitList(it)
+        }
+        viewModel.categoryWiseProductsResponse.observe(this) {
+            categoryListAdapter.submitList(it)
+        }
+        viewModel.productAddedToCart.observe(this) {
+            Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
+            if (it.Message.isNotEmpty()) {
+                viewModel.getCartItemCount()
             }
-            viewModel.categoryWiseProductsResponse.observe(this) { it ->
-                categoryListAdapter.submitList(it.Data)
-            }
-            viewModel.productAddedToCart.observe(this) {
-                Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
-                if (it.Message.isNotEmpty()) {
-                    viewModel.getCartItemCount()
-                }
-            }
-            viewModel.itemCount.observe(this) {
-                binding.cartBadge.text = it.Data.Cart.Items.size.toString()
-            }
-        } else {
-            viewModel.sliderImageResponseFromDb.observe(this) { slider ->
-                for (image in slider) {
-                    binding.adCarousel.addData(
-                        CarouselItem(
-                            imageUrl = image.ImageUrl
-                        )
-                    )
-                }
-            }
-            viewModel.featureProductsResponseFromDb.observe(this) {
-                val list = mutableListOf<Data>()
-                for (item in it) {
-                    list.add(
-                        item.toFeatureData()
-                    )
-                }
-
-                featureProductsAdapter.submitList(list)
-            }
-            viewModel.categoryWiseProductsResponseFromDb.observe(this) {
-                val list = mutableListOf<com.example.nopshop.model.category.Data>()
-                for (item in it) {
-                    list.add(
-                        item.toData()
-                    )
-                }
-                categoryListAdapter.submitList(list)
-            }
+        }
+        viewModel.itemCount.observe(this) {
+            binding.cartBadge.text = it.Data.Cart.Items.size.toString()
+        }
+        viewModel.showMessage.observe(this){
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -178,5 +150,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         Constants.TOKEN = sharedPreferences.getString("auth_token", null)
         println(Constants.TOKEN)
+        if(!NoInternet.isOnline(requireContext().applicationContext)){
+            Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
+        }
     }
 }

@@ -13,6 +13,7 @@ import com.example.nopshop.model.cart.Item
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
+import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -44,6 +45,13 @@ class CartViewModel @Inject constructor(
     val cartRemoveResponse: LiveData<CartItemResponse>
         get() = _cartRemoveResponse
 
+    private val _showMessage: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    val showMessage: LiveData<String>
+        get() = _showMessage
+
 
     fun getCartProducts() = viewModelScope.launch {
         try {
@@ -55,7 +63,7 @@ class CartViewModel @Inject constructor(
     }
 
     fun removeCart(item: Item) = viewModelScope.launch {
-        try {
+        if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.removeCart(
                 AddToCartItem(
                     listOf(
@@ -67,12 +75,15 @@ class CartViewModel @Inject constructor(
                 )
             )
             _cartRemoveResponse.value = response.body()
-        } catch (e: Exception) {
+        } else {
+            _showMessage.value = "No Internet Connection"
         }
+
+
     }
 
     fun updateCart(item: Item, quantity: Int?) = viewModelScope.launch {
-        try {
+        if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.updateCart(
                 AddToCartItem(
                     listOf(
@@ -84,8 +95,8 @@ class CartViewModel @Inject constructor(
                 )
             )
             _cartUpdateResponse.value = response.body()
-
-        } catch (e: Exception) {
+        } else {
+            _showMessage.value = "No Internet Connection"
         }
     }
 }

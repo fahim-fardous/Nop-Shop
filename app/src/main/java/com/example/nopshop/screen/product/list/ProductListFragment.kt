@@ -18,6 +18,7 @@ import com.example.nopshop.model.ProductItem
 import com.example.nopshop.model.category.Product
 import com.example.nopshop.model.products.ProductsItem
 import com.example.nopshop.screen.product.details.ProductDetailsViewModel
+import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -48,6 +49,7 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
         val action =
             ProductListFragmentDirections.actionProductListFragmentToProductDetailsFragment(it.Id)
         findNavController().navigate(action)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +69,9 @@ class ProductListFragment : Fragment(R.layout.fragment_product_list) {
         }
         viewModel.itemCount.observe(this) {
             binding.cartBadge.text = it.toString()
+        }
+        viewModel.showMessage.observe(this) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
     }
 

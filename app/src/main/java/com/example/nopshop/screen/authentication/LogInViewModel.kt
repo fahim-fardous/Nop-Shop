@@ -11,6 +11,7 @@ import com.example.nopshop.model.authentication.LoginResponse
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.AuthenticationApi
 import com.example.nopshop.repository.LoginRepository
+import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -46,18 +47,23 @@ class LogInViewModel @Inject constructor(
 
     fun postLogin(userEmail: String, userPassword: String) = viewModelScope.launch {
         if (!isValid(userEmail, userPassword)) return@launch
-        val response = repository.userLogin(
-            Login(
-                Data = Data(
-                    Email = userEmail,
-                    Password = userPassword,
+        if(NoInternet.isOnline(context.applicationContext)){
+            val response = repository.userLogin(
+                Login(
+                    Data = Data(
+                        Email = userEmail,
+                        Password = userPassword,
+                    )
                 )
             )
-        )
-        if (response.isSuccessful) {
-            _response.value = response.body()
-        } else {
-            _showMessage.value = "Incorrect email or password"
+            if (response.isSuccessful) {
+                _response.value = response.body()
+            } else {
+                _showMessage.value = "Incorrect email or password"
+            }
+        }
+        else{
+            _showMessage.value = "No internet connection"
         }
     }
 
