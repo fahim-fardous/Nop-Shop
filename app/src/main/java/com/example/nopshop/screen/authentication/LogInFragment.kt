@@ -14,6 +14,7 @@ import com.example.nopshop.MainActivity
 import com.example.nopshop.R
 import com.example.nopshop.databinding.FragmentLogInBinding
 import com.example.nopshop.utils.Constants
+import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -68,6 +69,12 @@ class LogInFragment : Fragment(R.layout.fragment_log_in) {
             if (message.isNotEmpty()) {
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        if(!NoInternet.isOnline(requireContext().applicationContext)){
+            Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
         }
     }
 }

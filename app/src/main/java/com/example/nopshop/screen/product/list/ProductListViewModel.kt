@@ -13,6 +13,7 @@ import com.example.nopshop.model.products.ProductsItem
 import com.example.nopshop.network.ApiClient
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
+import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -37,8 +38,15 @@ class ProductListViewModel @Inject constructor(
     val itemCount: LiveData<Int>
         get() = _itemCount
 
+    private val _showMessage: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    val showMessage: LiveData<String>
+        get() = _showMessage
+
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
-        try {
+        if (NoInternet.isOnline(context.applicationContext)) {
             val response = productRepository.addProductToCart(
                 AddToCartItem(
                     listOf(
@@ -49,12 +57,17 @@ class ProductListViewModel @Inject constructor(
                     )
                 ), productId
             )
-            _productAddedToCart.value = response.body()
-        } catch (e: Exception) {
-
+            if (response.isSuccessful) {
+                getCartItemCount()
+                _productAddedToCart.value = response.body()
+            } else {
+                _showMessage.value = "Unable to add to cart"
+            }
+        } else {
+            _showMessage.value = "No Internet Connection"
         }
-
     }
+
     fun getCartItemCount() = viewModelScope.launch {
         try {
             val response = productRepository.getCartItems()

@@ -1,5 +1,6 @@
 package com.example.nopshop.screen.checkout
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +15,9 @@ import com.example.nopshop.model.cart.Item
 import com.example.nopshop.network.api.ProductApi
 import com.example.nopshop.repository.ProductRepository
 import com.example.nopshop.utils.Constants
+import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,7 +27,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CheckOutViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _showMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -98,25 +102,30 @@ class CheckOutViewModel @Inject constructor(
     }
 
     private fun checkOut(orderTotal: String, products: List<Item>) = viewModelScope.launch {
-        val retrofit = Retrofit.Builder().baseUrl(Constants.CHECK_OUT_URL)
-            .addConverterFactory(GsonConverterFactory.create()).build()
-            .create(ProductApi::class.java)
-        _showLoading.value = true
-        val response = retrofit.getCheckOutResponse()
-        if (response.isSuccessful) {
-            saveToDb(
-                Constants.TOKEN!!,
-                orderTotal,
-                sharedPreferences.getString("email",""),
-                response.body()?.orderId.toString(),
-                products
-            )
-            removeAllCartItem()
-            _order.value = response.body()
-            _showMessage.value = response.body()?.message.toString()
-            _showLoading.value = false
-        } else {
-            _showMessage.value = "Something went wrong"
+        if (NoInternet.isOnline(context.applicationContext)) {
+            val retrofit = Retrofit.Builder().baseUrl(Constants.CHECK_OUT_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build()
+                .create(ProductApi::class.java)
+            _showLoading.value = true
+            val response = retrofit.getCheckOutResponse()
+            if (response.isSuccessful) {
+                saveToDb(
+                    Constants.TOKEN!!,
+                    orderTotal,
+                    sharedPreferences.getString("email", ""),
+                    response.body()?.orderId.toString(),
+                    products
+                )
+                removeAllCartItem()
+                _order.value = response.body()
+                _showMessage.value = response.body()?.message.toString()
+                _showLoading.value = false
+            } else {
+                _showMessage.value = "Something went wrong"
+            }
+        }
+        else{
+            _showMessage.value = "No Internet Connection"
         }
     }
 

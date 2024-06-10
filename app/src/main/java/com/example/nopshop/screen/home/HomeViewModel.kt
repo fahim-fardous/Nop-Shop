@@ -8,13 +8,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nopshop.db.AppDatabase
 import com.example.nopshop.db.dbmodel.category.CategoryEntity
+import com.example.nopshop.db.dbmodel.category.toData
 import com.example.nopshop.db.dbmodel.featureProduct.FeatureProductsEntity
+import com.example.nopshop.db.dbmodel.featureProduct.toFeatureData
 import com.example.nopshop.db.dbmodel.slider.SliderEntity
+import com.example.nopshop.db.dbmodel.slider.toSlider
 import com.example.nopshop.model.cart.AddToCartItem
 import com.example.nopshop.model.cart.AddToCartResponse
 import com.example.nopshop.model.cart.CartItemResponse
 import com.example.nopshop.model.cart.FormValue
 import com.example.nopshop.model.category.CategoryWiseProductsItem
+import com.example.nopshop.model.featureProducts.Data
 import com.example.nopshop.model.featureProducts.FeatureProductItem
 import com.example.nopshop.model.slider.Slider
 import com.example.nopshop.network.ApiClient
@@ -39,37 +43,20 @@ class HomeViewModel @Inject constructor(
     val sliderImageResponse: LiveData<List<Slider>>
         get() = _sliderImageResponse
 
-    private val _sliderImageResponseFromDb: MutableLiveData<List<SliderEntity>> by lazy {
-        MutableLiveData<List<SliderEntity>>()
-    }
-    val sliderImageResponseFromDb: LiveData<List<SliderEntity>>
-        get() = _sliderImageResponseFromDb
 
-    private val _categoryWiseProductsResponse: MutableLiveData<CategoryWiseProductsItem> by lazy {
-        MutableLiveData<CategoryWiseProductsItem>()
+    private val _categoryWiseProductsResponse: MutableLiveData<List<com.example.nopshop.model.category.Data>> by lazy {
+        MutableLiveData<List<com.example.nopshop.model.category.Data>>()
     }
 
-    val categoryWiseProductsResponse: LiveData<CategoryWiseProductsItem>
+    val categoryWiseProductsResponse: LiveData<List<com.example.nopshop.model.category.Data>>
         get() = _categoryWiseProductsResponse
 
-    private val _categoryWiseProductsResponseFromDb: MutableLiveData<List<CategoryEntity>> by lazy {
-        MutableLiveData<List<CategoryEntity>>()
+
+    private val _featureProductsResponse: MutableLiveData<List<Data>> by lazy {
+        MutableLiveData<List<Data>>()
     }
 
-    val categoryWiseProductsResponseFromDb: LiveData<List<CategoryEntity>>
-        get() = _categoryWiseProductsResponseFromDb
-
-    private val _featureProductsResponseFromDb: MutableLiveData<List<FeatureProductsEntity>> by lazy {
-        MutableLiveData<List<FeatureProductsEntity>>()
-    }
-
-    val featureProductsResponseFromDb: LiveData<List<FeatureProductsEntity>>
-        get() = _featureProductsResponseFromDb
-    private val _featureProductsResponse: MutableLiveData<FeatureProductItem> by lazy {
-        MutableLiveData<FeatureProductItem>()
-    }
-
-    val featureProductsResponse: LiveData<FeatureProductItem>
+    val featureProductsResponse: LiveData<List<Data>>
         get() = _featureProductsResponse
 
     private val _productAddedToCart: MutableLiveData<AddToCartResponse> by lazy {
@@ -86,6 +73,13 @@ class HomeViewModel @Inject constructor(
     val itemCount: LiveData<CartItemResponse>
         get() = _itemCount
 
+    private val _showMessage: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    val showMessage: LiveData<String>
+        get() = _showMessage
+
 
     fun getImageSlider() = viewModelScope.launch {
         if (NoInternet.isOnline(context.applicationContext)) {
@@ -93,32 +87,38 @@ class HomeViewModel @Inject constructor(
             _sliderImageResponse.value = response.body()?.Data?.Sliders
         } else {
             val response = repository.getImageSliderFromDb()
-            _sliderImageResponseFromDb.value = response
+            _sliderImageResponse.value = response.map {
+                it.toSlider()
+            }
         }
     }
 
     fun getCategoryWiseProducts() = viewModelScope.launch {
         if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getCategoryWiseProducts()
-            _categoryWiseProductsResponse.value = response.body()
+            _categoryWiseProductsResponse.value = response.body()?.Data
         } else {
             val response = repository.getCategoryWiseProductsFromDb()
-            _categoryWiseProductsResponseFromDb.value = response
+            _categoryWiseProductsResponse.value = response.map {
+                it.toData()
+            }
         }
     }
 
     fun getFeatureProducts() = viewModelScope.launch {
         if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.getFeatureProducts()
-            _featureProductsResponse.value = response.body()
+            _featureProductsResponse.value = response.body()?.Data
         } else {
             val response = repository.getFeatureProductsFromDb()
-            _featureProductsResponseFromDb.value = response
+            _featureProductsResponse.value = response.map {
+                it.toFeatureData()
+            }
         }
     }
 
     fun addProductToCart(productId: Int, quantity: Int) = viewModelScope.launch {
-        if(NoInternet.isOnline(context.applicationContext)){
+        if (NoInternet.isOnline(context.applicationContext)) {
             val response = repository.addProductToCart(
                 AddToCartItem(
                     listOf(
@@ -129,6 +129,11 @@ class HomeViewModel @Inject constructor(
                 ), productId
             )
             if (response.isSuccessful) _productAddedToCart.value = response.body()
+            else{
+                _showMessage.value = "Unable to add to cart"
+            }
+        } else {
+            _showMessage.value = "No Internet Connection"
         }
     }
 

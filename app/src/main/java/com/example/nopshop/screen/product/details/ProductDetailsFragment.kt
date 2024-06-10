@@ -44,7 +44,7 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
 
     private fun initShimmerEffect() {
         binding.scrollView.visibility = View.GONE
-        binding.productDetailsShimmer.visibility =View.VISIBLE
+        binding.productDetailsShimmer.visibility = View.VISIBLE
         binding.productDetailsShimmer.startShimmer()
     }
 
@@ -108,20 +108,22 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
                 } else {
                     binding.descriptionTv.text = it.Data.FullDescription ?: ""
                 }
-                binding.discountPrice.text = "$%.2f".format(it.Data.ProductPrice.BasePricePAngVValue)
+                binding.discountPrice.text =
+                    "$%.2f".format(it.Data.ProductPrice.BasePricePAngVValue)
                 binding.originalPrice.text = "$%.2f".format(it.Data.ProductPrice.PriceValue)
                 binding.originalPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 initViews()
             }
             viewModel.productAddedToCart.observe(viewLifecycleOwner) {
                 Toast.makeText(requireContext(), it.Message, Toast.LENGTH_SHORT).show()
-                if(it.Message.isNotEmpty()){
+                if (it.Message.isNotEmpty()) {
                     viewModel.getCartItemCount()
                 }
             }
-            viewModel.itemCount.observe(viewLifecycleOwner){
+            viewModel.itemCount.observe(viewLifecycleOwner) {
                 binding.cartBadge.text = it.Data.Cart.Items.size.toString()
             }
+
         } else {
             viewModel.productResponseFromDb.observe(viewLifecycleOwner) {
                 binding.categoryTv.text = it.productName
@@ -147,6 +149,9 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
                 initViews()
             }
         }
+        viewModel.showMessage.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun isHtmlString(description: String): Boolean {
@@ -155,6 +160,13 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
             doc.body().children().isNotEmpty()
         } catch (e: Exception) {
             false
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!NoInternet.isOnline(requireContext().applicationContext)){
+            Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
         }
     }
 

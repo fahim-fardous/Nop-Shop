@@ -15,6 +15,7 @@ import com.example.nopshop.adapter.CartAdapter
 import com.example.nopshop.databinding.FragmentCartBinding
 import com.example.nopshop.model.CartItem
 import com.example.nopshop.model.cart.Item
+import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -79,6 +80,9 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                 "${item.Data.Cart.Items.size} ${if (item.Data.Cart.Items.size > 1) " ITEM(S)" else " ITEM"}"
             initViews()
         }
+        viewModel.showMessage.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,8 +112,11 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         }
         binding.checkoutBtn.setOnClickListener {
             val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-            if (isLoggedIn) {
-                if (adapter.itemCount>0) {
+            if (!NoInternet.isOnline(requireContext().applicationContext)) {
+                Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (isLoggedIn) {
+                if (adapter.itemCount > 0) {
                     findNavController().navigate(CartFragmentDirections.actionCartFragmentToCheckOutFragment())
                 } else {
                     Toast.makeText(
@@ -129,7 +136,6 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         binding.cartItemShimmerLayout.stopShimmer()
         binding.cartItemShimmerLayout.visibility = View.GONE
         binding.scrollView.visibility = View.VISIBLE
-
     }
 
     private fun removeItem(cartItem: Item) {
@@ -145,6 +151,13 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             viewModel.updateCart(
                 item = cartItem, quantity = quantity
             )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!NoInternet.isOnline(requireContext().applicationContext)) {
+            Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
         }
     }
 }
