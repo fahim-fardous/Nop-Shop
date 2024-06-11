@@ -1,11 +1,21 @@
 package com.example.nopshop.screen.cart
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -83,7 +93,12 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         viewModel.showMessage.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
+        viewModel.showLoading.observe(viewLifecycleOwner) {
+            binding.progressLayout.visibility = if (it) View.VISIBLE else View.GONE
+            binding.overlayView.visibility = if (it) View.VISIBLE else View.GONE
+        }
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -106,6 +121,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         viewModel.getCartProducts()
     }
 
+
     private fun initListeners() {
         binding.topBar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -120,14 +136,15 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                     findNavController().navigate(CartFragmentDirections.actionCartFragmentToCheckOutFragment())
                 } else {
                     Toast.makeText(
-                        requireContext(),
-                        "Atleast add one item to proceed",
-                        Toast.LENGTH_SHORT
+                        requireContext(), "Atleast add one item to proceed", Toast.LENGTH_SHORT
                     ).show()
                 }
             } else {
                 findNavController().navigate(CartFragmentDirections.actionCartFragmentToLogInFragment())
             }
+        }
+        binding.overlayView.setOnTouchListener { _,event ->
+            event.action == MotionEvent.ACTION_DOWN
         }
 
     }
