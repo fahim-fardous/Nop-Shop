@@ -22,6 +22,10 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -123,8 +127,7 @@ class CheckOutViewModel @Inject constructor(
             } else {
                 _showMessage.value = "Something went wrong"
             }
-        }
-        else{
+        } else {
             _showMessage.value = "No Internet Connection"
         }
     }
@@ -146,20 +149,7 @@ class CheckOutViewModel @Inject constructor(
         orderTotal: String,
         products: List<Item>
     ) = viewModelScope.launch {
-        if (
-            oldAddress.isEmpty() ||
-            newAddress.isEmpty() ||
-            firstName.isEmpty() ||
-            lastName.isEmpty() ||
-            email.isEmpty() ||
-            company.isEmpty() ||
-            country.isEmpty() ||
-            state.isEmpty() ||
-            zip.isEmpty() ||
-            city.isEmpty() ||
-            phone.isEmpty() ||
-            fax.isEmpty()
-        ) {
+        if (oldAddress.isEmpty() || newAddress.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || company.isEmpty() || country.isEmpty() || state.isEmpty() || zip.isEmpty() || city.isEmpty() || phone.isEmpty() || fax.isEmpty()) {
             _showMessage.value = "Please fill all the fields"
         } else {
             checkOut(orderTotal, products)
@@ -167,21 +157,22 @@ class CheckOutViewModel @Inject constructor(
     }
 
     private fun saveToDb(
-        token: String,
-        totalAmount: String,
-        email: String?,
-        orderId: String,
-        products: List<Item>
+        token: String, totalAmount: String, email: String?, orderId: String, products: List<Item>
     ) = viewModelScope.launch {
-        println("Aya porchi")
         productRepository.saveOrderToDb(
             OrderEntity(
                 token = token,
                 email = email!!,
                 totalAmount = totalAmount,
                 orderId = orderId,
+                orderDate = formatDate(),
                 products = products
             )
         )
+    }
+    private fun formatDate(): String {
+        val currentDate = LocalDate.now()
+        val formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return currentDate.format(formatDate)
     }
 }

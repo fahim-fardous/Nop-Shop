@@ -102,6 +102,8 @@ import com.example.nopshop.component.TotalCard
 import com.example.nopshop.databinding.FragmentCheckOutBinding
 import com.example.nopshop.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlin.math.round
 
 @AndroidEntryPoint
@@ -370,14 +372,18 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
                             onValueChange = { city = it },
                             type = "text"
                         )
-                        TextFieldCustom(label = "Phone Number",
+                        TextFieldCustom(
+                            label = "Phone Number",
                             value = phoneNumber,
                             onValueChange = { phoneNumber = it },
-                            type = "number")
-                        TextFieldCustom(label = "Fax Number",
+                            type = "number"
+                        )
+                        TextFieldCustom(
+                            label = "Fax Number",
                             value = faxNumber,
                             onValueChange = { faxNumber = it },
-                            type = "number")
+                            type = "number"
+                        )
                         Title(label = "Payment Method")
                         PaymentOptionCard()
                         Title(label = "Payment Information")
@@ -419,6 +425,7 @@ class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
             }
         }
     }
+
 
     @Composable
     @Preview

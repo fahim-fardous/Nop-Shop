@@ -23,6 +23,7 @@ import com.example.nopshop.utils.Constants
 import com.example.nopshop.utils.NoInternet
 import dagger.hilt.android.AndroidEntryPoint
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem
+import kotlin.properties.Delegates
 import kotlin.reflect.jvm.internal.ReflectProperties.Val
 
 
@@ -149,7 +150,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         sharedPreferences =
             requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         Constants.TOKEN = sharedPreferences.getString("auth_token", null)
-        println(Constants.TOKEN)
         if(!NoInternet.isOnline(requireContext().applicationContext)){
             Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
         }

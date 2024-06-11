@@ -71,10 +71,4 @@ class LogInFragment : Fragment(R.layout.fragment_log_in) {
             }
         }
     }
-    override fun onResume() {
-        super.onResume()
-        if(!NoInternet.isOnline(requireContext().applicationContext)){
-            Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
-        }
-    }
 }

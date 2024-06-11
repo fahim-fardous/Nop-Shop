@@ -55,8 +55,10 @@ class ProductRepository @Inject constructor(
     }
 
     suspend fun getOrdersFromDb(email: String) = withContext(Dispatchers.IO) {
+        println(db.productDao().getOrders(email))
         return@withContext db.productDao().getOrders(email)
     }
+
 }
 
 fun dataToProductEntity(data: Data): ProductEntity {

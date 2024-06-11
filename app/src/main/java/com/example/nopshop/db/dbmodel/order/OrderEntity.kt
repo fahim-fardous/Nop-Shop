@@ -12,5 +12,6 @@ data class OrderEntity(
     val email:String,
     val totalAmount:String,
     val orderId:String,
+    val orderDate:String,
     val products:List<Item>
 )

@@ -87,8 +87,6 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
         binding.scrollView.visibility = View.VISIBLE
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun initObserver() {
         if (NoInternet.isOnline(requireContext())) {
             viewModel.productResponse.observe(viewLifecycleOwner) {
@@ -96,18 +94,10 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
                 binding.productImg.load(it.Data.PictureModels[0].ImageUrl)
                 binding.productTitleTv.text = it.Data.Name
                 binding.stockTv.text = it.Data.StockAvailability ?: "Out of Stock"
-                if (isHtmlString(it.Data.ShortDescription)) {
-                    binding.productSubtitleTv.text =
-                        Html.fromHtml(it.Data.ShortDescription, Html.FROM_HTML_MODE_LEGACY) ?: ""
-                } else {
-                    binding.productSubtitleTv.text = it.Data.ShortDescription ?: ""
-                }
-                if (isHtmlString(it.Data.FullDescription)) {
-                    binding.descriptionTv.text =
-                        Html.fromHtml(it.Data.FullDescription, Html.FROM_HTML_MODE_LEGACY) ?: ""
-                } else {
-                    binding.descriptionTv.text = it.Data.FullDescription ?: ""
-                }
+                binding.productSubtitleTv.text =
+                    Html.fromHtml(it.Data.ShortDescription, Html.FROM_HTML_MODE_COMPACT) ?: ""
+                binding.descriptionTv.text =
+                    Html.fromHtml(it.Data.FullDescription, Html.FROM_HTML_MODE_LEGACY) ?: ""
                 binding.discountPrice.text =
                     "$%.2f".format(it.Data.ProductPrice.BasePricePAngVValue)
                 binding.originalPrice.text = "$%.2f".format(it.Data.ProductPrice.PriceValue)
@@ -130,19 +120,10 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
                 binding.productImg.load(it.productImage)
                 binding.productTitleTv.text = it.productName
                 binding.stockTv.text = it.stock
-                if (it.productShortDescription?.let { it1 -> isHtmlString(it1) } == true) {
-                    binding.productSubtitleTv.text =
-                        Html.fromHtml(it.productShortDescription, Html.FROM_HTML_MODE_COMPACT)
-                            .toString()
-                } else {
-                    binding.productSubtitleTv.text = it.productShortDescription
-                }
-                if (it.productLongDescription?.let { it1 -> isHtmlString(it1) } == true) {
-                    binding.descriptionTv.text =
-                        Html.fromHtml(it.productLongDescription, Html.FROM_HTML_MODE_LEGACY) ?: ""
-                } else {
-                    binding.descriptionTv.text = it.productLongDescription ?: ""
-                }
+                binding.productSubtitleTv.text =
+                    Html.fromHtml(it.productShortDescription, Html.FROM_HTML_MODE_COMPACT) ?: ""
+                binding.descriptionTv.text =
+                    Html.fromHtml(it.productLongDescription, Html.FROM_HTML_MODE_LEGACY) ?: ""
                 binding.discountPrice.text = it.newPrice
                 binding.originalPrice.text = it.oldPrice
                 binding.originalPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
@@ -151,22 +132,6 @@ class ProductDetailsFragment : Fragment(R.layout.fragment_product_details) {
         }
         viewModel.showMessage.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun isHtmlString(description: String): Boolean {
-        return try {
-            val doc = Jsoup.parse(description, "", Parser.xmlParser())
-            doc.body().children().isNotEmpty()
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if(!NoInternet.isOnline(requireContext().applicationContext)){
-            Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
         }
     }
 
