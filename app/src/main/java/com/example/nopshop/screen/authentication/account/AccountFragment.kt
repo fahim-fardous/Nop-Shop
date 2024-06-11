@@ -44,21 +44,19 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
             requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val token = sharedPreferences.getString("auth_token", "")
         if (token.isNullOrEmpty()) {
-            binding.messageTv.text = "You are not logged in"
-            binding.button.text = "Login"
+            binding.actionTv.text = "Log in"
         } else {
-            binding.messageTv.text = "You are logged in"
-            binding.button.text = "Logout"
+            binding.actionTv.text = "Log out"
         }
     }
 
     private fun initListeners() {
-        if(binding.button.text == "Login"){
-            binding.button.setOnClickListener {
+        if(binding.actionTv.text == "Log in"){
+            binding.actionTv.setOnClickListener {
                 findNavController().navigate(R.id.action_accountFragment_to_logInFragment)
             }
         }else{
-            binding.button.setOnClickListener {
+            binding.actionTv.setOnClickListener {
                 viewModel.logOut()
             }
         }

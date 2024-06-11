@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/top_bar_gradient"
-            app:navigationIcon="@drawable/back_arrow">
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -32,33 +32,25 @@
                     android:text="@string/account_app_bar"
                     android:textColor="@color/white"
                     android:textSize="18sp"
+                    android:layout_marginStart="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/cart_btn"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:src="@drawable/img"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintStart_toEndOf="@+id/category_tv"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <TextView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/badge"
-                    android:gravity="center"
-                    android:text="@string/badge_count"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@id/cart_btn"
-                    app:layout_constraintStart_toEndOf="@id/cart_btn"
-                    app:layout_constraintTop_toTopOf="@id/cart_btn" />
+                    android:id="@+id/action_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Log out"
+                    app:layout_constraintTop_toTopOf="@id/category_tv"
+                    app:layout_constraintBottom_toBottomOf="@id/category_tv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/lato"
+                    android:textSize="18sp"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
@@ -68,30 +60,17 @@
         android:id="@+id/message_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click here to log out"
+        android:text="Account details coming soon.."
         app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias=".4"
-        android:fontFamily="@font/lato_bold"
+        app:layout_constraintVertical_bias=".5"
+        android:fontFamily="@font/lato"
         android:textSize="18sp"
         android:textColor="@color/textColor"
         app:layout_constraintHorizontal_bias="0.5"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button"
-        android:layout_width="300dp"
-        android:layout_height="38dp"
-        android:fontFamily="@font/lato"
-        android:textSize="15sp"
-        android:background="@drawable/gradient_button"
-        android:text="LOG OUT"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/message_tv"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.06"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
