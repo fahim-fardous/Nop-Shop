@@ -66,9 +66,6 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         }
         viewModel.cartUpdateResponse.observe(viewLifecycleOwner) { item ->
             Toast.makeText(requireContext(), "Item Updated", Toast.LENGTH_SHORT).show()
-            item.let {
-                adapter.submitList(item.Data.Cart.Items)
-            }
             binding.subtotalPriceTv.text = item.Data.OrderTotals.SubTotal
             binding.shippingPriceTv.text = item.Data.OrderTotals.Shipping
             binding.totalPriceTv.text = item.Data.OrderTotals.OrderTotal
