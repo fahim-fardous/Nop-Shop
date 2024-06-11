@@ -52,6 +52,13 @@ class CartViewModel @Inject constructor(
     val showMessage: LiveData<String>
         get() = _showMessage
 
+    private val _showLoading:MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
+    val showLoading:LiveData<Boolean>
+        get() = _showLoading
+
 
     fun getCartProducts() = viewModelScope.launch {
         try {
@@ -84,6 +91,7 @@ class CartViewModel @Inject constructor(
 
     fun updateCart(item: Item, quantity: Int?) = viewModelScope.launch {
         if (NoInternet.isOnline(context.applicationContext)) {
+            _showLoading.value = true
             val response = repository.updateCart(
                 AddToCartItem(
                     listOf(
@@ -94,6 +102,7 @@ class CartViewModel @Inject constructor(
                     )
                 )
             )
+            _showLoading.value = false
             _cartUpdateResponse.value = response.body()
         } else {
             _showMessage.value = "No Internet Connection"
