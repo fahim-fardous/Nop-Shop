@@ -44,8 +44,5 @@ class MoreViewModel @Inject constructor(
         if(!orders.isNullOrEmpty()){
             _orders.value = orders
         }
-        else{
-            _showMessage.value = "You have to login first"
-        }
     }
 }
