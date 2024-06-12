@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="180dp"
-    android:layout_height="280dp"
-    android:layout_marginEnd="16dp"
+    android:layout_width="165dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
     android:elevation="16dp"
@@ -17,10 +17,9 @@
         <ImageView
             android:id="@+id/product_img"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="200dp"
             android:contentDescription="@string/item_image"
             android:scaleType="centerCrop"
-            android:src="@drawable/orange"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent=".7"
@@ -44,17 +43,21 @@
 
         <TextView
             android:id="@+id/product_name_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/lato_bold"
             android:padding="4dp"
+            android:singleLine="true"
             android:text="@string/california_orange_8_pcs"
             android:textColor="@color/black"
             android:textSize="14sp"
+            android:maxLines="1"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/product_img" />
+            app:layout_constraintTop_toBottomOf="@id/product_img"
+            android:ellipsize="end"/>
 
         <RatingBar
             android:id="@+id/product_rating"
@@ -64,7 +67,7 @@
             android:layout_marginTop="8dp"
             android:numStars="5"
             android:rating="3"
-            android:theme="@style/Widget.AppCompat.RatingBar"
+            android:progressTint="@color/ratingBarActivate"
             app:layout_constraintEnd_toEndOf="@id/product_name_tv"
             app:layout_constraintStart_toStartOf="@id/product_name_tv"
             app:layout_constraintTop_toBottomOf="@id/product_name_tv" />
@@ -76,7 +79,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/khand_medium"
             android:text="@string/_15_00"
-            android:textColor="@color/price"
+            android:textColor="@color/appTheme"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@id/product_rating"
             app:layout_constraintStart_toStartOf="@id/product_rating"

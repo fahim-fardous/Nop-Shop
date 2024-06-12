@@ -1,60 +1,437 @@
 package com.example.nopshop.screen.checkout
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Shop
+import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.UiMode
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.room.util.TableInfo
 import com.example.nopshop.R
+import com.example.nopshop.component.CustomCheckBox
+import com.example.nopshop.component.PaymentOptionCard
+import com.example.nopshop.component.TextFieldCustom
+import com.example.nopshop.component.Title
+import com.example.nopshop.component.TotalCard
+import com.example.nopshop.databinding.FragmentCheckOutBinding
+import com.example.nopshop.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import kotlin.math.round
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CheckOutFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CheckOutFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+@AndroidEntryPoint
+class CheckOutFragment : Fragment(R.layout.fragment_check_out) {
+    private lateinit var binding: FragmentCheckOutBinding
+    private val viewModel: CheckOutViewModel by viewModels()
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        initObserver()
+
+    }
+
+    private fun initObserver() {
+        viewModel.showMessage.observe(this) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.removeSuccess.observe(this) {
+            if (it) {
+                val action = CheckOutFragmentDirections.actionCheckOutFragmentToHomeFragment()
+                findNavController().navigate(action)
+            }
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_check_out, container, false)
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                CheckOutScreen(
+                    sharedPreferences.getString("Email", "")
+                )
+            }
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CheckOutFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CheckOutFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun CheckOutScreen(
+        email: String?
+    ) {
+        var existingAddress by remember {
+            mutableStateOf("")
+        }
+        var billingAddress by remember {
+            mutableStateOf("")
+        }
+        var firstName by remember {
+            mutableStateOf("")
+        }
+        var lastName by remember {
+            mutableStateOf("")
+        }
+        var email by remember {
+            mutableStateOf("")
+        }
+        var company by remember {
+            mutableStateOf("")
+        }
+        var country by remember {
+            mutableStateOf("")
+        }
+        var state by remember {
+            mutableStateOf("")
+        }
+        var zip by remember {
+            mutableStateOf("")
+        }
+        var city by remember {
+            mutableStateOf("")
+        }
+        var phoneNumber by remember {
+            mutableStateOf("")
+        }
+        var faxNumber by remember {
+            mutableStateOf("")
+        }
+        var checked by remember {
+            mutableStateOf(false)
+        }
+        val orders by viewModel.cart.observeAsState()
+        val showLoading by viewModel.showLoading.observeAsState()
+        LaunchedEffect(Unit) {
+            viewModel.getTotalOrder()
+        }
+        if (orders == null) {
+            Box(
+                modifier = Modifier,
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(
+                    color = Color(0xFF088DF9)
+                )
+            }
+        } else {
+            Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+                TopAppBar(
+                    modifier = Modifier.background(
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFF0BF7EB),
+                                Color(0xFF07C5FB),
+                                Color(0xFF088DF9),
+                            )
+                        )
+                    ),
+                    title = {
+                        Text(
+                            text = "One Page Checkout", color = Color.White, fontSize = 18.sp
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    actions = {
+                        BadgedBox(modifier = Modifier.padding(horizontal = 16.dp), badge = {
+                            Badge(containerColor = Color.White) {
+                                Text(text = orders!!.Data.Cart.Items.size.toString(),
+                                    modifier = Modifier.semantics { })
+                            }
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cart),
+                                contentDescription = "Go to cart",
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                )
+            }) { innerPadding ->
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    OutlinedCard(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(top = 16.dp, start = 16.dp, bottom = 16.dp, end = 16.dp),
+                        shape = RoundedCornerShape(1.dp),
+                        elevation = CardDefaults.cardElevation(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Title(label = "Billing Address")
+                        Text(
+                            modifier = Modifier.padding(top = 16.dp, start = 16.dp),
+                            text = "Address",
+                            fontWeight = FontWeight.Bold
+                        )
+                        TextField(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp),
+                            value = existingAddress,
+                            onValueChange = { existingAddress = it },
+                            label = {
+                                Text(
+                                    text = "Existing Address",
+                                    fontSize = 12.sp,
+                                    color = Color((0xFF7D828B))
+                                )
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color(0xFFCDD1D4),
+                                focusedIndicatorColor = Color(0xFFCDD1D4)
+                            ),
+                            trailingIcon = {
+                                Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                            })
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CustomCheckBox(isChecked = checked, onCheckChange = { checked = it })
+                            Text(
+                                modifier = Modifier.padding(start = 12.dp),
+                                text = "Ship to the same address",
+                                fontSize = 12.sp,
+                                color = Color(0xFF384150)
+                            )
+                        }
+                        Text(
+                            modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+                            text = "Select A Billing Address",
+                            fontWeight = FontWeight.Bold,
+                        )
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 4.dp),
+                            value = billingAddress,
+                            onValueChange = { billingAddress = it },
+                            label = {
+                                Text(
+                                    text = "New", fontSize = 14.sp, color = Color((0xFF7D828B))
+                                )
+                            },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color(0xFFCDD1D4),
+                                focusedIndicatorColor = Color(0xFFCDD1D4)
+                            ),
+                            trailingIcon = {
+                                Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                        )
+                        TextFieldCustom(
+                            label = "First Name",
+                            value = firstName,
+                            onValueChange = { firstName = it },
+                            type = "text"
+                        )
+                        TextFieldCustom(
+                            label = "Last Name",
+                            value = lastName,
+                            onValueChange = { lastName = it },
+                            type = "text"
+                        )
+                        TextFieldCustom(
+                            label = "Email",
+                            value = email,
+                            onValueChange = { email = it },
+                            type = "email"
+                        )
+                        TextFieldCustom(
+                            label = "Company",
+                            value = company,
+                            onValueChange = { company = it },
+                            type = "text"
+                        )
+                        TextFieldCustom(
+                            label = "Country",
+                            value = country,
+                            onValueChange = { country = it },
+                            type = "text"
+                        )
+                        TextFieldCustom(
+                            label = "State/Province",
+                            value = state,
+                            onValueChange = { state = it },
+                            type = "text"
+                        )
+                        TextFieldCustom(
+                            label = "Zip / Postal Code",
+                            value = zip,
+                            onValueChange = { zip = it },
+                            type = "number"
+                        )
+                        TextFieldCustom(
+                            label = "City",
+                            value = city,
+                            onValueChange = { city = it },
+                            type = "text"
+                        )
+                        TextFieldCustom(
+                            label = "Phone Number",
+                            value = phoneNumber,
+                            onValueChange = { phoneNumber = it },
+                            type = "number"
+                        )
+                        TextFieldCustom(
+                            label = "Fax Number",
+                            value = faxNumber,
+                            onValueChange = { faxNumber = it },
+                            type = "number"
+                        )
+                        Title(label = "Payment Method")
+                        PaymentOptionCard()
+                        Title(label = "Payment Information")
+                        orders?.Data?.OrderTotals?.let {
+                            if (showLoading == true) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator(
+                                        color = Color(0xFF088DF9)
+                                    )
+                                }
+                            } else {
+                                TotalCard(it.SubTotal, it.Tax, it.Shipping, it.OrderTotal) {
+                                    viewModel.isValid(
+                                        existingAddress,
+                                        billingAddress,
+                                        firstName,
+                                        lastName,
+                                        email,
+                                        company,
+                                        country,
+                                        state,
+                                        zip,
+                                        city,
+                                        phoneNumber,
+                                        faxNumber,
+                                        it.OrderTotal,
+                                        orders!!.Data.Cart.Items
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
+        }
     }
+
+
+    @Composable
+    @Preview
+    fun CheckOutScreenPreview() {
+        CheckOutScreen(email = "")
+    }
+
+
 }

@@ -48,6 +48,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/cart_badge"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:background="@drawable/badge"
@@ -59,8 +60,6 @@
                     app:layout_constraintTop_toTopOf="@id/cart_btn" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
-
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -78,13 +77,11 @@
             <org.imaginativeworld.whynotimagecarousel.ImageCarousel
                 android:id="@+id/ad_carousel"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="200dp"
                 app:autoPlay="true"
                 app:autoPlayDelay="2000"
                 app:carouselType="BLOCK"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent=".26"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0"
@@ -109,7 +106,7 @@
                     android:layout_margin="16dp"
                     android:fontFamily="@font/khand_semibold"
                     android:text="@string/our_categories"
-                    android:textColor="@color/black"
+                    android:textColor="@color/textColor"
                     android:textSize="22sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0"
@@ -117,18 +114,20 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/our_categories_title_tv"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/category_rv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="16dp"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/our_categories_title_tv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/best_selling_layout"
+                android:id="@+id/feature_product_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_margin="16dp"
@@ -138,11 +137,11 @@
                 app:layout_constraintVertical_bias="0">
 
                 <TextView
-                    android:id="@+id/best_selling_title_tv"
+                    android:id="@+id/feature_product_title_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/khand_semibold"
-                    android:text="@string/best_selling"
+                    android:text="@string/feature_products"
                     android:textColor="@color/textColor"
                     android:textSize="22sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -151,15 +150,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/best_selling_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/feature_product_rv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/best_selling_title_tv" />
-
+                    app:layout_constraintTop_toBottomOf="@id/feature_product_title_tv" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
