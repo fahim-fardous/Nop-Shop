@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     tools:context=".screen.authentication.account.AccountFragment">
+
+    <ImageView
+        android:id="@+id/warning_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="64dp"
+        android:src="@drawable/warning_pic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
+        android:visibility="gone"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="0dp"
@@ -18,8 +32,7 @@
             style="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/top_bar_gradient"
-            >
+            android:background="@drawable/top_bar_gradient">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -29,10 +42,10 @@
                     android:id="@+id/category_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:text="@string/account_app_bar"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:layout_marginStart="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -42,35 +55,138 @@
                     android:id="@+id/action_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/lato"
                     android:text="Log out"
-                    app:layout_constraintTop_toTopOf="@id/category_tv"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@id/category_tv"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="16dp"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/lato"
-                    android:textSize="18sp"
-                    />
+                    app:layout_constraintTop_toTopOf="@id/category_tv" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
-
-
     </com.google.android.material.appbar.AppBarLayout>
-    <TextView
-        android:id="@+id/message_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Account details coming soon.."
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/account_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias=".5"
-        android:fontFamily="@font/lato"
-        android:textSize="18sp"
-        android:textColor="@color/textColor"
-        app:layout_constraintHorizontal_bias="0.5"/>
+        app:layout_constraintBottom_toBottomOf="parent">
+        <ImageView
+            android:id="@+id/profile_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_pic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/user_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/textColor"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/profile_img"
+            app:layout_constraintStart_toStartOf="@id/profile_img"
+            app:layout_constraintTop_toBottomOf="@id/profile_img"
+            tools:text="Fahim Mohammod Fardous" />
+
+        <TextView
+            android:id="@+id/location_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/lato"
+            android:text="Dhaka, Bangladesh"
+            android:textColor="#424141"
+            app:layout_constraintEnd_toEndOf="@id/profile_img"
+            app:layout_constraintStart_toStartOf="@id/profile_img"
+            app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
+
+        <LinearLayout
+            android:id="@+id/mail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="48dp"
+            android:background="#BEE2F4"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/location_tv">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/outline_mail" />
+
+            <TextView
+                android:id="@+id/mail_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="24dp"
+                android:fontFamily="@font/lato_bold"
+                android:textColor="@color/textColor"
+                android:textSize="16sp"
+                tools:text="Fahim@gmail.com" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/order_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="16dp"
+            android:background="#BEE2F4"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mail_layout">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/outline_dataset" />
+
+            <TextView
+                android:id="@+id/order_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="24dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="Orders"
+                android:textColor="@color/textColor"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/order_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="160dp"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center"
+                android:padding="8dp"
+                android:textColor="#03A9F4"
+                android:textSize="16sp"
+                tools:text="10+" />
+        </LinearLayout>
 
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
