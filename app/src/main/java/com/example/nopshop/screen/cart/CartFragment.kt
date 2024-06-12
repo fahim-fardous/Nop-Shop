@@ -138,6 +138,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                     ).show()
                 }
             } else {
+                Toast.makeText(requireContext(), "You have to login first", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(CartFragmentDirections.actionCartFragmentToLogInFragment())
             }
         }
