@@ -26,6 +26,7 @@ import com.example.nopshop.databinding.FragmentCartBinding
 import com.example.nopshop.model.CartItem
 import com.example.nopshop.model.cart.Item
 import com.example.nopshop.utils.NoInternet
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -140,7 +141,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                 findNavController().navigate(CartFragmentDirections.actionCartFragmentToLogInFragment())
             }
         }
-        binding.overlayView.setOnTouchListener { _,event ->
+        binding.overlayView.setOnTouchListener { _, event ->
             event.action == MotionEvent.ACTION_DOWN
         }
 
@@ -153,19 +154,25 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     }
 
     private fun removeItem(cartItem: Item) {
-        viewModel.removeCart(
-            item = cartItem,
-        )
+        getDialog(cartItem)
+    }
+
+    private fun getDialog(cartItem: Item) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Do you want to remove this item?")
+            .setNeutralButton("Cancel") { dialog, which ->
+                // Respond to neutral button press
+            }
+            .setPositiveButton("Yes") { dialog, which ->
+                viewModel.removeCart(cartItem)
+            }
+            .show()
     }
 
     private fun updateItem(cartItem: Item, quantity: Int) {
-        if (quantity == 0) {
-            removeItem(cartItem)
-        } else {
-            viewModel.updateCart(
-                item = cartItem, quantity = quantity
-            )
-        }
+        viewModel.updateCart(
+            item = cartItem, quantity = quantity
+        )
     }
 
     override fun onResume() {

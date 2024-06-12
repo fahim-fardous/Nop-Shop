@@ -22,8 +22,14 @@ class MoreViewModel @Inject constructor(
     private val _showLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
-    val showLoading: MutableLiveData<Boolean>
+    val showLoading: LiveData<Boolean>
         get() = _showLoading
+
+    private val _showMessage: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val showMessage: LiveData<String>
+        get() = _showMessage
 
     private val _orders:MutableLiveData<List<OrderEntity>> by lazy {
         MutableLiveData<List<OrderEntity>>()
@@ -37,6 +43,9 @@ class MoreViewModel @Inject constructor(
         val orders = email?.let { productRepository.getOrdersFromDb(it) }
         if(!orders.isNullOrEmpty()){
             _orders.value = orders
+        }
+        else{
+            _showMessage.value = "You have to login first"
         }
     }
 }

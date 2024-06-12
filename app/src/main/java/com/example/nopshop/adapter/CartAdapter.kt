@@ -30,9 +30,11 @@ class CartAdapter(
                 onQuantityBtnClick(item, binding.quantityTv.text.toString().toInt())
             }
             binding.quantityRemoveBtn.setOnClickListener {
-                binding.quantityTv.text =
-                    (binding.quantityTv.text.toString().toInt() - 1).toString()
-                onQuantityBtnClick(item, binding.quantityTv.text.toString().toInt())
+                if(binding.quantityTv.text.toString().toInt() > 1){
+                    binding.quantityTv.text =
+                        (binding.quantityTv.text.toString().toInt() - 1).toString()
+                    onQuantityBtnClick(item, binding.quantityTv.text.toString().toInt())
+                }
             }
             binding.closeBtn.setOnClickListener {
                 onRemoveClick(item)

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,9 +53,17 @@ class MoreFragment : Fragment(R.layout.fragment_more) {
     private val viewModel: MoreViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initObserver()
         loadData()
 
     }
+
+    private fun initObserver() {
+        viewModel.showMessage.observe(this){
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun loadData() {
         viewModel.getOrders()
     }
@@ -111,7 +120,9 @@ class MoreFragment : Fragment(R.layout.fragment_more) {
             }) { innerPadding ->
                 Column(modifier = Modifier.padding(innerPadding)) {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
                         contentPadding = PaddingValues(0.dp, 16.dp, 0.dp, 16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -124,7 +135,6 @@ class MoreFragment : Fragment(R.layout.fragment_more) {
 
             }
         }
-
     }
 
     @Preview
