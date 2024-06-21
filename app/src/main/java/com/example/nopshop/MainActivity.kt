@@ -3,15 +3,9 @@ package com.example.nopshop
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.nopshop.databinding.ActivityMainBinding
@@ -37,30 +31,23 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         binding.bottomNavBar.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.logInFragment -> {
-                    binding.bottomNavBar.visibility = View.GONE
-                }
-
-                R.id.productListFragment -> {
-                    binding.bottomNavBar.visibility = View.GONE
-                }
-
-                R.id.productDetailsFragment -> {
-                    binding.bottomNavBar.visibility = View.GONE
-                }
-
-                R.id.cartFragment -> {
-                    binding.bottomNavBar.visibility = View.GONE
-                }
-
-                R.id.checkOutFragment -> {
-                    binding.bottomNavBar.visibility = View.GONE
-                }
-
-                else -> binding.bottomNavBar.visibility = View.VISIBLE
+        binding.bottomNavBar.setOnItemSelectedListener {
+            val popped = navController.popBackStack(it.itemId, false)
+            if (!popped) {
+                navController.navigate(it.itemId)
             }
+
+            true
         }
+
+        /*navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavBar.visibility = if (
+                destination.id == R.id.homeFragment ||
+                destination.id == R.id.categoryFragment ||
+                destination.id == R.id.searchFragment ||
+                destination.id == R.id.accountFragment ||
+                destination.id == R.id.moreFragment2
+            ) View.VISIBLE else View.GONE
+        }*/
     }
 }
